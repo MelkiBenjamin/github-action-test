@@ -1,0 +1,18 @@
+name: Confirm Push
+
+# Ici on déclare qu'on execute ce workflow si on fait un git push
+on: [push]
+
+jobs:
+
+  # Ici c'est notre premiere action, on pourrait en faire plusieurs
+  deploy:
+
+    # Ici on utiliser notre Runner déployé sur la vm server
+    runs-on: self-hosted
+
+    # Ici on déclare des actions à effectuer sur notre vm server    
+    steps:
+    - name: confirmation push mache
+      run: |
+        cowsay "Le push a envoyer est un succès !"
