@@ -15,4 +15,4 @@ jobs:
     steps:
     - name: Run push confirmation
       run: |
-        cowsay "The push to remote repo is successful !""
+        cowsay "The push to remote repo is successful !"
