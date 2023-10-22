@@ -13,6 +13,6 @@ jobs:
 
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
-    - name: confirmation push mache
+    - name: Run push confirmation
       run: |
-        cowsay "Le push a envoyer est un succès !"
+        cowsay "The push to remote repo is successful !""
