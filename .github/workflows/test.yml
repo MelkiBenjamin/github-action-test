@@ -14,4 +14,5 @@ jobs:
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
     - name: Run push confirmation
-      run: cowsay "Le push vers le depot distant est reussie !"
+      run: |
+        cowsay "Le push vers le depot distant est reussie !"
