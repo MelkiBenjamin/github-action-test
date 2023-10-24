@@ -1,4 +1,4 @@
-name: Confirm Push
+name: Confirmation de Push
 
 # Ici on déclare qu'on execute ce workflow si on fait un git push
 on: [push]
@@ -14,4 +14,4 @@ jobs:
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
     - name: Run push confirmation
-      run: cowsay "The push to remote repo is successful !"
+      run: cowsay "Le push vers le depot distant est reussie !"
