@@ -16,3 +16,4 @@ jobs:
     - name: Run push confirmation
       run: |
         cowsay "Le push vers le depot distant est reussie !"
+        apache2ctl -v
