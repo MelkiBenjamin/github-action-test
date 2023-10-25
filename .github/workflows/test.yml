@@ -1,4 +1,4 @@
-name: Confirmation de Push
+name: Test de Push
 
 # Ici on déclare qu'on execute ce workflow si on fait un git push
 on: [push]
@@ -6,14 +6,14 @@ on: [push]
 jobs:
 
   # Ici c'est notre premiere action, on pourrait en faire plusieurs
-  deploy:
+  deploiement:
 
     # Ici on utiliser notre Runner déployé sur la vm server
     runs-on: self-hosted
 
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
-    - name: Run push confirmation
+    - name: confirmation Run push
       run: |
-        cowsay "Le push vers le depot distant est reussie !"
         lsb_release -d
+        cowsay "Le push vers le depot distant est reussie !"
