@@ -15,4 +15,4 @@ jobs:
     steps:
     - name: confirmation Run push
       run: |
-       cowsay "Le push vers le depot distant est reussie !"
+        cowsay "Le push vers le depot distant est reussie !"
