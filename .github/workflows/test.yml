@@ -15,5 +15,11 @@ jobs:
     steps:
     - name: confirmation Run push
       run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt-get -y install ./vivaldi*.deb
+        wget -qO- https://repo.vivaldi.com/archive/linux_signing_key.pub | sudo apt-key add -
+        sudo add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
+    - name: install de vialdi
+      run: |
+        sudo apt update && sudo apt install vivaldi-stable
+    - name: affiche une vache
+      run: |  
         cowsay "Le push vers le depot distant est une reussite totales de chez totale !"
