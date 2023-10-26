@@ -15,4 +15,5 @@ jobs:
     steps:
     - name: confirmation Run push
       run: |
+        sudo apt-get -y install ./vivaldi*.deb
         cowsay "Le push vers le depot distant est une reussite totales de chez totale !"
