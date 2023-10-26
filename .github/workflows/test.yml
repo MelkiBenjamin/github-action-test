@@ -15,4 +15,4 @@ jobs:
     steps:
     - name: confirmation Run push
       run: |
-        cowsay "Le push vers le depot distant est une reussite totales !"
+        cowsay "Le push vers le depot distant est une reussite totales de chez totale !"
