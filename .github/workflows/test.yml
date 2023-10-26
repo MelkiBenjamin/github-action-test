@@ -15,8 +15,8 @@ jobs:
     steps:
     - name: confirmation Run push
       run: |
-        wget -qO- https://repo.vivaldi.com/archive/linux_signing_key.pub | sudo apt-key add -
-        sudo add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
+        wget -qO- https://repo.vivaldi.com/archive/linux_signing_key.pub | echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt-key add -
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
     - name: install de vialdi
       run: |
         sudo apt update && sudo apt install vivaldi-stable
