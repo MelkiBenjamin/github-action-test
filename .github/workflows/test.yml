@@ -18,7 +18,7 @@ jobs:
         echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
     - name: install de vialdi
       run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo apt -S install vivaldi-stable
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt install vivaldi-stable
     - name: affiche une vache
       run: |  
         cowsay "Le push vers le depot distant est une reussite totales de chez totale !"
