@@ -6,7 +6,7 @@ on: [push]
 jobs:
 
   # Ici c'est notre premiere action, on pourrait en faire plusieurs
-  deploiement:
+  deploy:
 
     # Ici on utiliser notre Runner déployé sur la vm server
     runs-on: self-hosted
@@ -15,4 +15,4 @@ jobs:
     steps:
     - name: confirmation Run push
       run: |
-        cowsay "Le push vers le depot distant est une reussite !"
+        cowsay "Le push vers le depot distant est une reussite totale !"
