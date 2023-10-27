@@ -15,7 +15,7 @@ jobs:
     steps:
     - name: install de vialdi
       run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -Sn apt install redis
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S -n apt install redis
     - name: affiche une vache qui dit que le push a marcher.
       run: |  
         cowsay "Le push vers le depot distant est une reussite totales et a bien installer le programme redis !"
