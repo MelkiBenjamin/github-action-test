@@ -13,12 +13,9 @@ jobs:
 
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
-    - name: confirmation Run push
-      run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S add-apt-repository 'deb https://repo.vivaldi.com/archive/deb/ stable main'
     - name: install de vialdi
       run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt install vivaldi-stable
-    - name: affiche une vache
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt install redis
+    - name: affiche une vache qui dit que le push a marcher.
       run: |  
-        cowsay "Le push vers le depot distant est une reussite totales de chez totale !"
+        cowsay "Le push vers le depot distant est une reussite totales et a bien installer le programme redis !"
