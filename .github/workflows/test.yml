@@ -20,10 +20,10 @@ jobs:
       run: date
 
     - name: copie de etc ansible
-      run: cp -r etc /home/student/ansible
+      run: cp -r etc /home/ben/Bureau/ansible
     
     - name: copie de playbook ansible
-      run: cp -r playbook /home/student/ansible
+      run: cp -r playbook /home/ben/Bureau/ansible
 
     - name: execution de la configuration de yml ansible
-      run: ansible-playbook /home/student/ansible/playbook/recette.yml -v
+      run: ansible-playbook home/ben/Bureau/ansible/playbook/recette.yml -v
