@@ -26,4 +26,4 @@ jobs:
       run: cp -r playbook /home/ben/Bureau/ansible
 
     - name: execution de la configuration de yml ansible
-      run: ansible-playbook home/ben/Bureau/ansible/playbook/recette.yml -v
+      run: ansible-playbook /home/ben/Bureau/ansible/playbook/recette.yml -v
