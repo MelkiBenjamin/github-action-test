@@ -1,7 +1,7 @@
-name: Test de Push
+name: configuration conteneur
 
 # Ici on déclare qu'on execute ce workflow si on fait un git push
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
 
@@ -13,9 +13,17 @@ jobs:
 
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
-    - name: install de vialdi
-      run: |
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -n -S apt install redis
-    - name: affiche une vache qui dit que le push a marcher.
-      run: |  
-        cowsay "Le push vers le depot distant est une reussite totales et a bien installe le programme redis !"
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: donne la date pour test
+      run: date
+
+    - name: copie de etc ansible
+      run: cp -r etc /home/student/ansible
+    
+    - name: copie de playbook ansible
+      run: cp -r playbook /home/student/ansible
+
+    - name: execution de la configuration de yml ansible
+      run: ansible-playbook /home/student/ansible/playbook/recette.yml -v
