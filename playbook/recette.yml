@@ -15,6 +15,6 @@
       state: present
       update_cache: yes
 
-  - name: run a cowsay
+  - name: lance un cowsay 
     ansible.builtin.shell:
       cmd: cowsay "hello DevOps"
