@@ -1,0 +1,21 @@
+---
+- name: Installe Apache2
+  ansible.builtin.apt:
+    name: apache2
+    state: present
+    update_cache: true
+
+- name: copie index.html
+  ansible.builtin.copy:
+    src: index.html
+    dest: /var/www/html/
+
+- name: copie security.conf (securité apache)
+  ansible.builtin.copy:
+    src: security.conf
+    dest: /etc/apache2/conf-available/security.conf
+  notify: restart apache
+
+- name: Prints 
+  ansible.builtin.debug:
+    msg: "ma variable est bien : '{{ titi }}'"

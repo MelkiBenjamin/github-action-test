@@ -1,0 +1,40 @@
+---
+- name: telecharge la clé de securité et ajoute le depot mariadb 11.1
+  block:
+    - name: telecharhge la clé
+      ansible.builtin.get_url:
+        url: https://mariadb.org/mariadb_release_signing_key.pgp
+        dest: /etc/apt/keyrings/mariadb-keyring.pgp
+
+    - name:  ajoute depot mariadb 11.1
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/mariadb-keyring.pgp] https://mirrors.ircam.fr/pub/mariadb/repo/11.1/ubuntu jammy main"
+        state: present
+
+- name: Install mariadb
+  ansible.builtin.apt:
+    pkg:
+      - mariadb-server
+      - python3-pymysql
+    
+- name: Create database user and password with all and grant database privileges 
+  community.mysql.mysql_user:
+    name: bob
+    password: '{{ password }}'
+    priv: 'eponges.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Create database user and password with all and grant database privileges 
+  community.mysql.mysql_user:
+    name: benjamin
+    password: '{{ password }}'
+    priv: '*.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    
+- name: créé un database nommé 'eponge'
+  community.mysql.mysql_db:
+    name: eponges
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock

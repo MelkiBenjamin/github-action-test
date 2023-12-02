@@ -3,16 +3,15 @@
   hosts: first
   remote_user: root
 
+  roles:
+    - apaches2
+    - mariadb
+
+
   tasks:
   - name: create empty toto.txt file
     ansible.builtin.file:
       path: /etc/toto.txt
       state: touch
-
-  - name: install needed packages
-    ansible.builtin.apt:
-      pkg: 
-        - mariadb-server
-        - apache2
 
 
