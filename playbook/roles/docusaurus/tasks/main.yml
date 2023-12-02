@@ -1,6 +1,0 @@
----
-- name: copie build docusaurus
-  ansible.builtin.copy:
-    src: "{{ role_path }}/files/*"
-    dest: /var/www/html/
-

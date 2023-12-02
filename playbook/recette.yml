@@ -9,7 +9,7 @@
 
 
   tasks:
-  - name: create empty toto.txt file
+  - name: create empty toto.txt files
     ansible.builtin.file:
       path: /etc/toto.txt
       state: touch
