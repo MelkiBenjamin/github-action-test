@@ -11,10 +11,8 @@
 
   - name: install needed packages
     ansible.builtin.apt:
-      name: cowsay
-      state: present
-      update_cache: yes
+      pkg: 
+        - mariadb-server
+        - apache2
 
-  - name: lance un cowsay 
-    ansible.builtin.shell:
-      cmd: cowsay "hello DevOps"
+
