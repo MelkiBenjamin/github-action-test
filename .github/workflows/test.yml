@@ -19,11 +19,19 @@ jobs:
     - name: donne la date pour test
       run: date
 
-    - name: copie de etc ansible
-      run: cp -r etc /home/ben/Bureau/ansible
+    #- name: copie de etc ansible 
+    #  run: cp -r etc /home/ben/Bureau/ansible
     
-    - name: copie de playbook ansible
-      run: cp -r playbook /home/ben/Bureau/ansible
+    #- name: copie de playbook ansible
+    #  run: cp -r playbook /home/ben/Bureau/ansible
 
-    - name: execution de la configuration de yml ansible
-      run: ansible-playbook /home/ben/Bureau/ansible/playbook/recette.yml -v
+    #- name: execution de la configuration de yml ansible
+    #  run: ansible-playbook /home/ben/Bureau/ansible/playbook/recette.yml -v
+
+    - name: donne la date pour test
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11' 
+
+    - name: lance le script python
+      run: python3 script.py
