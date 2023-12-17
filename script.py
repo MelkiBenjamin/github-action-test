@@ -12,7 +12,7 @@ print(memutilisé)
 print("Bonjour vous utiliser ",memutilisé,"% de memoire.")
 
 memoirerest = 16*memutilisé/100 #memoire utiliser
-print(math.ceil(memoirerest))
+print(memoirerest) #sans arrondit
 memar = math.ceil(memoirerest) #memoire utlisé arrondit
 print(memar)
 print("Bonjour vous utiliser ",memar,"GO de memoire.")
