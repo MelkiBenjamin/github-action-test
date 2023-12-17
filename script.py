@@ -11,7 +11,9 @@ print(memutilisé)
 print("Bonjour vous utiliser ",memutilisé," % de memoire.")
 
 memoirerest = 16*memutilisé/100 #memoire utiliser
-print(memoirerest)
-print("Bonjour vous utiliser ",memoirerest," de memoire.")
+print(math.ceil(memoirerest))
+memar = math.ceil(memoirerest) #memoire utlisé arrondit
+print(memar)
+print("Bonjour vous utiliser ",memar," de memoire.")
 
-if memutilisé > 65 : print ("vous utliser trop de memoire.")
+if memutilisé > 65 : print ("Attention, vous utliser trop de memoire.")
