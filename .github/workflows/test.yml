@@ -33,5 +33,8 @@ jobs:
       with:
         python-version: '3.11' 
 
+    - name: installation dependance
+      run: pip install -r requirements.txt
+
     - name: lance le script python
       run: python3 script.py
