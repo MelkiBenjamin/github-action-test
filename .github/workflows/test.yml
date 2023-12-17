@@ -33,6 +33,9 @@ jobs:
       with:
         python-version: '3.11' 
 
+    - name: Ajuster le chemin d'accès pour Python
+      run: echo "PATH=$PATH:/usr/bin:/usr/local/bin" >> $GITHUB_ENV
+
     - name: Afficher le contenu du chemin d'accès
       run: echo $PATH
 
