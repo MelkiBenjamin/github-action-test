@@ -33,6 +33,9 @@ jobs:
       with:
         python-version: '3.11' 
 
+    - name: Afficher le contenu du chemin d'accès
+      run: echo $PATH
+
     - name: installation dependance
       run: pip install -r requirements.txt
 
@@ -41,3 +44,8 @@ jobs:
 
     - name: test 2l
       run: cp -r /home/benjamin/actions-runner/toto /home/benjamin
+
+    - name: Vérifier la version de Python
+      run: |
+        python --version
+        python3 --version
