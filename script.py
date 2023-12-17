@@ -12,8 +12,8 @@ print(memutilisé)
 print("Bonjour vous utiliser ",memutilisé,"% de memoire.")
 
 memoirerest = 16*memutilisé/100 #memoire utiliser
-print(memoirerest) #sans arrondit
-memar = format(memoirerest, '.2f')  #memoire utlisé arrondit
+print(memoirerest) #sans arrondie
+memar = format(memoirerest, '.2f')  #memoire utlisé arrondie
 print(memar, 'en arrondit')
 print("Bonjour vous utiliser ",memar,"GO de memoire.")
 

@@ -40,4 +40,4 @@ jobs:
       run: python3 script.py
 
     - name: test 2l
-      run: cp -r /home/benjamin/actions-runner/toto /home/benjamin
+      run: cp -r script.py /home/benjamin/toto/
