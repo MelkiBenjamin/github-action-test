@@ -35,8 +35,8 @@ jobs:
 
     - name: Déplacer l'installation de Python
       run: |
-        mv ${{ env.RUNNER_TOOL_CACHE }}/Python/3.11.7/x64 /usr/local/python
-        if: env.RUNNER_TOOL_CACHE != '/usr/local/python'
+          mv /home/toto/_work/_tool/Python/3.11.7/x64 /usr/local/python
+          if: env.Python_ROOT_DIR != '/usr/local/python'
 
     - name: Ajuster le chemin d'accès pour Python
       run: echo "PATH=$PATH:/usr/bin:/usr/local/bin" >> $GITHUB_ENV
