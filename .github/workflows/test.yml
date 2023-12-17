@@ -33,17 +33,6 @@ jobs:
       with:
         python-version: '3.11' 
 
-    - name: Déplacer l'installation de Python
-      run: |
-          mv /home/benjamin/_work/_tool/Python/3.11.7/x64 /usr/local/python
-          if: env.Python_ROOT_DIR != '/usr/local/python'
-
-    - name: Ajuster le chemin d'accès pour Python
-      run: echo "PATH=$PATH:/usr/bin:/usr/local/bin" >> $GITHUB_ENV
-
-    - name: Afficher le contenu du chemin d'accès
-      run: echo $PATH
-
     - name: installation dependance
       run: pip install -r requirements.txt
 
@@ -52,8 +41,3 @@ jobs:
 
     - name: test 2l
       run: cp -r /home/benjamin/actions-runner/toto /home/benjamin
-
-    - name: Vérifier la version de Python
-      run: |
-        python --version
-        python3 --version

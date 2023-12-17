@@ -1,5 +1,8 @@
-print("hello world")
-
 import psutil
 
-print('virtual_memory().percent')
+print("hello world")
+
+
+memoire
+
+print('psutil.virtual_memory().percent')
