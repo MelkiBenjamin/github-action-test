@@ -28,7 +28,7 @@ jobs:
     #- name: execution de la configuration de yml ansible
     #  run: ansible-playbook /home/ben/Bureau/ansible/playbook/recette.yml -v
 
-    - name: donne la date pour test
+    - name: install python3
       uses: actions/setup-python@v5
       with:
         python-version: '3.11' 
