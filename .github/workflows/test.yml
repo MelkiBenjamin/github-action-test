@@ -33,6 +33,11 @@ jobs:
       with:
         python-version: '3.11' 
 
+    - name: Déplacer l'installation de Python
+      run: |
+        mv ${{ env.RUNNER_TOOL_CACHE }}/Python/3.11.7/x64 /usr/local/python
+        if: env.RUNNER_TOOL_CACHE != '/usr/local/python'
+
     - name: Ajuster le chemin d'accès pour Python
       run: echo "PATH=$PATH:/usr/bin:/usr/local/bin" >> $GITHUB_ENV
 
