@@ -54,6 +54,8 @@ jobs:
   deploy3:
     runs-on: self-hosted
     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
     - name: test install go 1
       run: go hello-world.go
     needs: deploy2
