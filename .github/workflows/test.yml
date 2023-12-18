@@ -54,7 +54,7 @@ jobs:
   deploy3:
     runs-on: self-hosted
     steps:
-    - name: test install go
+    - name: test install go 1
       run: go hello-world.go
     needs: deploy2
 
