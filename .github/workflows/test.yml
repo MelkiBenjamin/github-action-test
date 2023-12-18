@@ -45,21 +45,21 @@ jobs:
   deploy2:
     runs-on: self-hosted
     steps:
-    - name: test install go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.21.0' # The Go version to download (if necessary) and use.
-    - run: go version
-
+#   - name: test install go
+#      uses: actions/setup-go@v4
+#      with:
+#        go-version: '1.21.0' # The Go version to download (if necessary) and use.
+#    - run: go version
+    - name: test
+      run: echo 1 
+ 
   deploy3:
     runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: test install go 1
-      run: go hello-world.go
-    needs: deploy2
-
-
-
-
+#    - name: test install go 1
+#      run: go hello-world.go
+#    needs: deploy2
+    - name: trst2
+      run: echo 2
