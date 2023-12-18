@@ -6,7 +6,7 @@ on: [push, workflow_dispatch]
 jobs:
 
   # Ici c'est notre premiere action, on pourrait en faire plusieurs
-  deploy:
+  deploy1:
 
     # Ici on utiliser notre Runner déployé sur la vm server
     runs-on: self-hosted
@@ -41,3 +41,20 @@ jobs:
 
     - name: test 2l
       run: cp -r script.py /home/benjamin/toto/
+  
+  deploy2:
+    runs-on: self-hosted
+    steps:
+    - name: test install go
+      uses: actions/setup-go@v4
+
+  deploy3:
+    runs-on: self-hosted
+    steps:
+    - name: test install go
+      run: go hello-world.go
+    needs: deploy2
+
+
+
+
