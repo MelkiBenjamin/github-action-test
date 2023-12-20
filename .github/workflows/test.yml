@@ -67,5 +67,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: installation dependance
+      run: pip install -r requirements.txt
+
     - name: Checkout
       run: pip install mkdocs
+    needs: deploy1
