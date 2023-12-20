@@ -38,9 +38,6 @@ jobs:
 
     - name: lance le script python
       run: python3 script.py
-
-    - name: test 2l
-      run: cp -r script.py /home/benjamin/toto/
   
   deploy2:
     runs-on: self-hosted
