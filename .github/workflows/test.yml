@@ -63,3 +63,12 @@ jobs:
 #    needs: deploy2
     - name: trst2
       run: echo 2
+  
+  mkdocs:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Checkout
+      run: pip install mkdocs
