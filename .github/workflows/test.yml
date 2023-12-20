@@ -78,7 +78,6 @@ jobs:
     - name: mkdocs
       run: pip install mkdocs
 
-
     - name: copy
-      run: cp monprojet /home/benjamin
+      run: cp -r ./monprojet/monprojet/ /home/benjamin
     needs: deploy1
