@@ -75,6 +75,10 @@ jobs:
     - name: installation dependance
       run: pip install -r requirements.txt
 
-    - name: Checkout
+    - name: mkdocs
       run: pip install mkdocs
+
+
+    - name: copy
+      run: cp monprojet /home/benjamin
     needs: deploy1
