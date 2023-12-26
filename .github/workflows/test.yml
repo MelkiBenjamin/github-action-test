@@ -69,5 +69,5 @@ jobs:
       run: pwd
 
     - name: dev mkdocs
-      run: mkdocs serve
+      run: mkdocs serve -a 0.0.0.0:80
     needs: deploy1
