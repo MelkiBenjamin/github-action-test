@@ -38,6 +38,9 @@ jobs:
 
     - name: lance le script python
       run: python3 script.py
+
+    - name: copie de script
+      run: cp script.py /home/benjamin
   
   deploy2:
     runs-on: self-hosted
