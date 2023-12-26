@@ -63,7 +63,7 @@ jobs:
       run: mkdocs --version
 
     - name: copy2
-      run: cp -r ./monprojet/monprojet/ /home/benjamin/actions-runner/_work/_tool/Python/3.12.1/x64/lib/python3.12/site-packages/mkdocs
+      run: cp -r ./monprojet/monprojet/ .
 
     - name: pwd
       run: pwd
