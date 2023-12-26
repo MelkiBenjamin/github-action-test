@@ -60,8 +60,12 @@ jobs:
       run: pip install mkdocs
 
     - name: copy2
-      run: cp -r /home/benjamin/actions-runner/_work/github-action-test/github-action-test/monprojet/monprojet/* .
+      run: cp -r monprojet/monprojet/* .
 
     - name: dev mkdocs 1
-      run: mkdocs serve -a 0.0.0.0:80
+      run: mkdocs serve -a 0.0.0.0:80 &
+
+    - name: arret
+      run: ls
+
     needs: deploy1
