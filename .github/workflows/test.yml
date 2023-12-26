@@ -61,4 +61,7 @@ jobs:
 
     - name: copy2
       run: cp -r ./monprojet/monprojet/ /home/benjamin
+
+    - name: dev mkdocs
+      run: mkdocs serve
     needs: deploy1
