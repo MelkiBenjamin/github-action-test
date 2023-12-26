@@ -62,10 +62,19 @@ jobs:
     - name: copy2
       run: cp -r monprojet/monprojet/* .
 
-    - name: dev mkdocs 1
-      run: mkdocs serve -a 0.0.0.0:80 &
+#    - name: dev mkdocs 1
+#      run: mkdocs serve -a 0.0.0.0:80 &
 
-    - name: arret
-      run: ls
+#    - name: arret
+#      run: ls
+
+    - name: caddy
+      run: sudo apt install caddy
+
+    - name: copie de build
+      run: mkdocs build
+
+    - name: copie de deploiement
+      run: cp build /usr/share/caddy/
 
     needs: deploy1
