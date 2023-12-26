@@ -63,7 +63,7 @@ jobs:
       run: mkdocs --version
 
     - name: copy2
-      run: cp -r monprojet/monprojet/ /home/benjamin/actions-runner/_work/github-action-test/github-action-test
+      run: cp -r ./monprojet/monprojet/* /home/benjamin/actions-runner/_work/github-action-test/github-action-test/
 
     - name: pwd
       run: pwd
