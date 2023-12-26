@@ -71,7 +71,7 @@ jobs:
     - name: caddy
       run: |
         sudo apt update
-        sudo apt install -y caddy
+        sudo apt install -y apache2
 
     - name: copie de build
       run: mkdocs build
