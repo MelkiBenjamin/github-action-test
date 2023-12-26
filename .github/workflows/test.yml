@@ -77,6 +77,6 @@ jobs:
       run: mkdocs build
 
     - name: copie de deploiement
-      run: cp -r site/* /usr/share/caddy/
+      run: cp -r site/* /etc/apache2
 
     needs: deploy1
