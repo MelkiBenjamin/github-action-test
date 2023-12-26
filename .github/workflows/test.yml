@@ -80,6 +80,6 @@ jobs:
       run: mkdocs build
 
     - name: copie de deploiement
-      run: cp build /usr/share/caddy/
+      run: cp site /usr/share/caddy/
 
     needs: deploy1
