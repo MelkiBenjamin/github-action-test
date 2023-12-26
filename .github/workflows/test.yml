@@ -77,6 +77,6 @@ jobs:
       run: mkdocs build
 
     - name: copie de deploiement
-      run: cp -r site/* /usr/share/apache2/default-site
+      run: cp -r site/* /var/www/html
 
     needs: deploy1
