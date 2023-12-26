@@ -31,7 +31,7 @@ jobs:
     - name: install python3
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11' 
+        python-version: '3.12' 
 
     - name: installation dependance
       run: pip install -r requirements.txt
@@ -41,29 +41,7 @@ jobs:
 
     - name: copie de script
       run: cp script.py /home/benjamin
-  
-#  deploy2:
-#    runs-on: self-hosted
-#    steps:
-#   - name: test install go
-#      uses: actions/setup-go@v4
-#      with:
-#        go-version: '1.21.0' # The Go version to download (if necessary) and use.
-#    - run: go version
-#    - name: test
-#      run: echo 1 
- 
-#  deploy3:
-#    runs-on: self-hosted
-#    steps:
-#    - name: Checkout
-#      uses: actions/checkout@v4
-#    - name: test install go 1
-#      run: go hello-world.go
-#    needs: deploy2
-#    - name: trst2
-#      run: echo 2
-  
+    
   mkdocs:
     runs-on: self-hosted
     steps:
@@ -73,7 +51,7 @@ jobs:
     - name: install python3
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11' 
+        python-version: '3.12' 
 
     - name: installation dependance
       run: pip install -r requirements.txt
