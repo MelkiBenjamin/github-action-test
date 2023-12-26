@@ -56,17 +56,17 @@ jobs:
     - name: installation dependance
       run: pip install -r requirements.txt
 
-    - name: mkdocs
+    - name: install mkdocs
       run: pip install mkdocs
 
-    - name: copy2
+    - name: version mkdocs
       run: mkdocs --version
 
     - name: copy2
-      run: cp -r ./monprojet/monprojet/ .
+      run: cp -r ./monprojet/monprojet/ /home/benjamin/actions-runner/_work/_tool/Python/3.12.1/x64/lib/python3.12/site-packages/mkdocs
 
-    - name: copy2
-      run: pwd    
+    - name: pwd
+      run: pwd
 
     - name: dev mkdocs
       run: mkdocs serve
