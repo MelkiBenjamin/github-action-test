@@ -17,4 +17,4 @@ jobs:
           run: tar -xvf cowsay_2.0.4_Linux_x86_64.tar.gz
 
         - name: date 4
-          run: ls
+          run: ls -alh
