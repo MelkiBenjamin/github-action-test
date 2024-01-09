@@ -72,11 +72,17 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y apache2
-
+  
     - name: copie de build
       run: mkdocs build
 
-    - name: copie de deploiement
+    - name: copie de deploiement 5
       run: sudo cp -r site/* /var/www/html
 
     needs: deploy1
+
+  deploy4:
+    runs-on: self-hosted
+    steps:
+    - name: date
+      run: date
