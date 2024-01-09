@@ -28,3 +28,10 @@ jobs:
             message: | # Support multi-lines
               This is cowsay
               Hello, World!!
+
+        - name: cowsay on the comment
+          uses: Code-Hex/neo-cowsay-action@v1
+          with:
+             message: 'Hello, World with random'
+             cow: 'random' # If specified, it shows random ascii art.
+             cowsay_on_comment: true
