@@ -34,3 +34,9 @@ jobs:
           with:
              message: 'Hello, World with random'
              cow: 'random' # If specified, it shows random ascii art.
+
+        - name: install cowsay
+          run: apt install -y cowsay
+   
+        - name: cowsay envoyer dans fichier
+          run: cowsay c'est le commit ${{ GITHUB.SHA }} >> /home/cow.txt

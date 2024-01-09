@@ -1,0 +1,8 @@
+name: 'build and push'
+description: 'lower case a text'
+inputs:
+  text: 
+    description: 'build push simple'
+    required: true
+    default: 'Hello DevOps'
+outputs:
