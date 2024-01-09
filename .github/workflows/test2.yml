@@ -21,3 +21,10 @@ jobs:
 
         - name: date 4
           run: ./cowsay test
+
+        - name: output the message on actions result
+          uses: Code-Hex/neo-cowsay-action@v1
+          with:
+            message: | # Support multi-lines
+              This is cowsay
+              Hello, World!!
