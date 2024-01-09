@@ -11,7 +11,7 @@ jobs:
           run: date
 
         - name: install cowsay
-          run: apt install -y cowsay
+          run: sudo apt install -y cowsay
    
         - name: cowsay envoyer dans fichier
           run: cowsay c'est le commit ${{ GITHUB.SHA }} >> /home/cow.txt
