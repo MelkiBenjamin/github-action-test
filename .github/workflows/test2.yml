@@ -34,4 +34,3 @@ jobs:
           with:
              message: 'Hello, World with random'
              cow: 'random' # If specified, it shows random ascii art.
-             cowsay_on_comment: true
