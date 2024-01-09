@@ -14,7 +14,7 @@ jobs:
           run: sudo apt install -y cowsay
    
         - name: cowsay envoyer dans fichier
-          run: cowsay c'est le commit '${{ GITHUB.SHA }}'' >> /home/cow.txt
+          run: cowsay c'est le commit '${{ GITHUB.SHA }}'' >> ./test.txt
 
         - name: ls
-          run: ls /home/cow.txt
+          run: cat cow.txt
