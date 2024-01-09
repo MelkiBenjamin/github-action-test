@@ -1,7 +1,7 @@
 name: configuration conteneur
 
 # Ici on déclare qu'on execute ce workflow si on fait un git push
-on: [push, workflow_dispatch]
+on: workflow_dispatch
 
 jobs:
 
