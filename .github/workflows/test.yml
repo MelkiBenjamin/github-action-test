@@ -5,11 +5,11 @@ on: [push, workflow_dispatch]
 
 jobs:
 
-#  # Ici c'est notre premiere action, on pourrait en faire plusieurs
+  # Ici c'est notre premiere action, on pourrait en faire plusieurs
   deploy1:
 
     # Ici on utiliser notre Runner déployé sur la vm server
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     # Ici on déclare des actions à effectuer sur notre vm server    
     steps:
@@ -43,7 +43,7 @@ jobs:
       run: cp script.py /home/benjamin
     
   mkdocs:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -80,9 +80,3 @@ jobs:
       run: sudo cp -r site/* /var/www/html
 
     needs: deploy1
-
-  deploy4:
-    runs-on: ubuntu-latest
-    steps:
-    - name: date
-      run: date
