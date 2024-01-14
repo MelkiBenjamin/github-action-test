@@ -11,5 +11,5 @@ jobs:
           run: date
         
         - name: date
-          run: ls /home
+          run: chot 'test' >> /apps
         
