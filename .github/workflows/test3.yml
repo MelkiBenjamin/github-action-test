@@ -10,9 +10,11 @@ jobs:
         - name: date
           run: date
         
-        - name: date
-          run: echo 'test' >> sudo /apps/test
-
         - name: test
-          run: ls /apps
+          run: mkdir test
         
+        - name: cowsay
+          run: sudo apt install -y cowsay 
+
+        - name: cowsay2 
+          run: sudo mv /usr/share/cowsay /apps
