@@ -11,5 +11,5 @@ jobs:
           run: date
         
         - name: date
-          run: chot 'test' >> /apps
+          run: echo 'test' >> /apps
         
