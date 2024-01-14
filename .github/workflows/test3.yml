@@ -10,9 +10,6 @@ jobs:
         - name: date
           run: date
         
-        - name: test
-          run: mkdir test
-        
         - name: cowsay
           run: sudo apt install -y cowsay 
 
