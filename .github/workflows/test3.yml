@@ -10,7 +10,7 @@ jobs:
         - name: date
           run: date
         
-        - name: cowsay
+        - name: cowsay t
           run: |
             sudo apt update
             sudo apt install -y cowsay 
