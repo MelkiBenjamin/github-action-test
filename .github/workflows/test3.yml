@@ -15,3 +15,6 @@ jobs:
 
 #        - name: cowsay2 
 #          run: sudo mv /usr/share/cowsay /apps
+
+#        - name: cowsay
+#          run: co
