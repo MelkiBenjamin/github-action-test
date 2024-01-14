@@ -11,5 +11,8 @@ jobs:
           run: date
         
         - name: date
-          run: sudo echo 'test' >> sudo /apps/test
+          run: echo 'test' >> sudo /apps/test
+
+        - name: test
+          run: le /apps
         
