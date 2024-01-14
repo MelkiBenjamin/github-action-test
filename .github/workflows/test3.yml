@@ -13,5 +13,5 @@ jobs:
         - name: cowsay
           run: sudo apt install -y cowsay 
 
-        - name: cowsay2 
-          run: sudo mv /usr/share/cowsay /apps
+#        - name: cowsay2 
+#          run: sudo mv /usr/share/cowsay /apps
