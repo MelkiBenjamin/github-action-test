@@ -1,4 +1,4 @@
-name: exo3 self-hosted
+name: test g
 on: 
   push:
     branches: main
@@ -14,5 +14,5 @@ jobs:
           run: echo 'test' >> sudo /apps/test
 
         - name: test
-          run: le /apps
+          run: ls /apps
         
