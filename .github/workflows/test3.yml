@@ -11,7 +11,9 @@ jobs:
           run: date
         
         - name: cowsay
-          run: sudo apt install -y cowsay 
+          run: |
+            sudo apt update
+            sudo apt install -y cowsay 
 
 #        - name: cowsay2 
 #          run: sudo mv /usr/share/cowsay /apps
