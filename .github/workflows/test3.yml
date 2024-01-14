@@ -1,0 +1,15 @@
+name: exo3 self-hosted
+on: 
+  push:
+    branches: main
+
+jobs:
+    job1:
+        runs-on: self-hosted
+        steps:
+        - name: date
+          run: date
+        
+        - name: date
+          run: ls /home
+        
