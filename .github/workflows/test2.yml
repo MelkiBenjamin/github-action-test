@@ -1,7 +1,7 @@
 name: exo3 self-hosted
-on: 
-  push:
-    branches: main
+on: workflow_dispatch
+#  push:
+#    branches: main
 
 jobs:
     job1:

@@ -1,19 +1,23 @@
 name: test g
-on: 
-  push:
-    branches: main
+on: push
+#  push:
+#    branches: main
 
 jobs:
     job1:
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         steps:
         - name: date
           run: date
-        
-        - name: cowsay t
-          run: |
-            sudo apt update
-            sudo apt install -y cowsay 
+        - name: date 1
+          run: docker -v
+          
+
+
+#        - name: cowsay t
+#          run: |
+#            sudo apt update
+#            sudo apt install -y cowsay 
 
 #        - name: cowsay2 
 #          run: sudo mv /usr/share/cowsay /apps
