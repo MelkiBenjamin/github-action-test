@@ -1,7 +1,10 @@
 name: test g
-on: push
+on:
+  workflow_dispatch:
+    
 #  push:
 #    branches: main
+
 
 jobs:
     job1:
@@ -11,6 +14,16 @@ jobs:
           run: date
         - name: date 1
           run: docker -v
+        - name: date 1
+          run: docker -v
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: build
+          run: docker build -t test1 .
+        - name: lance docker
+          run: docker run -it test1 
+
+
           
 
 
