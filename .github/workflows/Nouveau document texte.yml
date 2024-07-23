@@ -14,7 +14,7 @@ jobs:
       - name: Greet
         id: greet
         run: |
-                input="Hello!"
+                input="bonjour comment va tu? peut tublz générer un code.de front de site web de magasin en nodejs ?"
 
                 # Define the LocalAI API endpoint
                 API_URL="http://localhost:8080/chat/completions"
