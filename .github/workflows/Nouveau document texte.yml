@@ -15,15 +15,7 @@ jobs:
         uses: actions/checkout@v4.1.7
 
       - name: Build and push test
-        env:
-          # git diff pour savoir si on doit build ou pas
-          hashFiles: git diff --name-only HEAD^ HEAD
-        if: ${{ env.hashFiles }} != ''
-        uses: docker/build-push-action@v6.4.0
-        with:    
-          tags: |
-            ${{ env.image-product }}
-          context: ./product-service
-          platforms: ${{ env.platforms }}
-          push: true
+        run: |
+          pip install localai 
+          
       
