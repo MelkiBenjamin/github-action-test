@@ -17,5 +17,11 @@ jobs:
       - name: Build and push test
         run: |
           pip install localai 
-          
+
+      
+      - name: Generate code with LocalAI
+        run: |
+          python -m localai generate --query "Génère moi le dev front d'un magasin de jouet."
+        id: localai_output
+
       
