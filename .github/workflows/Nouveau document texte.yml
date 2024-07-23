@@ -14,15 +14,6 @@ jobs:
       - name: checkout  
         uses: actions/checkout@v4.1.7
 
-      - name: Download LocalAI binary
-        run: |
-          curl https://localai.io/install.sh | sh
-          
-
-      - name: Generate code with LocalAI
-        run: |
-          ./localai-binary --query "Generate a web shop front-end code nodejs "
-          
-      
-
-      
+      - name : install pip localai
+        run: pip install localai 
+        
