@@ -14,7 +14,7 @@ jobs:
       - name: Greet
         id: greet
         run: |
-                input="bonjour comment va tu? génére moi un code de front de site web de magasin en nodejs qui marche. donne moi un code dans la reponse."
+                input="bonjour comment va tu? génére moi un code d'une application web microservice de front de site web de magasin de livre en js qui marche et plug en play. l'application est très simple rapide sécurisé. donne moi un code dans la reponse."
 
                 # Define the LocalAI API endpoint
                 API_URL="http://localhost:8080/chat/completions"
