@@ -25,7 +25,7 @@ jobs:
                 messages: [
                     {
                     role: "system",
-                    content: "tu es un développeur professionnel d'applications"
+                    content: "You are a friendly companion"
                     },
                     {
                     role: "user",
@@ -53,3 +53,4 @@ jobs:
                     echo EOF
                 } >> "$GITHUB_OUTPUT"
                 # now the output can be consumed with ${{ steps.greet.outputs.message }} by other steps
+                
