@@ -42,15 +42,17 @@ jobs:
                 # Extract the result from the response
                 result="$(echo $response | jq -r '.choices[0].message.content')"
 
-                # Print the result
-                echo "Result:"   
-                echo "$result"
-                echo "payload sent"
-
-                # Using ::set-output for the message
-                echo "message<<EOF" >> $GITHUB_OUTPUT
-                echo "$result" >> $GITHUB_OUTPUT
-                echo "EOF" >> $GITHUB_OUTPUT
+                 # Print the result
+                 echo "Result:"
+                 echo "$result" 
+                 echo "payload sent"
+                 echo "$json_payload"
+                  {
+                    echo 'message<<EOF'
+                    echo "$result"
+                    echo EOF
+                  }
+                  >> "$GITHUB_OUTPUT"
 
                 # now the output can be consumed with ${{ steps.greet.outputs.message }} by other steps
 
