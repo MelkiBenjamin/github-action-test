@@ -45,7 +45,11 @@ jobs:
                  # Print the result
                  echo "Result:"
                  echo "$result" 
-                 écho "$result" >> test
+                 temp_file=$(mktemp)
+                 printf "%s" "$result" > "$temp_file"
+                 mv "$temp_file" result.html
+
+                
                             
                 # now the output can be consumed with ${{ steps.greet.outputs.message }} by other steps
 
