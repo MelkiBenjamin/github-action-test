@@ -57,7 +57,9 @@ jobs:
       - name: test
         run: |
           echo "${{ steps.greet.outputs.message }}" > temp_file
+          echo "GITHUB_OUTPUT<<EOF" >> temp_file
           cat temp_file >> test
+          echo "EOF" >> test
 
       - name: test2
         run: cat test
