@@ -53,4 +53,11 @@ jobs:
                     echo EOF
                 } >> "$GITHUB_OUTPUT"
                 # now the output can be consumed with ${{ steps.greet.outputs.message }} by other steps
-                
+
+      - name: test
+        run: |
+          ${{ steps.greet.outputs.message }} >> test
+
+
+      - name: test2
+        run: ls test
