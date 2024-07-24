@@ -14,7 +14,7 @@ jobs:
       - name: Greet
         id: greet
         run: |
-                input="Génére moi un code complet en js et css dans un seul fichier d'une application web microservice de front de site web de magasin de livre qui marche. ce code a une page d'accueil avec tout les livre pour les mettre aux panier et une page panier qui resume les livre au panier. l'apli est très simple. Repond avec que du code et tout ce code dans le meme fichier"
+                input="Génére moi un code complet en js et css dans un seul fichier d'une application web microservice de front seulement de site web de magasin de livre qui fonctionne. les livres ainsi que le back seront dans d'autres microsercive que l'on ne s'occupe pas. ce code demander a une page d'accueil avec tout les livre pour les mettre aux panier et une page panier qui resume les livre au panier. l'apli est très simple mais est utilisable. Repond avec uniquement du code donc pas de bonjour de phrase avant le code ou apres ou explication ou commentaire et tout le code est dans le meme fichier"
 
                 # Define the LocalAI API endpoint
                 API_URL="http://localhost:8080/chat/completions"
@@ -25,7 +25,7 @@ jobs:
                 messages: [
                     {
                     role: "system",
-                    content: "You are a friendly companion"
+                    content: "You are a developer who provides code functional without additional explanations or comments"
                     },
                     {
                     role: "user",
