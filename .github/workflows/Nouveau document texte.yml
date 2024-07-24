@@ -14,7 +14,7 @@ jobs:
       - name: Greet
         id: greet
         run: |
-                input="Génére moi un code d'une application web microservice de front de site web de magasin de livre en js avec aussi le css dans un meme fichier qui marche et plug en play. l'application a una page d'accueil avec tout les livre pour les mettre aux panier et une page panier qui resume les livre au panier. l'apli est très simple rapide sécurisé. Repond avec que du code"
+                input="Génére moi un code d'une application web microservice de front de site web de magasin de livre en js avec aussi le css qui marche si je l'essaye. ce code a une page d'accueil avec tout les livre pour les mettre aux panier et une page panier qui resume les livre au panier. l'apli est très simple rapide. Repond avec que du code et tout ce code dans le meme fichier"
 
                 # Define the LocalAI API endpoint
                 API_URL="http://localhost:8080/chat/completions"
@@ -56,7 +56,7 @@ jobs:
 
       - name: test
         run: |
-          ${{ steps.greet.outputs.message }} >> test
+         echo ${{ steps.greet.outputs.message }} >> test
 
 
       - name: test2
