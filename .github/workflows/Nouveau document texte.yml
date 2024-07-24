@@ -45,20 +45,10 @@ jobs:
                  # Print the result
                  echo "Result:"
                  echo "$result" 
-                 echo "payload sent"
-                 echo "$json_payload"
-                  {
-                    echo 'message<<EOF'
-                    echo "$result"
-                    echo EOF
-                  }
-                  >> "$GITHUB_OUTPUT"
-
+                 écho "$result" >> test
+                            
                 # now the output can be consumed with ${{ steps.greet.outputs.message }} by other steps
 
-      - name: test
-        run: |
-          echo "${{ steps.greet.outputs.message }}" > test
-          
+                    
       - name: test2
         run: cat test
