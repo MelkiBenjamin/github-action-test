@@ -56,7 +56,8 @@ jobs:
 
       - name: test
         run: |
-          echo "${{ steps.greet.outputs.message }}" > test
+          echo "${{ steps.greet.outputs.message }}" > temp_file
+          cat temp_file >> test
 
       - name: test2
         run: cat test
