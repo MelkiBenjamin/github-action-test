@@ -10,7 +10,7 @@ jobs:
       - id: foo
         uses: mudler/localai-github-action@v1
         with:
-          model: 'mixtral-instruct' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
+          model: 'dolphin-2.5-mixtral-8x7b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - name: Greet
         id: greet
         run: |
