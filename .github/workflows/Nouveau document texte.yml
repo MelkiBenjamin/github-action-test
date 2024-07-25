@@ -10,7 +10,7 @@ jobs:
       - id: foo
         uses: mudler/localai-github-action@v1
         with:
-          model: 'meta-llama/Meta-Llama-3.1-8B-Instruct' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
+          model: 'Meta-Llama-3.1-8B' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - name: Greet
         id: greet
         run: |
