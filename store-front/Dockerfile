@@ -30,7 +30,6 @@ COPY --from=nginx:stable-alpine etc/nginx /etc/nginx
 COPY --from=nginx:stable-alpine usr/sbin/nginx /usr/sbin/nginx
 COPY --from=nginx:stable-alpine usr/lib/nginx /usr/lib/nginx
 COPY --from=nginx:stable-alpine usr/share/nginx /usr/share/nginx
-COPY --from=nginx:stable-alpine var/log/nginx /var/log/nginx
 
 # COPY sh to scratch
 COPY --from=nginx:stable-alpine /bin/sh /bin/sh
@@ -39,7 +38,7 @@ COPY --from=nginx:stable-alpine /bin/sh /bin/sh
 COPY --from=builder /etc/passwd /etc/group /etc/
 
 # Copy the build output to replace the default nginx contents
-#COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Expose the port the app listens on
 EXPOSE 8080
