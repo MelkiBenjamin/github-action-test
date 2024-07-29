@@ -28,8 +28,6 @@ FROM scratch AS runner
 # copy nginx dans scratch
 COPY --from=nginx:stable-alpine etc/nginx /etc/nginx
 COPY --from=nginx:stable-alpine usr/sbin/nginx /usr/sbin/nginx
-COPY --from=nginx:stable-alpine usr/lib/nginx /usr/lib/nginx
-COPY --from=nginx:stable-alpine usr/share/nginx /usr/share/nginx
 
 # COPY sh to scratch
 COPY --from=nginx:stable-alpine /bin/sh /bin/sh
