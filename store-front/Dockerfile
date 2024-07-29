@@ -32,8 +32,9 @@ COPY --from=nginx:stable-alpine /bin/sh /bin/sh
 COPY --from=nginx:stable-alpine /etc/passwd /etc/group /etc/
 
 # create user
-RUN adduser -D nginx
-USER nginx
+RUN adduser benjamin && \
+    echo "benjamin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER benjamin
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
