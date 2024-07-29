@@ -6,6 +6,11 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
+# Create user
+RUN adduser benjamin && \
+    echo "benjamin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+USER benjamin
+
 # Install app dependencies
 RUN npm install
 
@@ -18,8 +23,6 @@ RUN npm run build
 # Run the app on nginx from scratch
 FROM scratch AS runner
 
-
-
 # copy nginx dans scratch
 COPY --from=nginx:stable-alpine etc/nginx /etc/nginx
 COPY --from=nginx:stable-alpine usr/sbin/nginx /usr/sbin/nginx
@@ -29,12 +32,9 @@ COPY --from=nginx:stable-alpine var/log/nginx /var/log/nginx
 
 # COPY sh to scratch
 COPY --from=nginx:stable-alpine /bin/sh /bin/sh
-COPY --from=nginx:stable-alpine /etc/passwd /etc/group /etc/
 
-# create user
-RUN adduser benjamin && \
-    echo "benjamin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-USER benjamin
+# COPY user from builder to scratch
+COPY --from=builder /etc/passwd /etc/group /etc/
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
