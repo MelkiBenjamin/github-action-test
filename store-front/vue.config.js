@@ -80,10 +80,6 @@ module.exports = defineConfig({
       new CompressionPlugin({
         algorithm: 'gzip',
       }),
-      new BundleAnalyzerPlugin({
-        analyzerMode: process.env.NODE_ENV === 'production' ? 'static' : 'disabled',
-        openAnalyzer: false,
-      }),
     ],
   },
 });
