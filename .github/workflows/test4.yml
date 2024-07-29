@@ -10,5 +10,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: docker build
-        run: docker build -t hello-world store-front
+        run: docker build -t store-front store-front
       - run: docker image ls

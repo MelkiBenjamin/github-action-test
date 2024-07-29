@@ -33,6 +33,7 @@ COPY --from=nginx:stable-alpine /bin/sh /bin/sh
 
 # COPY user from builder to scratch
 COPY --from=builder /etc/passwd /etc/group /etc/
+USER benjamin
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
