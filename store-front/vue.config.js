@@ -1,9 +1,12 @@
-const { defineConfig } = require('@vue/cli-service')
-const fetch = require("node-fetch")
-const bodyParser = require('body-parser')
+const { defineConfig } = require('@vue/cli-service');
+const fetch = require('node-fetch');
+const bodyParser = require('body-parser');
+const CompressionPlugin = require('compression-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-const PRODUCT_SERVICE_URL = (process.env.VUE_APP_PRODUCT_SERVICE_URL || "http://172.19.0.2:3002/")
-const ORDER_SERVICE_URL = (process.env.VUE_APP_ORDER_SERVICE_URL || "http://172.19.0.5:3000/")
+const PRODUCT_SERVICE_URL = process.env.VUE_APP_PRODUCT_SERVICE_URL || "http://172.19.0.2:3002/";
+const ORDER_SERVICE_URL = process.env.VUE_APP_ORDER_SERVICE_URL || "http://172.19.0.5:3000/";
 
 module.exports = defineConfig({
   transpileDependencies: true,
@@ -12,54 +15,75 @@ module.exports = defineConfig({
     host: '0.0.0.0',
     allowedHosts: 'all',
     client: false,
-    webSocketServer: false,    
+    webSocketServer: false,
     setupMiddlewares: (middlewares, devServer) => {
-      
       if (!devServer) {
         throw new Error('webpack-dev-server is not defined');
       }
 
-      devServer.app.use(bodyParser.json())
+      devServer.app.use(bodyParser.json());
 
       // Health check
       devServer.app.get('/health', (_, res) => {
-        const version = process.env.APP_VERSION || '0.1.0'
-        res.send({ status: 'ok', version: version})
-      })
-      
+        const version = process.env.APP_VERSION || '0.1.0';
+        res.send({ status: 'ok', version: version });
+      });
+
+      // Fetch products
       devServer.app.get('/products', (_, res) => {
         fetch(`${PRODUCT_SERVICE_URL}`)
           .then(response => response.json())
-          .then(products => {
-            res.send(products)
-          })
+          .then(products => res.send(products))
           .catch(error => {
-            console.log(error)
-            // alert('Error occurred while fetching products')
-          })
+            console.log(error);
+            // alert('Error occurred while fetching products');
+          });
       });
 
+      // Place order
       devServer.app.post('/order', (req, res) => {
         fetch(`${ORDER_SERVICE_URL}`, {
           method: 'POST',
           body: JSON.stringify(req.body),
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         })
           .then(response => {
             if (response.status === 201) {
-              res.sendStatus(200)
+              res.sendStatus(200);
             } else {
-              res.sendStatus(500)
+              res.sendStatus(500);
             }
           })
           .catch(error => {
-            console.log(error)
-            res.sendStatus(500)
-          })
-      })
+            console.log(error);
+            res.sendStatus(500);
+          });
+      });
 
       return middlewares;
-    }
-
-  }
-})
+    },
+  },
+  configureWebpack: {
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
+      splitChunks: {
+        chunks: 'all',
+      },
+    },
+    performance: {
+      hints: false,
+      maxEntrypointSize: 512000,  // Taille maximale du point d'entrée en octets
+      maxAssetSize: 512000,       // Taille maximale des assets en octets
+    },
+    plugins: [
+      new CompressionPlugin({
+        algorithm: 'gzip',
+      }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: process.env.NODE_ENV === 'production' ? 'static' : 'disabled',
+        openAnalyzer: false,
+      }),
+    ],
+  },
+});
