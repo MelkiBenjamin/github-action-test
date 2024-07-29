@@ -14,7 +14,7 @@ RUN addgroup -S appgroup && adduser -S benjamin -G appgroup
 #USER benjamin
 
 # Install app dependencies
-RUN npm install
+RUN npm install --ignore-scripts
 
 # Copy the rest of the app source code to the container
 COPY . .
