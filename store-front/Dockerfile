@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN addgroup -S appgroup && adduser -S benjamin -G appgroup
 
 # Tell docker that all future commands should run as the appuser user
-USER benjamin
+#USER benjamin
 
 # Install app dependencies
 RUN npm install
