@@ -7,8 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Create user
-RUN adduser benjamin && \
-    echo "benjamin ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN adduser benjamin 
 USER benjamin
 
 # Install app dependencies
