@@ -18,8 +18,7 @@ RUN npm run build
 # Run the app on nginx from scratch
 FROM scratch AS runner
 
-# Copy the build output to replace the default nginx contents
-COPY --from=builder /app/dist /usr/share/nginx/html
+
 
 # copy nginx dans scratch
 COPY --from=nginx:stable-alpine etc/nginx /etc/nginx
@@ -30,10 +29,14 @@ COPY --from=nginx:stable-alpine var/log/nginx /var/log/nginx
 
 # COPY sh to scratch
 COPY --from=nginx:stable-alpine /bin/sh /bin/sh
+COPY --from=nginx:stable-alpine /etc/passwd /etc/group /etc/
 
-# crete user
-RUN adduser -D -H -u 1001 -s /bin/sh nginx
-user nginx
+# create user
+RUN adduser -D nginx
+USER nginx
+
+# Copy the build output to replace the default nginx contents
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Expose the port the app listens on
 EXPOSE 8080
