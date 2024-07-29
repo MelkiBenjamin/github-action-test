@@ -7,7 +7,10 @@ WORKDIR /app
 COPY package*.json ./
 
 # Create user
-RUN adduser benjamin 
+# Create a group and user
+RUN addgroup -S appgroup && adduser -S benjamin -G appgroup
+
+# Tell docker that all future commands should run as the appuser user
 USER benjamin
 
 # Install app dependencies
