@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: docker build
-        run: docker build -t store-front-test store-front
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test store-front
       - run: docker image ls
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
