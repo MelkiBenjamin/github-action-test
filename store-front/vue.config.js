@@ -3,7 +3,6 @@ const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const CompressionPlugin = require('compression-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const PRODUCT_SERVICE_URL = process.env.VUE_APP_PRODUCT_SERVICE_URL || "http://172.19.0.2:3002/";
 const ORDER_SERVICE_URL = process.env.VUE_APP_ORDER_SERVICE_URL || "http://172.19.0.5:3000/";
@@ -79,6 +78,9 @@ module.exports = defineConfig({
     plugins: [
       new CompressionPlugin({
         algorithm: 'gzip',
+        test: /\.(js|css|html|svg)$/, // Types de fichiers à compresser
+        threshold: 10240,             // Seuil de compression en octets
+        minRatio: 0.8                 // Ratio de compression minimal
       }),
     ],
   },
