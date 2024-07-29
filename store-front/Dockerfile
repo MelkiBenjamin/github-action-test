@@ -26,7 +26,7 @@ RUN npm run build
 FROM scratch AS runner
 
 # copy nginx dans scratch
-COPY --from=caddy:alpine etc/nginx /etc/caddy
+COPY --from=caddy:alpine etc/caddy /etc/caddy
 
 # COPY sh to scratch
 COPY --from=caddy:alpine /bin/sh /bin/sh
