@@ -1,0 +1,13 @@
+name: build test 4
+on: 
+#  push:
+  workflow_dispatch:
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v4
+      - name: docker build
+        run: docker build -t hello-world store-front

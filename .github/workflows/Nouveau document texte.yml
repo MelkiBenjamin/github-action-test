@@ -1,5 +1,7 @@
 name: build test
-on: [push]
+on: 
+#  push:
+  workflow_dispatch:
 
 jobs:
   hello_world_job:
@@ -47,12 +49,8 @@ jobs:
                  echo "$result" 
                  temp_file=$(mktemp)
                  printf "%s" "$result" > "$temp_file"
-                 mv "$temp_file" result.html
-
-                
-                            
+                 mv "$temp_file" result.html                            
                 # now the output can be consumed with ${{ steps.greet.outputs.message }} by other steps
-
                     
       - name: test2
         run: cat result.html
