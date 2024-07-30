@@ -39,7 +39,6 @@ COPY --from=nginx:alpine sbin/nginx /sbin/nginx
 COPY --from=nginx:alpine etc/init.d/nginx /etc/init.d/nginx
 Copy --from=nginx:alpine etc/conf.d/nginx /etc/conf.d/nginx
 COPY --from=nginx:alpine var/log/nginx /var/log/nginx
-COPY --from=nginx:alpine var/lib/nginx /var/lib/nginx
 COPY --from=nginx:alpine usr/sbin/nginx /usr/sbin/nginx
 
 # Copy the build output to replace the default nginx contents
