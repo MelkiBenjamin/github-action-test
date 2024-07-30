@@ -44,7 +44,7 @@ COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
 
 # COPY user from builder to alpine-slim
-COPY --from=builder /etc/passwd /etc/group /etc/
+#COPY --from=builder /etc/passwd /etc/group /etc/
 USER nginx
 
 # Start the app
