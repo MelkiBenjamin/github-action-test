@@ -60,5 +60,5 @@ COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 #RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
 
 # Start the app
-CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
-#CMD ["nginx", "-g", "daemon off;"]
+#CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
