@@ -43,7 +43,7 @@ ENV APP_VERSION=$APP_VERSION
 COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
 # Exécuter la substitution de variables
-envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
+RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
 
 # COPY user from builder to alpine-slim
 COPY --from=builder /etc/passwd /etc/group /etc/
