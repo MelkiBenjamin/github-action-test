@@ -45,7 +45,7 @@ RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/ngi
 
 # COPY user from builder to alpine-slim
 #COPY --from=builder /etc/passwd /etc/group /etc/
-USER nginx
+USER root
 
 # Start the app
-CMD ["sh", "-c", "nginx -g 'daemon off;'"]
+#CMD ["sh", "-c", "nginx -g 'daemon off;'"]
