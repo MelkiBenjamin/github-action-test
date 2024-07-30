@@ -35,9 +35,9 @@ USER benjamin
 # copy tout endroit avec nginx dans scratch
 COPY --from=nginx:alpine etc/nginx /etc/nginx
 COPY --from=nginx:alpine usr/share/nginx/html /usr/share/nginx/html
-COPY --from=nginx:alpine sbin/nginx /sbin/nginx
+#COPY --from=nginx:alpine sbin/nginx /sbin/nginx
 COPY --from=nginx:alpine etc/init.d/nginx /etc/init.d/nginx
-Copy --from=nginx:alpine etc/conf.d/nginx /etc/conf.d/nginx
+#Copy --from=nginx:alpine etc/conf.d/nginx /etc/conf.d/nginx
 COPY --from=nginx:alpine var/log/nginx /var/log/nginx
 COPY --from=nginx:alpine usr/sbin/nginx /usr/sbin/nginx
 
