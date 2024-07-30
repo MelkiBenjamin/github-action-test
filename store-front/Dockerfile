@@ -25,9 +25,6 @@ RUN npm run build
 # Run the app on nginx from scratch
 FROM scratch AS runner
 
-# copy nginx dans scratch
-COPY --from=nginx:alpine etc/nginx /etc/nginx
-
 # COPY sh to scratch
 COPY --from=nginx:alpine /bin/sh /bin/sh
 
@@ -35,8 +32,12 @@ COPY --from=nginx:alpine /bin/sh /bin/sh
 COPY --from=builder /etc/passwd /etc/group /etc/
 USER benjamin
 
+# copy nginx dans scratch
+COPY --from=nginx:alpine etc/nginx /etc/nginx
+
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /usr/local/nginx /usr/local/nginx
 
 # Expose the port the app listens on
 EXPOSE 8080
