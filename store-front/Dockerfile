@@ -26,17 +26,17 @@ RUN npm run build
 FROM scratch AS runner
 
 # copy nginx dans scratch
-COPY --from=caddy:alpine etc/caddy /etc/caddy
+COPY --from=nginx:alpine etc/nginx /etc/nginx
 
 # COPY sh to scratch
-COPY --from=caddy:alpine /bin/sh /bin/sh
+COPY --from=nginx:alpine /bin/sh /bin/sh
 
 # COPY user from builder to scratch
 COPY --from=builder /etc/passwd /etc/group /etc/
 USER benjamin
 
 # Copy the build output to replace the default nginx contents
-COPY --from=builder /app/dist /usr/share/caddy
+COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Expose the port the app listens on
 EXPOSE 8080
@@ -48,7 +48,7 @@ ARG APP_VERSION=0.1.0
 ENV APP_VERSION=$APP_VERSION
 
 # Copy the nginx configuration template to the container
-#COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
 # Update the nginx configuration to use the app version number
 # and Copy the nginx configuration template to the container
