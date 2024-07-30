@@ -22,23 +22,12 @@ COPY . .
 # Build the app
 RUN npm run build 
 
-# Run the app on nginx from scratch
-FROM scratch AS runner
+# Run the app on nginx from alpine-slim
+FROM nginx:stable-alpine-slim AS runner
 
-# COPY sh to scratch
-COPY --from=nginx:alpine /bin/sh /bin/sh
-
-# COPY user from builder to scratch
+# COPY user from builder to alpine-slim
 COPY --from=builder /etc/passwd /etc/group /etc/
 USER benjamin
-
-# copy tout endroit avec nginx dans scratch
-COPY --from=nginx:alpine etc/nginx /etc/nginx
-COPY --from=nginx:alpine usr/share/nginx/html /usr/share/nginx/html
-COPY --from=nginx:alpine etc/init.d/nginx /etc/init.d/nginx
-COPY --from=nginx:alpine var/log/nginx /var/log/nginx
-COPY --from=nginx:alpine usr/sbin/nginx /usr/sbin/nginx
-COPY --from=nginx:alpine usr/lib/nginx /usr/lib/nginx
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -57,8 +46,7 @@ COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
 # Update the nginx configuration to use the app version number
 # and Copy the nginx configuration template to the container
-#RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
+RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
 
 # Start the app
-#CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
 CMD ["nginx", "-g", "daemon off;"]
