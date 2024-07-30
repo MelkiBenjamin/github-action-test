@@ -34,10 +34,11 @@ USER benjamin
 
 # copy nginx dans scratch
 COPY --from=nginx:alpine etc/nginx /etc/nginx
+COPY --from=nginx:alpine /usr/local/nginx /usr/local/nginx
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
-COPY --from=builder /usr/local/nginx /usr/local/nginx
+
 
 # Expose the port the app listens on
 EXPOSE 8080
