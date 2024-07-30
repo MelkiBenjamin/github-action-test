@@ -32,13 +32,18 @@ COPY --from=nginx:alpine /bin/sh /bin/sh
 COPY --from=builder /etc/passwd /etc/group /etc/
 USER benjamin
 
-# copy nginx dans scratch
+# copy tout endroit avec nginx dans scratch
 COPY --from=nginx:alpine etc/nginx /etc/nginx
-COPY --from=nginx:alpine /usr/local/nginx /usr/local/nginx
+COPY --from=nginx:alpine usr/share/nginx/html /usr/share/nginx/html
+COPY --from=nginx:alpine sbin/nginx /sbin/nginx
+COPY --from=nginx:alpine etc/init.d/nginx /etc/init.d/nginx
+Copy --from=nginx:alpine etc/conf.d/nginx /etc/conf.d/nginx
+COPY --from=nginx:alpine var/log/nginx /var/log/nginx
+COPY --from=nginx:alpine var/lib/nginx /var/lib/nginx
+COPY --from=nginx:alpine usr/sbin/nginx /usr/sbin/nginx
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
-
 
 # Expose the port the app listens on
 EXPOSE 8080
@@ -54,7 +59,8 @@ COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
 # Update the nginx configuration to use the app version number
 # and Copy the nginx configuration template to the container
-#RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
+RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
 
 # Start the app
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/sbin/nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
