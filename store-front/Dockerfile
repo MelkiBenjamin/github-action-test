@@ -35,11 +35,10 @@ USER benjamin
 # copy tout endroit avec nginx dans scratch
 COPY --from=nginx:alpine etc/nginx /etc/nginx
 COPY --from=nginx:alpine usr/share/nginx/html /usr/share/nginx/html
-#COPY --from=nginx:alpine sbin/nginx /sbin/nginx
 COPY --from=nginx:alpine etc/init.d/nginx /etc/init.d/nginx
-#Copy --from=nginx:alpine etc/conf.d/nginx /etc/conf.d/nginx
 COPY --from=nginx:alpine var/log/nginx /var/log/nginx
 COPY --from=nginx:alpine usr/sbin/nginx /usr/sbin/nginx
+COPY --from=nginx:alpine usr/lib/nginx /usr/lib/nginx
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -61,5 +60,5 @@ COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 #RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
 
 # Start the app
-#CMD ["/sbin/nginx", "-g", "daemon off;"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
