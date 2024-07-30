@@ -25,8 +25,6 @@ RUN npm run build
 # Run the app on nginx from alpine-slim
 FROM nginx:stable-alpine-slim AS runner
 
-
-
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
 
@@ -47,7 +45,7 @@ RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/ngi
 
 # COPY user from builder to alpine-slim
 COPY --from=builder /etc/passwd /etc/group /etc/
-USER benjamin
+#USER benjamin
 
 # Start the app
 CMD ["sh", "-c", "nginx -g 'daemon off;'"]
