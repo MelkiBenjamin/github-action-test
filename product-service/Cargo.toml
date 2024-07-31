@@ -27,5 +27,6 @@ wasmtime-wasi = { git = "https://github.com/bytecodealliance/wasmtime", branch =
 ctor = "0.1.21"
 openssl = "0.10.66"
 openssl-sys = "0.9.103"
+openssl-probe = "0.1.2"
 
 
