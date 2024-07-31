@@ -40,12 +40,10 @@ ENV APP_VERSION=$APP_VERSION
 # Copy the nginx configuration template to the container
 COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
-# Exécuter la substitution de variables
-RUN envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf
-
 # COPY user from builder to alpine-slim
 #COPY --from=builder /etc/passwd /etc/group /etc/
-USER root
+#USER root
 
 # Start the app
-#CMD ["sh", "-c", "nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+
