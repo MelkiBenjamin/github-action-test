@@ -6,8 +6,15 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
+# Create user
+# Create a group and user
+RUN addgroup -S appgroup && adduser -S benjamin -G appgroup
+
+# Tell docker that all future commands should run as the appuser user
+#USER benjamin
+
 # Install app dependencies
-RUN npm install
+RUN npm install --ignore-scripts
 
 # Copy the rest of the app source code to the container
 COPY . .
@@ -15,8 +22,8 @@ COPY . .
 # Build the app
 RUN npm run build 
 
-# Run the app on nginx
-FROM nginx:stable-alpine AS runner
+# Run the app on nginx from alpine-slim
+FROM nginx:stable-alpine-slim AS runner
 
 # Copy the build output to replace the default nginx contents
 COPY --from=builder /app/dist /usr/share/nginx/html
@@ -33,6 +40,9 @@ ENV APP_VERSION=$APP_VERSION
 # Copy the nginx configuration template to the container
 COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
+# COPY user from builder to alpine-slim
+#COPY --from=builder /etc/passwd /etc/group /etc/
+#USER root
+
 # Start the app
 CMD ["sh", "-c", "envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
-
