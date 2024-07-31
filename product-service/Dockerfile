@@ -14,12 +14,6 @@ ADD . ./
 # Build the application
 RUN cargo build --release
 
-#resoudre erreur libessl1.1.so.1 et crypto.so.1.1 dans alpine 20.3
-
-RUN 
-#RUN apk add libcrypto1.1
-
-
 # Create a new stage and copy the binary from the builder stage
 FROM alpine:3.20.2 AS runner
 WORKDIR /app
