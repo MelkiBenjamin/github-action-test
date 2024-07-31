@@ -26,7 +26,6 @@ wasmtime = { git = "https://github.com/bytecodealliance/wasmtime", branch = "rel
 wasmtime-wasi = { git = "https://github.com/bytecodealliance/wasmtime", branch = "release-15.0.0" }
 ctor = "0.2.8"
 openssl = "0.10.66"
-openssl-sys = "0.9.103"
 openssl-probe = "0.1.5"
 
 
