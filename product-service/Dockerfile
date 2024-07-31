@@ -31,4 +31,4 @@ COPY --from=builder /product-service/target/release/product-service /app
 ENV APP_VERSION=$APP_VERSION
 
 # Run the application
-CMD ["./product-service"]
+#CMD ["./product-service"]
