@@ -1,4 +1,4 @@
-FROM rust:alpine3.20 as builder
+FROM rust:1.80.0 as builder
 
 RUN USER=root cargo new --bin product-service
 
