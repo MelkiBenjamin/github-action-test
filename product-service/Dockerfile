@@ -13,16 +13,14 @@ ADD . ./
 
 # Installer les outils nécessaires
 RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    libssl-dev \
     musl-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # Installer la cible musl
 RUN rustup target add x86_64-unknown-linux-musl
-
-RUN apk add --no-cache \
-    musl-dev \
-    openssl-dev \
-    pkgconfig
 
 # Build the application
 RUN cargo build --release --target x86_64-unknown-linux-musl
