@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  hello_world_job:
+  ohello_world_jb1:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
@@ -15,3 +15,12 @@ jobs:
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
 
+  ohello_world_jb2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: docker build
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test product-service
+      - run: docker image ls
+      - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
