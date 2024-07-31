@@ -1,4 +1,4 @@
-FROM rust:alpine3.20 as builder
+FROM rust:1.80.0 AS builder
 
 RUN USER=root cargo new --bin product-service
 
@@ -23,6 +23,7 @@ ARG APP_VERSION=0.1.0
 
 # Not ideal but needed to execute health checks in docker-compose
 #RUN apt-get update && apt-get install -y wget
+RUN apk update && apk add --no-cache gcompat libstdc++
 
 # Copy the binary from the builder stage
 COPY --from=builder /product-service/target/release/product-service /app
