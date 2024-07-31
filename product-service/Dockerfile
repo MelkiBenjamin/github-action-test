@@ -18,6 +18,10 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     musl-tools \
     && rm -rf /var/lib/apt/lists/*
+    
+# Configurer les chemins pour pkg-config pour la compilation croisée
+ENV PKG_CONFIG_ALLOW_CROSS=1
+ENV PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
 
 # Installer la cible musl
 RUN rustup target add x86_64-unknown-linux-musl
