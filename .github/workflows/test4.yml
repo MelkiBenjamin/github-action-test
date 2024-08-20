@@ -42,5 +42,6 @@ jobs:
       - run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm install my-nginx bitnami/nginx --version 18.1.9
+          sleep 120
       - run: kubectl port-forward service/nginx 8080:80 & sleep 5 # Laisser le temps à la 
       - run: curl http://localhost:8080
