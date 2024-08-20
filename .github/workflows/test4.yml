@@ -36,5 +36,9 @@ jobs:
       - run: |
           kubectl get nodes
           kubectl get pods -A
+          sleep 30
+          kubectl get pods -A
       - uses: Azure/setup-helm@v4.2.0
-      - run: helm install nginx nginx
+      - run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm install my-nginx bitnami/nginx --version 18.1.9
