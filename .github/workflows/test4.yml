@@ -40,8 +40,8 @@ jobs:
           kubectl get pods -A
       - uses: Azure/setup-helm@v4.2.0
       - run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm install my-nginx bitnami/nginx --version 18.1.9
+          helm repo add alekc https://charts.alekc.dev   
+          helm install my-caddy alekc/caddy --version 0.4.0 -f caddyfile 
           sleep 60
           kubectl get svc 
       - run: kubectl port-forward service/my-nginx 8080:80 & sleep 5 # Laisser le temps à la 
