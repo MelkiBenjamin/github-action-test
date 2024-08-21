@@ -41,7 +41,7 @@ jobs:
       - uses: Azure/setup-helm@v4.2.0
       - run: |
           helm repo add alekc https://charts.alekc.dev   
-          helm install my-caddy alekc/caddy --version 0.4.0 -f caddyfile 
+          helm install my-caddy alekc/caddy --version 0.4.0 -f test
           sleep 60
           kubectl get svc 
       - run: kubectl port-forward service/my-nginx 8080:80 & sleep 5 # Laisser le temps à la 
