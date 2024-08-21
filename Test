@@ -1,7 +1,7 @@
 replicaCount: 1
 
 # -- port caddy container and service is listening to
-listenPort: &listenPort 8080
+listenPort: &listenPort 443
 
 # -- manage https
 https:
@@ -55,7 +55,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 80
+  port: 443
   # -- External traffic policy. Used only when `service.type` is LoadBalancer or Nodeport
   externalTrafficPolicy: Cluster
   annotations: {}
@@ -131,6 +131,5 @@ config:
   # -- this is a place to add your own configuration. It will be appended after the global section
   caddyFile: |
     localhost:443 { 
-    reverse_proxy 127.0.0.1:8080 
     tls internal }
     
