@@ -1,14 +1,14 @@
 replicaCount: 1
 
 # -- port caddy container and service is listening to
-listenPort: &listenPort 443
+listenPort: &listenPort 8000
 
 # -- manage https
 https:
   # -- enable https ports. If true, ingress will point to the https port and not http one
   enabled: true
   # -- https port
-  port: 443
+  port: 8000
 
 image:
   repository: caddy
@@ -55,7 +55,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 443
+  port: 8000
   # -- External traffic policy. Used only when `service.type` is LoadBalancer or Nodeport
   externalTrafficPolicy: Cluster
   annotations: {}
@@ -130,6 +130,6 @@ config:
     }
   # -- this is a place to add your own configuration. It will be appended after the global section
   caddyFile: |
-    localhost:443 { 
+    localhost:8000 { 
     tls internal }
     
