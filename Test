@@ -130,7 +130,7 @@ config:
     }
   # -- this is a place to add your own configuration. It will be appended after the global section
   caddyFile: |
-    my-nginx.localhost {
-    reverse_proxy localhost:8181
-}
+    localhost:443 { 
+    reverse_proxy 127.0.0.1:8080 
+    tls internal }
     
