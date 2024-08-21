@@ -44,5 +44,5 @@ jobs:
           helm install my-caddy alekc/caddy --version 0.4.0 -f test
           sleep 60
           kubectl get svc 
-      - run: kubectl port-forward service/my-caddy 8080:80 & sleep 5 # Laisser le temps à la 
+      - run: kubectl port-forward service/my-caddy 8080:8080 & sleep 5 # Laisser le temps à la 
       - run: curl http://localhost:8080
