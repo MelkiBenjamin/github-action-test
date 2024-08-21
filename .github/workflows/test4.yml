@@ -45,4 +45,4 @@ jobs:
           sleep 60
           kubectl get svc 
       - run: kubectl port-forward service/my-caddy 8080:8080 & sleep 5 # Laisser le temps à la 
-      - run: curl -k https://127.0.0.1:8080
+      - run: curl -k https://127.0.0.1:443
