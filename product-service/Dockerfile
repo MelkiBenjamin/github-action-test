@@ -30,8 +30,8 @@ COPY --from=builder /product-service/target/release/product-service /app
 
 # Copy the libssl 3 ici
 COPY --from=caddy:2.7 /lib/libssl.so.3 /lib/libssl.so.3
-# Copy the bash ici
-COPY --from=caddy:2.7 /bin/bash /bin/bash
+# Copy the sh ici
+COPY --from=caddy:2.7 /bin/sh /bin/sh
 
 # Set the environment variable for the app version number
 ENV APP_VERSION=$APP_VERSION
