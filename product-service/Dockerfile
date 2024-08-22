@@ -29,6 +29,7 @@ COPY --from=builder /product-service/target/release/product-service /app
 
 # Copy the libssl 3 ici
 COPY --from=caddy:2.7 /lib/libssl.so.3 /lib/libssl.so.3
+COPY --from=caddy:2.7 /lib/libcrypto.so.3 /lib/libcrypto.so.3
 
 # Copy the sh ici
 #COPY --from=caddy:2.7 /bin/sh /bin/sh
