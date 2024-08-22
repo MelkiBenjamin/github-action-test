@@ -1,6 +1,6 @@
 name: build test 4
 on: 
-  push:
+#  push:
   workflow_dispatch:
 
 jobs:
@@ -39,10 +39,4 @@ jobs:
           sleep 30
           kubectl get pods -A
       - uses: Azure/setup-helm@v4.2.0
-      - run: |
-          helm repo add alekc https://charts.alekc.dev   
-          helm install my-caddy alekc/caddy --version 0.4.0 
-          kubectl get svc 
-          kubectl get pod
-      - run: kubectl port-forward service/my-caddy 8080:8080 & sleep 5 # Laisser le temps à la 
-      - run: curl -k https://127.0.0.1:8080
+
