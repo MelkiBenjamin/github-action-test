@@ -12,7 +12,6 @@ name = "product_service"
 path = "src/lib.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-#dependence sans openssl et avec rustls
 [dependencies]
 actix-cors = "0.7.0"
 actix-web = { version = "4", features = ["rustls-0_23"] }
