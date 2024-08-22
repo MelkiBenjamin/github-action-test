@@ -88,11 +88,7 @@ jobs:
         env:
           ARGOCD: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-          newmdp: ${{ secrets.ARGOCD }}
-        # fait si le mot de passe est diferent de celui par defaut sinon il ne le fait pas
-        if: ${{ env.newmdp != env.mdp }}
         run: argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) ${{ env.sensible-pas-afficher }}
-
 
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
@@ -102,7 +98,7 @@ jobs:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
         run: argocd login ${{ env.ip }} --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}
 
-      - name: Create Application Contoso with Argocd avec namespace
+      - name: Create Contoso namespace
         run: |
           kubectl get namespace contoso || kubectl create namespace contoso
         
