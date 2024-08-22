@@ -14,9 +14,7 @@ path = "src/lib.rs"
 
 [dependencies]
 actix-cors = "0.7.0"
-actix-web = { version = "4", features = ["rustls-0_23"] }
-rustls = "0.23"
-openssl = { version = "0.10" }
+actix-web = { version = "4", default-features = false, features = ["rustls-0_23"] }
 log = "0.4.20"
 env_logger = "0.10.0"
 futures-util = "0.3.28"
