@@ -86,9 +86,8 @@ jobs:
 
       - name: update ArgoCD password
         env:
-          ARGOCD: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-        run: argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) ${{ env.sensible-pas-afficher }}
+        run: argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}
 
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
