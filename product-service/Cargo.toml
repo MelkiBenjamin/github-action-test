@@ -12,13 +12,16 @@ name = "product_service"
 path = "src/lib.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+#dependence sans openssl et avec rustls
 [dependencies]
 actix-cors = "0.7.0"
-actix-web = "4.9.0"
+actix-web = { version = "4", features = ["rustls-0_23"] }
+rustls = "0.23"
+openssl = { version = "0.10" }
 log = "0.4.20"
 env_logger = "0.10.0"
 futures-util = "0.3.28"
-reqwest = { version = "0.11.23", features = ["json"] }
+reqwest = { version = "0.11.23", default-features = false, features = ["json", "blocking", rustls-tls"] }
 serde = { version = "1.0.164", features = ["derive"] }
 serde_json = "1.0.96"
 anyhow = "1.0.72"
