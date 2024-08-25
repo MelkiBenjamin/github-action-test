@@ -1,4 +1,4 @@
-FROM rust:alpine3.20 AS builder
+FROM rust:1.80.1 AS builder
 
 RUN USER=root cargo new --bin product-service
 
@@ -12,7 +12,7 @@ ARG APP_VERSION=0.1.0
 ADD . ./
 
 # install lib musl optimised for small binary size and timing
-RUN apk add --no-cache musl-dev 
+RUN apt install -y musl-dev 
 
 #Build the application with libc musl for fast and small binary size and timing and parallelism
 RUN cargo build --release --target x86_64-unknown-linux-musl 
