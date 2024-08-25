@@ -11,11 +11,11 @@ ARG APP_VERSION=0.1.0
 # Copy the source files to the container
 ADD . ./
 
-# install lib musl optimiser
-RUN apk add --no-cache musl-dev
+# install lib musl optimised for small binary size and timing
+RUN apk add --no-cache musl-dev 
 
 #Build the application with libc musl for fast and small binary size and timing and parallelism
-RUN cargo build --release --jobs 4 
+RUN cargo build --release --jobs 4 --target x86_64-unknown-linux-musl
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
