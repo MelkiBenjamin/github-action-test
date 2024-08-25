@@ -1,4 +1,4 @@
-FROM rust:latest AS builder
+FROM rust:1.80.1 AS builder
 
 # install lib musl
 RUN USER=root cargo new --bin product-service  
@@ -17,7 +17,7 @@ COPY . ./
 RUN cargo build --release 
 
 # Create a new stage and copy the binary from the builder stage ubuntu with glibc
-FROM ubuntu AS app
+FROM ubuntu:22.04 AS app
 WORKDIR /app
 
 # Set the build argument for the app version number
