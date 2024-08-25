@@ -16,7 +16,7 @@ run apk add musl-dev
 RUN cargo build --release --jobs 4
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
-FROM busybox:musl AS app
+FROM scratch AS app
 WORKDIR /app
 
 # Set the build argument for the app version number
@@ -27,7 +27,6 @@ ARG APP_VERSION=0.1.0
 
 # Copy the binary from the builder stage
 COPY --from=builder /product-service/target/release/product-service /app
-#COPY --from=builder /product-service/target/release/product-service /app
 
 # Copy the libssl 3 ici
 #COPY --from=caddy:2.7 /lib/libssl.so.3 /lib/libssl.so.3
