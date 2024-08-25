@@ -16,7 +16,7 @@ ADD . ./
 RUN apt update && apt install -y musl-tools musl-dev
 
 #Build the application with libc musl for fast and small binary size and timing and parallelism
-RUN rust-musl-builder cargo build --release
+RUN rust cargo build --release --target=x86_64-unknown-linux-musl
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
