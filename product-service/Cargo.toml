@@ -12,10 +12,9 @@ name = "product_service"
 path = "src/lib.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-# dependencies for the project with default-features = false
 [dependencies]
-actix-cors = { version = "0.7", default-features = false }
-actix-web = { version = "4.9.0", default-features = false }
+actix-cors = "0.7.0"
+actix-web = "4.9.0"
 log = "0.4.20"
 env_logger = "0.10.0"
 futures-util = "0.3.28"
@@ -23,6 +22,6 @@ reqwest = { version = "0.11.23", default-features = false, features = ["json", "
 serde = { version = "1.0.164", features = ["derive"], default-features = false }
 serde_json = "1.0.96"
 anyhow = "1.0.72"
-wasmtime = { git = "https://github.com/bytecodealliance/wasmtime", branch = "release-15.0.0", features = ["component-model"] }
+wasmtime = { git = "https://github.com/bytecodealliance/wasmtime", branch = "release-15.0.0", features = ["component-model"], default-features = false }
 wasmtime-wasi = { git = "https://github.com/bytecodealliance/wasmtime", branch = "release-15.0.0" }
 ctor = "0.2.8"
