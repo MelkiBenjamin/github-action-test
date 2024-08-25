@@ -16,7 +16,7 @@ RUN apk add musl-dev
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
-FROM alpine AS app
+FROM busybox:musl AS app
 WORKDIR /app
 
 # Set the build argument for the app version number
