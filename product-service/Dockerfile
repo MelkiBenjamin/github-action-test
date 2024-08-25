@@ -26,7 +26,8 @@ ARG APP_VERSION=0.1.0
 #RUN apt-get update && apt-get install -y wget
 
 # Copy the binary from the builder stage
-COPY --from=builder /product-service/target/release/product-service /app
+COPY --from=builder /product-service/target/x86_64-unknown-linux-musl/release/product-service /app
+#COPY --from=builder /product-service/target/release/product-service /app
 
 # Copy the libssl 3 ici
 #COPY --from=caddy:2.7 /lib/libssl.so.3 /lib/libssl.so.3
