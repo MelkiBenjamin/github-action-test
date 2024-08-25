@@ -12,10 +12,10 @@ ARG APP_VERSION=0.1.0
 ADD . ./
 
 # install lib musl optimised for small binary size and timing
-RUN apt install -y musl-dev 
+#RUN apt install -y musl-tools 
 
 #Build the application with libc musl for fast and small binary size and timing and parallelism
-RUN cargo build --release --target x86_64-unknown-linux-musl 
+RUN rust-musl-builder cargo build --release
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
