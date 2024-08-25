@@ -13,6 +13,7 @@ ADD . ./
 
 # install lib musl optimised for small binary size and timing
 #RUN apt install -y musl-tools 
+RUN apt update && apt install -y musl-tools musl-dev
 
 #Build the application with libc musl for fast and small binary size and timing and parallelism
 RUN rust-musl-builder cargo build --release
