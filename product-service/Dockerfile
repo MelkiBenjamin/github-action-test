@@ -1,8 +1,8 @@
 FROM rust:latest AS builder
 
 # install lib musl
-RUN USER=root cargo new --bin product-service \ 
-  && apk add --no-cache musl-dev
+RUN USER=root cargo new --bin product-service  
+#  && apk add --no-cache musl-dev
 
 # Create a new directory for our application
 WORKDIR /product-service
