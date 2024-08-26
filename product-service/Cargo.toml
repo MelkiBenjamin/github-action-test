@@ -3,6 +3,9 @@ name = "product-service"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+strip = true  # Automatically strip symbols from the binary.
+
 [[bin]]
 path = "src/main.rs"
 name = "product-service"
