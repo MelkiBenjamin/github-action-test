@@ -14,7 +14,7 @@ COPY . ./
 
 RUN apk add --no-cache musl-dev
 
-RUN apk curl && \
+RUN apk add curl && \
     curl -L get.fleet.rs | sh
 RUN fleet build --release
 #Build the application with libc musl 
