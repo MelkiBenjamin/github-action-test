@@ -10,16 +10,13 @@ WORKDIR /product-service
 ARG APP_VERSION=0.1.0
 
 # Copy the source files to the container
-COPY . ./
+COPY . ./ 
 
-RUN apk add --no-cache musl-dev
-
-RUN apk add curl
-RUN cargo install fleet-rs
-RUN fleet build --release
 #Build the application with libc musl 
-#RUN cargo build --release 
-
+RUN apk add --no-cache musl-dev \
+  && cargo build --release 
+  && addgroup -S appgroup && adduser -S benjamin -G appgroup
+  
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
 WORKDIR /app
@@ -32,6 +29,10 @@ ARG APP_VERSION=0.1.0
 
 # Copy the binary from the builder stage
 COPY --from=builder /product-service/target/release/product-service .
+
+#utilisateur
+COPY --from=builder /etc/passwd /etc/group /etc/
+USER benjamin
 
 # Set the environment variable for the app version number
 ENV APP_VERSION=$APP_VERSION
