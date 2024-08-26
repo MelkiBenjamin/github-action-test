@@ -14,8 +14,11 @@ COPY . ./
 
 RUN apk add --no-cache musl-dev
 
+RUN apk curl && \
+    curl -L get.fleet.rs | sh
+RUN fleet build --release
 #Build the application with libc musl 
-RUN cargo build --release 
+#RUN cargo build --release 
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
