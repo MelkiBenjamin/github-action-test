@@ -1,8 +1,7 @@
 FROM rust:alpine3.20 AS builder
 
 # install lib musl
-RUN USER=root cargo new --bin product-service \ 
-  && apk add --no-cache musl-dev
+RUN USER=root cargo new --bin product-service
 
 # Create a new directory for our application
 WORKDIR /product-service
@@ -12,6 +11,8 @@ ARG APP_VERSION=0.1.0
 
 # Copy the source files to the container
 COPY . ./
+
+RUN apk add --no-cache musl-dev
 
 #Build the application with libc musl 
 RUN cargo build --release 
