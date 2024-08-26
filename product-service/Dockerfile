@@ -14,9 +14,9 @@ COPY . ./
 
 #Build the application with libc musl 
 RUN apk add --no-cache musl-dev \
+  && addgroup -S appgroup && adduser -S benjamin -G appgroup \
   && cargo build --release 
-  && addgroup -S appgroup && adduser -S benjamin -G appgroup
-  
+
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
 WORKDIR /app
@@ -28,10 +28,9 @@ ARG APP_VERSION=0.1.0
 #RUN apt-get update && apt-get install -y wget
 
 # Copy the binary from the builder stage
-COPY --from=builder /product-service/target/release/product-service .
-
-#utilisateur
-COPY --from=builder /etc/passwd /etc/group /etc/
+COPY --from=builder /etc/passwd /etc/group /etc/ \
+  && --from=builder /product-service/target/release/product-service .
+   
 USER benjamin
 
 # Set the environment variable for the app version number
