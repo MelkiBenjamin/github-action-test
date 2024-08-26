@@ -14,8 +14,8 @@ COPY . ./
 
 RUN apk add --no-cache musl-dev
 
-RUN apk add curl && \
-    curl -L get.fleet.rs | sh
+RUN apk add curl
+RUN cargo install --git https://github.com/dimensionhq/fleet fleet-rs
 RUN fleet build --release
 #Build the application with libc musl 
 #RUN cargo build --release 
