@@ -14,7 +14,7 @@ ARG APP_VERSION=0.1.0
 COPY . ./
 
 #Build the application with libc musl 
-RUN cargo build --release --target x86_64-unknown-linux-musl
+RUN cargo build --release 
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
@@ -27,7 +27,7 @@ ARG APP_VERSION=0.1.0
 #RUN apt-get update && apt-get install -y wget
 
 # Copy the binary from the builder stage
-COPY --from=builder /product-service/target/x86_64-unknown-linux-musl/release/product-service .
+COPY --from=builder /product-service/target/release/product-service .
 
 # Set the environment variable for the app version number
 ENV APP_VERSION=$APP_VERSION
