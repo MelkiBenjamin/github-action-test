@@ -14,10 +14,10 @@ COPY . ./
 
 #Build the application with libc musl 
 #RUN addgroup -S appgroup && adduser -S benjamin -G appgroup 
-Run apt update && apt install -y musl-tools
-RUN rustup target add x86_64-unknown-linux-musl
-#run rustup toolchain install nightly
-run RUSTFLAGS="-Z threads=4" cargo +nightly build --release --target x86_64-unknown-linux-musl
+Run apt update && apt install -y musl-tools \
+  && rustup target add x86_64-unknown-linux-musl \
+  && rustup toolchain install nightly \
+  && RUSTFLAGS="-Z threads=4" cargo +nightly build --release --target x86_64-unknown-linux-musl
 #RUN cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
