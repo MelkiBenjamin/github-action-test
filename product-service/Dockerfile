@@ -18,6 +18,8 @@ Run apt update && apt install -y musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo build --release --target x86_64-unknown-linux-musl
 run ls /product-service/target/release/
+run ls /product-service/target/release/deps
+run ls /product-service/target/release/build
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
 WORKDIR /app
