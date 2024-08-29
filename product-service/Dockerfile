@@ -15,8 +15,11 @@ COPY . ./
 #Build the application with libc musl 
 #RUN addgroup -S appgroup && adduser -S benjamin -G appgroup 
 Run rustup toolchain install nightly \
+  && rustup default nightly \
   && apt update && apt install -y musl-tools \
   && rustup target add x86_64-unknown-linux-musl \
+  && rustup show active-toolchain \
+  && rustup target list --installed \
   && RUSTFLAGS="-Z threads=4" cargo +nightly build --release --target x86_64-unknown-linux-musl
 #RUN cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 
