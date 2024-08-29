@@ -17,7 +17,7 @@ COPY . ./
 Run apt update && apt install -y musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
 run rustup toolchain install nightly
-run RUSTFLAGS="-Z threads=4" cargo build --release --target x86_64-unknown-linux-musl -Z threads=4
+run RUSTFLAGS="-Z threads=4" cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 #RUN cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 run ls /product-service/target/release/
 run ls /product-service/target/release/deps
