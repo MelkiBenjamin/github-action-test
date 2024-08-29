@@ -14,6 +14,7 @@ COPY . ./
 
 #Build the application with libc musl 
 #RUN addgroup -S appgroup && adduser -S benjamin -G appgroup 
+Run apt update && apt install -y musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
