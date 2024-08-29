@@ -21,7 +21,7 @@ run ls /product-service/target/release/
 run ls /product-service/target/release/deps
 run ls /product-service/target/release/build
 run ls /product-service/target/
-RUN ls /product-service/target/x86_64-unknown-linux-musl
+RUN ls /product-service/target/x86_64-unknown-linux-musl/release
 run cargo metadata --format-version 1 | grep target
 run find target/ -type f -executable
 
@@ -37,7 +37,7 @@ ARG APP_VERSION=0.1.0
 
 # Copy the binary from the builder stage
 #COPY --from=builder /etc/passwd /etc/group /etc/  
-COPY --from=builder /product-service/target/release/ .
+COPY --from=builder /product-service/target/x86_64-unknown-linux-musl/release/ .
 
 #USER benjamin
 
