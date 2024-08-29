@@ -16,6 +16,7 @@ COPY . ./
 #RUN addgroup -S appgroup && adduser -S benjamin -G appgroup 
 Run apt update && apt install -y musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
+run rustup toolchain install nightly
 RUN cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 run ls /product-service/target/release/
 run ls /product-service/target/release/deps
