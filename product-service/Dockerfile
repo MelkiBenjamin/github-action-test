@@ -17,7 +17,7 @@ COPY . ./
 Run apt update && apt install -y musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo build --release --target x86_64-unknown-linux-musl
-
+run ls /product-service/target/release/
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
 WORKDIR /app
@@ -30,8 +30,8 @@ ARG APP_VERSION=0.1.0
 
 # Copy the binary from the builder stage
 #COPY --from=builder /etc/passwd /etc/group /etc/  
-COPY --from=builder /product-service/target/release/produc-service .
-   
+COPY --from=builder /product-service/target/release/ .
+
 #USER benjamin
 
 # Set the environment variable for the app version number
