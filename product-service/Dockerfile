@@ -21,6 +21,7 @@ run ls /product-service/target/release/
 run ls /product-service/target/release/deps
 run ls /product-service/target/release/build
 run ls /product-service/target/
+RUN ls /product-service/target/x86_64-unknown-linux-musl
 run cargo metadata --format-version 1 | grep target
 run find target/ -type f -executable
 
