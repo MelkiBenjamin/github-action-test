@@ -30,7 +30,7 @@ ARG APP_VERSION=0.1.0
 
 # Copy the binary from the builder stage
 #COPY --from=builder /etc/passwd /etc/group /etc/  
-COPY --from=builder /product-service/target/ .
+COPY --from=builder /product-service/target/release .
    
 #USER benjamin
 
