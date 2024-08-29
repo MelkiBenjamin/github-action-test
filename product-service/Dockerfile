@@ -20,6 +20,10 @@ RUN cargo build --release --target x86_64-unknown-linux-musl
 run ls /product-service/target/release/
 run ls /product-service/target/release/deps
 run ls /product-service/target/release/build
+run ls /product-service/target/
+run cargo metadata --format-version 1 | grep target
+run find target/ -type f -executable
+
 # Create a new stage and copy the binary from the builder stage busybox with glibc
 FROM scratch AS app
 WORKDIR /app
