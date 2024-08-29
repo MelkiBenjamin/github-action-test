@@ -30,9 +30,9 @@ ARG APP_VERSION=0.1.0
 
 # Copy the binary from the builder stage
 #COPY --from=builder /etc/passwd /etc/group /etc/  
-COPY --from=builder /product-service/target/release/product-service .
+COPY --from=builder /product-service/target/ .
    
-USER benjamin
+#USER benjamin
 
 # Set the environment variable for the app version number
 ENV APP_VERSION=$APP_VERSION
