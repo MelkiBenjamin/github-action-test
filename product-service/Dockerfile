@@ -20,7 +20,7 @@ Run rustup toolchain install nightly \
   && rustup target add x86_64-unknown-linux-musl \
   && rustup show active-toolchain \
   && rustup target list --installed \
-  && RUSTFLAGS="-Z threads=4" cargo +nightly build --release --target x86_64-unknown-linux-musl
+  && RUSTFLAGS="-Z threads=8" cargo +nightly build --release --target x86_64-unknown-linux-musl
 #RUN cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 
 # Create a new stage and copy the binary from the builder stage busybox with glibc
