@@ -34,7 +34,7 @@ jobs:
           git diff --name-only $BASE_COMMIT $HEAD_COMMIT > changed-files.txt || true 
       - run: cat changed-files.txt
       - name: docker build
-        if: ${{ env.test }} = "production"
+        if: ${{ env.test2 }} = 'production'
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
       - run: docker image ls
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
