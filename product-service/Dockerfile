@@ -1,6 +1,6 @@
 FROM rust:1.80.1 AS builder
 
-# install lib musl
+# new projet rust
 RUN USER=root cargo new --bin product-service
 
 # Create a new directory for our application
