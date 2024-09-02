@@ -33,8 +33,14 @@ jobs:
           HEAD_COMMIT=$(git rev-parse HEAD) # Comparer les commits et lister les fichiers modifiés 
           git diff --name-only $BASE_COMMIT $HEAD_COMMIT > changed-files.txt || true 
       - run: cat changed-files.txt
+        id: bon
+      - uses: dorny/paths-filter@v3
+        id: changes 
+        with: 
+          filters: | 
+            product-service: - 'product-service/**'
       - name: docker build
-        if: ${{ env.test2 }} = 'production'
+        if: steps.bon.outputs == 'production'
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
       - run: docker image ls
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
