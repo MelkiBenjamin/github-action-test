@@ -22,18 +22,6 @@ jobs:
       test2: cat changed-files.txt
     steps:
       - uses: actions/checkout@v4
-        with:
-         fetch-depth: 0
-      - run: git log --oneline 
-      - run: git diff --name-only
-      - run: git rev-parse HEAD~1
-      - run: git rev-parse HEAD
-      - run: |
-          BASE_COMMIT=$(git rev-parse HEAD~1) 
-          HEAD_COMMIT=$(git rev-parse HEAD) # Comparer les commits et lister les fichiers modifiés 
-          git diff --name-only $BASE_COMMIT $HEAD_COMMIT > changed-files.txt || true 
-      - run: cat changed-files.txt
-        id: bon
       - uses: dorny/paths-filter@v3
         id: changes 
         with: 
@@ -45,6 +33,6 @@ jobs:
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
       - run: docker image ls
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - if: steps.bon.outputs == 'product-service/**'
+      - if: steps.changes.outputs.product-service == 'true'
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
       
