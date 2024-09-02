@@ -23,7 +23,7 @@ Run rustup toolchain install nightly \
   && RUSTFLAGS="-Z threads=8" cargo +nightly build --release --target x86_64-unknown-linux-musl
 #RUN cargo +nightly build --release --target x86_64-unknown-linux-musl -Z threads=4
 
-# Create a new stage and copy the binary from the builder stage busybox with glibc
+# Create a new stage and copy the binary from the builder stage scratch with glibc
 FROM scratch AS app
 WORKDIR /app
 
