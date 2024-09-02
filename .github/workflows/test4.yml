@@ -41,9 +41,10 @@ jobs:
             product-service:
               - 'product-service/**'
       - name: docker build
-        if: steps.bon.outputs == 'production'
+        if: steps.bon.outputs == 'product-service/**'
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
       - run: docker image ls
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
+      - if: steps.bon.outputs == 'product-service/**'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
       
