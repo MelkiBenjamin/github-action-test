@@ -21,6 +21,8 @@ jobs:
       test: git diff --name-only HEAD^ HEAD
     steps:
       - uses: actions/checkout@v4
+        with:
+         fetch-depth: 0
       - run: git diff 
       - name: docker build
         if: ${{ env.test }} = "production"
