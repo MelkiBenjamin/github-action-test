@@ -38,7 +38,8 @@ jobs:
         id: changes 
         with: 
           filters: | 
-            product-service: - 'product-service/**'
+            product-service:
+              - 'product-service/**'
       - name: docker build
         if: steps.bon.outputs == 'production'
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
