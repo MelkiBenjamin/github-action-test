@@ -21,7 +21,7 @@ jobs:
       test: git diff --name-only HEAD^ HEAD
     steps:
       - uses: actions/checkout@v4
-      - run: git diff --name-only HEAD^ HEAD
+      - run: git diff --name-only HEAD^ 
       - name: docker build
         if: ${{ env.test }} = "production"
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
