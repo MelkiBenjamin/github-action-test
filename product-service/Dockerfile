@@ -12,7 +12,7 @@ ARG APP_VERSION=0.1.0
 # Copy the source files to the container
 COPY . ./ 
 
-#Build the application with libc musl 
+#Build the application with libc musl  
 #RUN addgroup -S appgroup && adduser -S benjamin -G appgroup 
 Run rustup toolchain install nightly \
   && rustup default nightly \
