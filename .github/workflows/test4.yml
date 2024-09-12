@@ -65,6 +65,13 @@ jobs:
         uses: Azure/setup-helm@v4
         id: install-helm
 
+      - name: Deploy
+        uses: WyriHaximus/github-action-helm3@v3
+        with:
+          exec: helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait
+#          kubeconfig: '${{ secrets.KUBECONFIG }}'
+#          overrule_existing_kubeconfig: "true"
+
       - name: install helm apli monitoring
         run: |
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -73,9 +80,8 @@ jobs:
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
 
-      - uses: abgeo/kubectl-action@1.25.3
-        env:
-          KUBE_NAMESPACE: argocd      
+      - name: create namespace argocd
+        run: kubectl get namespace argocd || kubectl create namespace argocd
 
       - name: Deploys application argocd
         uses: Azure/k8s-deploy@v5.0.0
@@ -83,11 +89,6 @@ jobs:
           namespace: argocd
           action: deploy
           manifests: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
-      - name: verfiy argocd
-        run: |
-          kubectl get pod -n argocd
-          kubectl get svc -n argocd
 
       - name: attendre argocd
         run: |
