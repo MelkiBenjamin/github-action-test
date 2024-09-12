@@ -72,7 +72,6 @@ jobs:
           namespace: 'monitoring'
           chart: 'prometheus-community/kube-prometheus-stack'
           token: '${{ github.token }}'
-          helm : helm3
           version: '57.0.3'
           atomic: true
 
