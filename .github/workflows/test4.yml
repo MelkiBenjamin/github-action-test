@@ -65,22 +65,6 @@ jobs:
         uses: Azure/setup-helm@v4
         id: install-helm
 
-      - uses: licenseware/helm@v1
-        with:
-          action: upgrade -i # upgrade -i, install, uninstall, etc.
-          atomic: "1"
-          chart-dir: https://prometheus-community.github.io/helm-charts
-          cleanup: "1" # delete all the files i.e. kubeconfig & values
-          cleanup-on-fail: "1" # delete newly created resources on failure
-          create-namespace: "0"
-          helm-version: "v3.10.1" # https://github.com/helm/helm/releases
-          namespace: default
-          release-name: my-kube-prometheus-stack
-          reuse-values: "0" # possible values: [0, 1] default: 0
-          timeout: 10m
-          wait: "1"
-          
-
       - name: install helm apli monitoring
         run: |
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
