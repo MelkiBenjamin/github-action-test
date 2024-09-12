@@ -73,16 +73,6 @@ jobs:
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
 
-      - name: Example action
-        uses: cloudposse/kubernetes-namespace-builder-composite-action@0.4.0
-        id: kubernetes-namespace
-        with:
-          flavor: custom
-          app-name: argocd
-
-      - name: echo output from previous action
-        run: echo "Le namespace est ${{ steps.kubernetes-namespace.outputs.kubernetes-namespace }}."  
-
       - name: Deploys application argocd
         uses: Azure/k8s-deploy@v5.0.0
         with:
