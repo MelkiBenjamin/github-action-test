@@ -77,6 +77,7 @@ jobs:
         uses: cloudposse/kubernetes-namespace-builder-composite-action@0.4.0
         id: kubernetes-namespace
         with:
+          flavor: custom
           app-name: argocd
 
       - name: echo output from previous action
