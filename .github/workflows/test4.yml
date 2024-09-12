@@ -65,12 +65,16 @@ jobs:
         uses: Azure/setup-helm@v4
         id: install-helm
 
-      - name: Deploy
-        uses: WyriHaximus/github-action-helm3@v3
+      - name: 'Deploy'
+        uses: 'deliverybot/helm@v1'
         with:
-          exec: helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait
-#          kubeconfig: '${{ secrets.KUBECONFIG }}'
-#          overrule_existing_kubeconfig: "true"
+          release: 'my-kube-prometheus-stack'
+          namespace: 'monitoring'
+          chart: 'prometheus-community/kube-prometheus-stack'
+          token: '${{ github.token }}'
+          helm : helm3
+          version: '57.0.3'
+          atomic: true
 
       - name: install helm apli monitoring
         run: |
