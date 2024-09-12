@@ -9,11 +9,19 @@ jobs:
     name: A job to say hello
     steps:
       - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3.0.2
+        id: changes 
+        with: 
+          filters: | 
+            store-front:
+              - 'store-front/**'
       - name: docker build
+        if: steps.changes.outputs.store-front == 'true'
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test store-front
       - run: docker image ls
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
+      - if: steps.changes.outputs.store-front == 'true'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
 
   ohello_world_jb2:
     runs-on: ubuntu-latest
@@ -37,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
       - name: docker k3s
-        uses: debianmaster/actions-k3s@master
+        uses: debianmaster/actions-k3s@v1.0.5
         id: k3s
         with:
           version: 'latest'
@@ -59,15 +67,20 @@ jobs:
 
       - name: install helm apli monitoring
         run: |
-          kubectl get namespace monitoring || kubectl create namespace monitoring
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --atomic --wait
+          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait
       
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
 
-      - name: create namespace argocd
-        run: kubectl get namespace argocd || kubectl create namespace argocd
+      - name: Example action
+        uses: cloudposse/kubernetes-namespace-builder-composite-action@0.4.0
+        id: kubernetes-namespace
+        with:
+          app-name: argocd
+
+      - name: echo output from previous action
+        run: echo "Le namespace est ${{ steps.kubernetes-namespace.outputs.kubernetes-namespace }}."  
 
       - name: Deploys application argocd
         uses: Azure/k8s-deploy@v5.0.0
