@@ -88,36 +88,16 @@ jobs:
           kubectl wait --for=condition=available deployment --all -n argocd
           sleep 60
 
-      - name: load balancing
-        run: |
-          echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
-          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)"
-
-      - name: sleep
-        run: sleep 60
-
-      - name: kubectl get svc -n argocd 
-        run: kubectl get svc -n argocd
-
-      - name: trouver ip et la mettre dans une variable github action
-        run: |
-          ip=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          mdp=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
-          echo "IP: $ip"
-          echo "MDP: $mdp"
-          
-
+#      - name: load balancing
+#        run: |
+#          echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
+#          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)"
+                    
       - name: connexion argocd
         env:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-        run: argocd login ${{ env.ip }} --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}
-            
-#      - name: connexion argocd
-#        env:
-#          ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-#          mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-#        run: argocd login $(kubectl get service argocd-server -n argocd --output=jsonpath='{.status.loadBalancer.ingress[0].ip}') --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}
+        run: argocd login 127.0.0.1 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}
             
       - name: update ArgoCD password
         env:
@@ -127,11 +107,6 @@ jobs:
           
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
-
-      - name: connexion argocd
-        env:
-          ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-        run: argocd login ${{ env.ip }} --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}
 
       - name: Create Contoso namespace
         run: |
