@@ -93,6 +93,9 @@ jobs:
           echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
           kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)"
 
+      - name: kubectl get svc -n argocd 
+        run: kubectl get svc -n argocd
+
       - name: trouver ip et la mettre dans une variable github action
         run: |
           ip=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
