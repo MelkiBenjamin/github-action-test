@@ -41,8 +41,8 @@ ENV APP_VERSION=$APP_VERSION
 COPY nginx.conf /etc/nginx/conf.d/nginx.conf.template
 
 # COPY user from builder to alpine-slim
-#COPY --from=builder /etc/passwd /etc/group /etc/
-#USER root
+COPY --from=builder /etc/passwd /etc/group /etc/
+USER benjamin
 
 # Start the app
 CMD ["sh", "-c", "envsubst '${APP_VERSION}' < /etc/nginx/conf.d/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
