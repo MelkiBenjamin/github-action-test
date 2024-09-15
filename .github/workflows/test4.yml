@@ -93,6 +93,13 @@ jobs:
           echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
           kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)"
 
+      - name: trouver ip et la mettre dans une variable github action
+        run: |
+          echo "ip=kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"" >> $GITHUB_ENV
+          echo "mdp=kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo" >> $GITHUB_ENV
+          argocd login ${{ env.ip }} --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}
+
+
       - name: connexion argocd
         env:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
