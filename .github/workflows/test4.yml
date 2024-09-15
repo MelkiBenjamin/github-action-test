@@ -95,9 +95,9 @@ jobs:
 
       - name: trouver ip et la mettre dans une variable github action
         run: |
-          echo "ip=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')")" >> $GITHUB_ENV
-          echo "mdp=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)" >> $GITHUB_ENV
-          argocd login ${{ env.ip }} --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}
+          echo "ip=$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_ENV
+          echo "mdp=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)" >> $GITHUB_ENV
+          argocd login ${{ env.ip }} --username admin --password ${{ env.mdp }} --insecure
 
       - name: connexion argocd
         env:
