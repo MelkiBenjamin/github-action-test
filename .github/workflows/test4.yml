@@ -44,16 +44,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
-      - name: docker k3s
-        uses: debianmaster/actions-k3s@v1.0.5
-        id: k3s
-        with:
-          version: 'latest'
-      - run: |
-          kubectl get nodes
-          kubectl get pods -A
-          sleep 30
-          kubectl get pods -A
       
       - uses: Azure/setup-helm@v4.2.0
 
@@ -64,6 +54,18 @@ jobs:
       - name: install helm
         uses: Azure/setup-helm@v4
         id: install-helm
+
+      - name: config kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECONFIG_CONTENT" > $HOME/.kube/config
+          # Remplacer 127.0.0.1 par l'IP publique de l'hôte ou l'IP/ngrok public
+          sed -i 's/127.0.0.1/${{ secrets.conteneur }}/' $HOME/.kube/config
+
+      - name: install k3s
+        run: |
+          kubeconfig=$HOME/.kube/config
+          kubectl get nodes
 
       - name: install helm apli monitoring
         run: |
