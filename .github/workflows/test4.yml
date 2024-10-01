@@ -1,6 +1,6 @@
 name: build test 4
 on: 
-  push:
+#  push:
   workflow_dispatch:
 
 jobs:
