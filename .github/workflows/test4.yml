@@ -45,26 +45,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
 
-#      - name: docker setup k3s
-#        run: |
-#          docker run -d --name k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.21.4-k3s1 server
-          
-#      - name: sleep
-#        run: sleep 60
-
-#      - name: docker setup kubectl
-#        run: |
-#          docker exec k3s kubectl get nodes
-#          docker cp k3s:/etc/rancher/k3s/k3s.yaml .
-#          sed -i 's/
-
-#      - name: docker setup helm
-#        #copier le fichier kubeconfig pour un autre job
-#        uses: actions/upload-artifact@v4
-#        with:
-#            name: kubeconfig
-#            path: k3s.yaml
-
   monitoring:
     runs-on: ubuntu-latest
     steps:
@@ -72,15 +52,15 @@ jobs:
         uses: Azure/setup-kubectl@v4.0.0
         id: install
 
-      - name: config kubectl
+      - name: config kubectl t
         run: |
-          mkdir -p $HOME/.kube/config
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config/k3s.yaml
-          export KUBECONFIG=$HOME/.kube/config/k3s.yaml
+          mkdir -p /home/.kube/config
+          echo "${{ secrets.KUBE_CONFIG }}" > /home/.kube/config/k3s.yaml
+          export KUBECONFIG=/home/.kube/config/k3s.yaml
 
       - name: verif kubectl
         run: |
-          ls -alh $HOME/.kube/config
+          ls -alh /home/.kube/config
 
       - name: verif kubectl
         run: |
