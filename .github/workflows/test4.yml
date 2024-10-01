@@ -64,7 +64,7 @@ jobs:
 
       - name: verif kubectl
         run: |
-          k3s kubectl get nodes
+          kubectl get nodes
 
       - name: install helm apli monitoring
         run: |
