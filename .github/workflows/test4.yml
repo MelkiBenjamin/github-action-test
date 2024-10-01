@@ -54,7 +54,7 @@ jobs:
 
       - name: config kubectl t
         run: |
-          mkdir -p /home/.kube/config
+          sudo mkdir -p /home/.kube/config
           echo "${{ secrets.KUBE_CONFIG }}" > /home/.kube/config/k3s.yaml
           export KUBECONFIG=/home/.kube/config/k3s.yaml
 
