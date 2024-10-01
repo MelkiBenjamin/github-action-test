@@ -80,6 +80,10 @@ jobs:
 
       - name: verif kubectl
         run: |
+          ls -alh $HOME/.kube/config
+
+      - name: verif kubectl
+        run: |
           kubectl get nodes
 
       - name: install helm apli monitoring
