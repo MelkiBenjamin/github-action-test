@@ -1,0 +1,77 @@
+version: "3.7"
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.17-management-alpine
+    container_name: 'rabbitmq'
+    restart: always
+    environment:
+      - "RABBITMQ_DEFAULT_USER=username"
+      - "RABBITMQ_DEFAULT_PASS=password"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_services
+  aks-store-demo-order-service:
+    container_name: 'order-service'
+    image: aks-store-demo-order-service
+    ports:
+      - 3000:3000
+    networks:
+      - backend_services
+  store-front:
+    container_name: 'store-front'
+    image: aks-store-demo-store-front:latest
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - backend_services
+  product-service:
+    container_name: 'product-service'
+    image: aks-store-demo-product-service:latest
+    restart: always
+    ports:
+      - 3002:3002
+    networks:
+      - backend_services
+  prometheus:
+    container_name: 'prometheus'
+    image: prom/prometheus:v2.48.0
+    restart: unless-stopped
+    volumes:
+      - .prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'      
+    ports:
+      - 9090:9090
+    networks:
+      - backend_services
+  cadvisor:
+    container_name: 'cadvisor'
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    restart: unless-stopped
+    ports:
+      - 80:80
+    networks:
+      - backend_services
+  grafana:
+    container_name: 'grafana'
+    image: grafana/grafana:10.2.2 
+    restart: unless-stopped
+    environment:
+      - GF_SERVER_HTTP_PORT=10
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    ports:
+      - 10:10
+    networks:
+      - backend_services
+networks:
+  backend_services:
+    driver: bridge

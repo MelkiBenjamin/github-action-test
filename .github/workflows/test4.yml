@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  ohello_world_jb1:
+  store-front:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
@@ -23,7 +23,7 @@ jobs:
       - if: steps.changes.outputs.store-front == 'true'
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
 
-  ohello_world_jb2:
+  product-service:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
@@ -40,31 +40,46 @@ jobs:
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - if: steps.changes.outputs.product-service == 'true'
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
-  k3s:
+  setup_k3s:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
-      
-      - uses: Azure/setup-helm@v4.2.0
 
+#      - name: docker setup k3s
+#        run: |
+#          docker run -d --name k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.21.4-k3s1 server
+          
+#      - name: sleep
+#        run: sleep 60
+
+#      - name: docker setup kubectl
+#        run: |
+#          docker exec k3s kubectl get nodes
+#          docker cp k3s:/etc/rancher/k3s/k3s.yaml .
+#          sed -i 's/
+
+#      - name: docker setup helm
+#        #copier le fichier kubeconfig pour un autre job
+#        uses: actions/upload-artifact@v4
+#        with:
+#            name: kubeconfig
+#            path: k3s.yaml
+
+  monitoring:
+    runs-on: ubuntu-latest
+    steps:
       - name: setup kubectl
         uses: Azure/setup-kubectl@v4.0.0
         id: install
 
-      - name: install helm
-        uses: Azure/setup-helm@v4
-        id: install-helm
-
       - name: config kubectl
         run: |
-          mkdir -p $HOME/.kube
-          echo "$KUBECONFIG_CONTENT" > $HOME/.kube/config
-          # Remplacer 127.0.0.1 par l'IP publique de l'hôte ou l'IP/ngrok public
-          sed -i 's/127.0.0.1/${{ secrets.conteneur }}/' $HOME/.kube/config
+          mkdir -p $HOME/.kube/config
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config/k3s.yaml
+          export KUBECONFIG=$HOME/.kube/config/k3s.yaml
 
-      - name: install k3s
+      - name: verif kubectl
         run: |
-          kubeconfig=$HOME/.kube/config
           kubectl get nodes
 
       - name: install helm apli monitoring

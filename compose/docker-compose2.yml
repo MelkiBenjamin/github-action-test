@@ -1,0 +1,45 @@
+version: "3.7"
+services:
+  abbitmq:
+    image: rabbitmq:3.11.17-management-alpine
+    container_name: 'rabbitmq'
+    restart: always
+    environment:
+      - "RABBITMQ_DEFAULT_USER=username"
+      - "RABBITMQ_DEFAULT_PASS=password"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_services
+  aks-store-demo-order-service:
+    container_name: 'order-service'
+    image: aks-store-demo-order-service
+    ports:
+      - 3000:3000
+    networks:
+      - backend_services
+  store-front:
+    container_name: 'store-front'
+    image: benjaminmelki/store-front-test
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - backend_services
+  product-service:
+    container_name: 'product-service'
+    image: benjaminmelki/product-service-test2
+    restart: always
+    ports:
+      - 3002:3002
+    networks:
+      - backend_services
+networks:
+  backend_services:
+    driver: bridge
