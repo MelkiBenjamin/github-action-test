@@ -54,8 +54,8 @@ jobs:
     steps:
       - name: setup kubectl
         run: |
-          docker run -it -d --name kubectl jitesoft/kubectl:v1.31
-          docker exec -it kubectl export KUBECONFIG=/home/kube/
+          docker run -d --name kubectl jitesoft/kubectl:v1.31 sleep 1000
+          docker exec -it kubectl sh -c "export KUBECONFIG=/home/kube/k3s.yaml"
  
       - name: config kubectl
         run: |
