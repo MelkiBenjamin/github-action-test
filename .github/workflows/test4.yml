@@ -56,13 +56,13 @@ jobs:
         run: |
           docker run -d -p 8080:8080 --name kubectl jitesoft/kubectl:v1.31 sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && sleep 1000'
  
+      - name: met ip k3s-server dans une variable 
+        run: |
+          $IP= (docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
+
       - name: config kubectl
         run: |
           docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
-
-      - name: sortir ip k3s server dans une variable 
-        run: |
-          $IP= (docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
 
       - name: modif ip kubeconfig
         run: |
@@ -75,8 +75,7 @@ jobs:
 
       - name: verif kubectl
         run: |
-          export KUBECONFIG=/home/kube/k3s.yaml 
-          docker exec -it sh -c 'kubectl get nodes'
+          docker exec -it kubectl sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
@@ -86,11 +85,11 @@ jobs:
 #        run: 
 #          echo "echo 'Hello world'" | ssh -i /home/runner/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o User=root -o ConnectTimeout=10 root@${{ steps.install.outputs.ip }}
 
-      - name: config kubectl 
-        run: |
-          sudo mkdir -p /home/.kube/config
-          echo "${{ secrets.KUBE_CONFIG }}" > /home/.kube/config/k3s.yaml
-          export KUBECONFIG=/home/.kube/config/k3s.yaml
+#      - name: config kubectl 
+#        run: |
+#          sudo mkdir -p /home/.kube/config
+#          echo "${{ secrets.KUBE_CONFIG }}" > /home/.kube/config/k3s.yaml
+#          export KUBECONFIG=/home/.kube/config/k3s.yaml
 
 #      - name: verif kubectl
 #        run: |
