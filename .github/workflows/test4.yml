@@ -54,7 +54,7 @@ jobs:
     steps:
       - name: setup kubectl
         run: |
-          docker run -d --name kubectl jitesoft/kubectl:v1.31 sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && sleep 1000'
+          docker run -d -p 8080:8080 --name kubectl jitesoft/kubectl:v1.31 sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && sleep 1000'
  
       - name: config kubectl
         run: |
@@ -66,8 +66,12 @@ jobs:
 
       - name: modif ip kubeconfig
         run: |
-          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP"
+          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
 #         sed -i 's/127.0.0.1/"$IP"/g' /home/kube/k3s.yaml
+
+      - name: copie kubeconfig dans le conteneur kubectl
+        run: |
+          docker cp k3s.yaml kubectl:/home/kube/k3s.yaml 
 
       - name: verif kubectl
         run: kubectl get nodes
