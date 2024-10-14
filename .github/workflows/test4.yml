@@ -58,20 +58,14 @@ jobs:
  
       - name: met ip k3s-server dans une variable 
         run: |
-          $IP= (docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
+          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
 
       - name: config kubectl
         run: |
           docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
-
-      - name: modif ip kubeconfig
-        run: |
+          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
           (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
-#         sed -i 's/127.0.0.1/"$IP"/g' /home/kube/k3s.yaml
-
-      - name: copie kubeconfig dans le conteneur kubectl
-        run: |
-          docker cp k3s.yaml kubectl:/home/kube/k3s.yaml 
+          docker cp k3s.yaml kubectl:/home/kube/k3s.yaml
 
       - name: verif kubectl
         run: |
