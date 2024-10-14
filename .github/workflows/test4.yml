@@ -59,7 +59,6 @@ jobs:
       - name: config kubectl
         run: |
           docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
-          docker cp k3s.yaml kubectl:/home/kube/k3s.yaml
 
       - name: sortir ip k3s server dans une variable 
         run: |
@@ -67,7 +66,8 @@ jobs:
 
       - name: modif ip kubeconfig
         run: |
-          docker exec -it kubectl sed -i 's/server/$IP/g' /home/kube/k3s.yaml
+          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP"
+#         sed -i 's/127.0.0.1/"$IP"/g' /home/kube/k3s.yaml
 
       - name: verif kubectl
         run: kubectl get nodes
