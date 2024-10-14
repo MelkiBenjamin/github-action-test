@@ -40,42 +40,63 @@ jobs:
       - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - if: steps.changes.outputs.product-service == 'true'
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
+
   setup_k3s:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - name: setup k3s dans docker
+        run: |
+          docker run -d --name k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.21.4-k3s1 server
+
+  kubectl:
+    runs-on: self-hosted
+    needs: setup_k3s
     steps:
       - uses: actions/checkout@v4.1.7
 
-  monitoring:
-    runs-on: ubuntu-latest
-    steps:
       - name: setup kubectl
-        uses: Azure/setup-kubectl@v4.0.0
-        id: install
+        run: docker run -it -d --name kubectl bitnami/kubectl 
+      
+      - name: config kubectl
+        run: cp setup_k3s:/etc/rancher/k3s/k3s.yaml bitnami/kubectl:/root/.kube/config
 
-      - name: config kubectl t
+      - name: verif kubectl
+        run: kubectl get nodes
+
+  monitoring:
+    runs-on: self-hosted
+    needs: kubectl
+    steps:
+#      - name: lancer commande echo avec ssh dans un autre conteneur
+#        run: 
+#          echo "echo 'Hello world'" | ssh -i /home/runner/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o User=root -o ConnectTimeout=10 root@${{ steps.install.outputs.ip }}
+
+      - name: config kubectl 
         run: |
           sudo mkdir -p /home/.kube/config
           echo "${{ secrets.KUBE_CONFIG }}" > /home/.kube/config/k3s.yaml
           export KUBECONFIG=/home/.kube/config/k3s.yaml
 
-      - name: verif kubectl
-        run: |
-          ls -alh /home/.kube/config
+#      - name: verif kubectl
+#        run: |
+#          ls -alh /home/.kube/config
 
-      - name: verif kubectl
-        run: |
-          kubectl get nodes
+#      - name: verif kubectl
+#        run: |
+#          kubectl get nodes
 
       - name: install helm apli monitoring
         run: |
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait
+          docker exec -it kubectl helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          docker exec -it kubectl helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          docker exec -it kubectl helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait
       
       - name: Setup ArgoCD CLI 
         uses: imajeetyadav/argocd-cli@v1
 
       - name: create namespace argocd
-        run: kubectl get namespace argocd || kubectl create namespace argocd
+        run: docker exec -it kubectl kubectl get namespace argocd || kubectl create namespace argocd
 
       - name: Deploys application argocd
         uses: Azure/k8s-deploy@v5.0.0
