@@ -74,7 +74,9 @@ jobs:
           docker cp k3s.yaml kubectl:/home/kube/k3s.yaml 
 
       - name: verif kubectl
-        run: kubectl get nodes
+        run: |
+          export KUBECONFIG=/home/kube/k3s.yaml 
+          docker exec -it sh -c 'kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
