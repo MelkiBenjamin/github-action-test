@@ -58,7 +58,8 @@ jobs:
  
       - name: config kubectl
         run: |
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml kubectl:/home/kube/
+          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
+          docker cp k3s.yaml kubectl:/home/kube/k3s.yaml
 
       - name: sortir ip k3s server
         run: |
