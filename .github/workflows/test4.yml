@@ -75,7 +75,7 @@ jobs:
 
       - name: verif kubectl
         run: |
-          docker exec -it kubectl sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && kubectl get nodes'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
