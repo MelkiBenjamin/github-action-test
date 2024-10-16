@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+  k3s-server:
+    image: rancher/k3s:v1.31.0-k3s1
+    container_name: 'k3s-server'
+    command: "server --token mysecrettoken" 
+    privileged: true
+    restart: always
+    ports:
+      - 6443:6443
+    networks:
+      - backend_services
+    volumes:
+      - config:/etc/rancher/k3s
+  
+  k3s-server2:
+    image: rancher/k3s:v1.31.0-k3s1
+    container_name: 'k3s-server2'
+    command: "server --token mysecrettoken"
+    privileged: true
+    restart: always
+    networks:
+      - backend_services
+    volumes:
+      - config:/etc/rancher/k3s
+  
+  k3s-agent:
+    image: rancher/k3s:v1.31.0-k3s1
+    container_name: 'k3s-agent'
+    command: agent --server https://k3s-server:6443 --token mysecrettoken
+    restart: always
+    networks:
+      - backend_services
+    volumes:
+      - config:/etc/rancher/k3s
+    privileged: true
+
+  kubectl:
+    image: jitesoft/kubectl:v1.31
+    container_name: 'kubectl'
+    command: sleep 1000
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - backend_services
+    volumes:
+      - config:/etc/rancher/k3s
+    depends_on:
+      - k3s-server
+    privileged: true
+
+networks:
+  backend_services:
+    driver: bridge
+
+volumes:
+  config:

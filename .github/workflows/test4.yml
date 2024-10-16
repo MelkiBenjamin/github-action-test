@@ -44,7 +44,12 @@ jobs:
   setup_k3s:
     runs-on: self-hosted
     steps:
-      - name: setup k3s dans docker
+      - name: verif si container k3s-server existe sur win
+        run: docker ps -a | findstr k3s-server 
+        id: k3s-server
+          
+      - if: steps.k3s-server.outputs.stdout == ''
+        name: setup k3s dans docker
         run: |
           docker run -d --name k3s-server --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server
 
@@ -52,20 +57,26 @@ jobs:
     runs-on: self-hosted
     needs: setup_k3s
     steps:
-      - name: setup kubectl
-        run: |
-          docker run -d -p 8080:8080 --name kubectl jitesoft/kubectl:v1.31 sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && sleep 1000'
- 
-      - name: met ip k3s-server dans une variable 
-        run: |
-          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
+      - name: verif si container kubectl existe sur win
+        run: docker ps -a | findstr kubectl 
+        id: kubectl
 
-      - name: config kubectl
+      - if: steps.kubectl.outputs.stdout == ''
+        name: setup kubectl
+        run: |
+          docker run -d -p 8080:8080 --name kubectl jitesoft/kubectl:v1.31 sh -c 'sleep 1000'
+ 
+      - name: copie kubectl
         run: |
           docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
+
+      - name: met ip k3s-server dans une variable et modifie la config kubectl
+        run: |
           $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
           (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
-          docker cp k3s.yaml kubectl:/home/kube/k3s.yaml
+
+      - name: copie k3s.yaml dans le conteneur kubectl
+        run: docker cp k3s.yaml kubectl:/home/kube/k3s.yaml
 
       - name: verif kubectl
         run: |
@@ -95,22 +106,22 @@ jobs:
 
       - name: install helm apli monitoring
         run: |
-          docker exec -it kubectl helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          docker exec -it kubectl helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          docker exec -it kubectl helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait
+          docker exec -it kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
+          docker exec -it kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
+          docker exec -it kubectl sh -c 'helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
       
       - name: Setup ArgoCD CLI 
-        uses: imajeetyadav/argocd-cli@v1
+        run: |
+          docker exec -it kubectl sh -c 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
+          docker exec -it kubectl sh -c 'sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd'
+          docker exec -it kubectl sh -c 'rm argocd-linux-amd64'
 
       - name: create namespace argocd
-        run: docker exec -it kubectl kubectl get namespace argocd || kubectl create namespace argocd
+        run: docker exec -it kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
 
       - name: Deploys application argocd
-        uses: Azure/k8s-deploy@v5.0.0
-        with:
-          namespace: argocd
-          action: deploy
-          manifests: https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+        run: | 
+          docker exec -it kubectl sh -c 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd' 
 
       - name: attendre argocd
         run: |
@@ -127,29 +138,19 @@ jobs:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
-          kubectl port-forward svc/argocd-server -n argocd 80:80 &
-          argocd login 127.0.0.1 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}
+          docker exec -it kubectl sh -c 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
+          docker exec -it kubectl sh -c 'argocd login 127.0.0.1 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}''
             
       - name: update ArgoCD password
         env:
           ARGOCD: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-        run: argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}
-          
-      - name: Setup ArgoCD CLI 
-        uses: imajeetyadav/argocd-cli@v1
+        run: docker exec -it kubectl sh -c 'argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}''
 
       - name: Create Contoso namespace
         run: |
           kubectl get namespace contoso || kubectl create namespace contoso
         
       - name: Create Application Contoso with Argocd avec namespace
-        uses: clowdhaus/argo-cd-action/@v2.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          version: 2.11.3
-          command: app
-          options: create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune
-
+        run: docker exec -it kubectl sh -c 'argocd create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
