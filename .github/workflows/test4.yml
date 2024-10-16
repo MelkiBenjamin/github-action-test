@@ -78,11 +78,11 @@ jobs:
           (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
 
       - name: copie k3s.yaml dans le conteneur kubectl
-        run: docker cp k3s.yaml kubectl:/home/kube/k3s.yaml
+        run: docker cp k3s.yaml kubectl:/home/k3s.yaml
 
       - name: verif kubectl
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/kube/k3s.yaml && kubectl get nodes'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
@@ -108,9 +108,10 @@ jobs:
 
       - name: installe helm
         run: |
+          docker exec kubectl sh -c 'apk add curl'
           docker exec kubectl sh -c 'curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3'
           docker exec kubectl sh -c 'chmod 700 get_helm.sh'
-          docker exec kubectl sh -c './get_helm.sh'
+          docker exec kubectl sh -c 'apk add bash openssl && ./get_helm.sh'
 
       - name: install helm apli monitoring
         run: |
