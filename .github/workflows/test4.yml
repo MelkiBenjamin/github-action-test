@@ -69,7 +69,7 @@ jobs:
         run: |
           docker run -d -p 8080:8080 --name kubectl jitesoft/kubectl:v1.31 sh -c 'sleep 1000'
  
-      - name: copie kubectl
+      - name: copie kubectl 
         run: |
           docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
 
