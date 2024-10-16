@@ -121,11 +121,11 @@ jobs:
           docker exec kubectl sh -c 'rm argocd-linux-amd64'
 
       - name: create namespace argocd
-        run: docker exec -it kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
+        run: docker exec kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
 
       - name: Deploys application argocd
         run: | 
-          docker exec -it kubectl sh -c 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd' 
+          docker exec kubectl sh -c 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd' 
 
       - name: attendre argocd
         run: |
@@ -142,8 +142,8 @@ jobs:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
-          docker exec -it kubectl sh -c 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
-          docker exec -it kubectl sh -c 'argocd login 127.0.0.1 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}''
+          docker exec kubectl sh -c 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
+          docker exec kubectl sh -c 'argocd login 127.0.0.1 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}''
             
       - name: update ArgoCD password
         env:
