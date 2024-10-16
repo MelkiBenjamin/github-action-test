@@ -109,15 +109,16 @@ jobs:
 
       - name: install helm apli monitoring
         run: |
-          docker exec -it kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec -it kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec -it kubectl sh -c 'helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
+          docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
+          docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
+          docker exec kubectl sh -c 'helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
       
       - name: Setup ArgoCD CLI 
         run: |
-          docker exec -it kubectl sh -c 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
-          docker exec -it kubectl sh -c 'sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd'
-          docker exec -it kubectl sh -c 'rm argocd-linux-amd64'
+          docker exec kubectl sh -c 'apk add curl'
+          docker exec kubectl sh -c 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64'
+          docker exec kubectl sh -c 'install -m 555 argocd-linux-amd64 /usr/local/bin/argocd'
+          docker exec kubectl sh -c 'rm argocd-linux-amd64'
 
       - name: create namespace argocd
         run: docker exec -it kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
