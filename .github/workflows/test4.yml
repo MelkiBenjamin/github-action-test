@@ -117,7 +117,7 @@ jobs:
       - name: install helm apli monitoring
         run: |
           docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'
           docker exec kubectl sh -c 'helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
       
   argocd:
@@ -126,12 +126,18 @@ jobs:
     steps:
       - name: Setup ArgoCD CLI 
         run: |
+          docker exec kubectl sh -c 'apk add curl'
+
+      - name: install argocd
+        run: |
           docker exec kubectl sh -c 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64' 
           docker exec kubectl sh -c 'install -m 555 argocd-linux-amd64 /usr/local/bin/argocd'
           docker exec kubectl sh -c 'rm argocd-linux-amd64'
 
       - name: create namespace argocd
-        run: docker exec kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
+        run: |
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'    
+          docker exec kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
 
       - name: Deploys application argocd
         run: | 
@@ -167,6 +173,7 @@ jobs:
     steps:
       - name: Create Contoso namespace
         run: |
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'
           kubectl get namespace contoso || kubectl create namespace contoso
         
       - name: Create Application Contoso with Argocd avec namespace
