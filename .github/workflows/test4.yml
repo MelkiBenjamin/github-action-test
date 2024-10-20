@@ -117,8 +117,7 @@ jobs:
       - name: install helm apli monitoring
         run: |
           docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'
-          docker exec kubectl sh -c 'helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
       
   argocd:
     runs-on: self-hosted
