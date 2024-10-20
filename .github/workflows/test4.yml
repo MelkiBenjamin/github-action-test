@@ -169,13 +169,13 @@ jobs:
 
   contoso:
     runs-on: self-hosted
-    needs: kubectl
+    needs: [kubectl, argocd]
     steps:
       - name: Create Contoso namespace
         run: |
           docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'
-          kubectl get namespace contoso || kubectl create namespace contoso
+          docker exec kubectl sh -c 'kubectl get namespace contoso || kubectl create namespace contoso'
         
       - name: Create Application Contoso with Argocd avec namespace
-        run: docker exec -it kubectl sh -c 'argocd create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
+        run: docker exec kubectl sh -c 'argocd create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
