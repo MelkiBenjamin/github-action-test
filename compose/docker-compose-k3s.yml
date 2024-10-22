@@ -4,7 +4,7 @@ services:
   k3s-server:
     image: rancher/k3s:v1.31.0-k3s1
     container_name: 'k3s-server'
-    command: "server --token mysecrettoken" 
+    command: "server --token mysecrettoken --cluster-init --node-name k3s-server1"
     privileged: true
     restart: always
     ports:
@@ -13,33 +13,52 @@ services:
       - backend_services
     volumes:
       - config:/etc/rancher/k3s
-  
+    
   k3s-server2:
     image: rancher/k3s:v1.31.0-k3s1
     container_name: 'k3s-server2'
-    command: "server --token mysecrettoken"
+    command: "server --server https://k3s-server:6443 --token mysecrettoken --node-name k3s-server2"
     privileged: true
     restart: always
-    networks:
-      - backend_services
+    ports:
+      - 6444:6443
+    depends_on:
+      - k3s-server
     volumes:
       - config:/etc/rancher/k3s
+    networks:
+      - backend_services
   
   k3s-agent:
     image: rancher/k3s:v1.31.0-k3s1
     container_name: 'k3s-agent'
-    command: agent --server https://k3s-server:6443 --token mysecrettoken
+    command: agent --server https://k3s-server:6443 --token mysecrettoken --node-name k3s-agent
     restart: always
     networks:
       - backend_services
     volumes:
       - config:/etc/rancher/k3s
     privileged: true
+    depends_on:
+      - k3s-server
+
+  k3s-agent2:
+    image: rancher/k3s:v1.31.0-k3s1
+    container_name: 'k3s-agent2'
+    command: agent --server https://k3s-server:6443 --token mysecrettoken --node-name k3s-agent2
+    restart: always
+    networks:
+      - backend_services
+    volumes:
+      - config:/etc/rancher/k3s
+    privileged: true
+    depends_on:
+      - k3s-server
 
   kubectl:
-    image: jitesoft/kubectl:v1.31
+    image: alpine
     container_name: 'kubectl'
-    command: sleep 1000
+    command: sleep 10000
     restart: always
     ports:
       - 8080:8080

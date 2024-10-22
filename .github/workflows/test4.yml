@@ -9,6 +9,8 @@ jobs:
     name: A job to say hello
     steps:
       - uses: actions/checkout@v4
+      - name: ip test
+        run: ip addr
       - uses: dorny/paths-filter@v3.0.2
         id: changes 
         with: 
@@ -66,7 +68,7 @@ jobs:
       - if: steps.kubectl.outputs.stdout == ''
         name: setup kubectl
         run: |
-          docker run -d -p 8080:8080 --name kubectl alpine sh -c 'sleep 1000'
+          docker run -d -p 8080:8080 --name kubectl alpine sh -c 'sleep 10000'
           docker exec kubectl sh -c 'apk add kubectl'
  
       - name: copie kubectl 
@@ -84,6 +86,7 @@ jobs:
       - name: verif kubectl
         run: |
           docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get nodes'
+          kubectl
 
   monitoring:
     runs-on: self-hosted
