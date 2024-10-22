@@ -55,7 +55,7 @@ jobs:
           docker run -d --name k3s-server --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server
 
   kubectl:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: setup_k3stest
     steps:
 #      - name: verif si container kubectl existe sur win
