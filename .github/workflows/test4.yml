@@ -67,7 +67,8 @@ jobs:
         name: setup kubectl
         run: |
           docker run -d -p 8080:8080 --name kubectl alpine sh -c 'sleep 10000'
-          docker exec kubectl sh -c 'apk add kubectl'
+          docker exec kubectl sh -c 'apk add kubectl --no-cache'
+        continue-on-error: true 
  
       - name: copie kubectl 
         run: |
@@ -84,7 +85,6 @@ jobs:
       - name: verif kubectl
         run: |
           docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get nodes'
-          kubectl
 
   monitoring:
     runs-on: self-hosted
@@ -118,7 +118,7 @@ jobs:
       - name: install helm apli monitoring
         run: |
           docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --timeout 15m'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace  --timeout 15m'
 
       - name: attendre monitoring
         run: |
@@ -141,12 +141,11 @@ jobs:
 
       - name: create namespace argocd
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'    
-          docker exec kubectl sh -c 'kubectl get namespace argocd || kubectl create namespace argocd'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get namespace argocd || kubectl create namespace argocd'
 
       - name: Deploys application argocd
         run: | 
-          docker exec kubectl sh -c 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=15m' 
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=15m' 
 
       - name: attendre argocd
         run: |
