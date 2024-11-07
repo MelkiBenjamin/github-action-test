@@ -109,7 +109,13 @@ jobs:
 #        run: |
 #          kubectl get nodes
 
+      - name: verif si helm est installé
+        run: docker exec kubectl sh -c 'helm'
+        id: helm
+        continue-on-error: true
+
       - name: installe helm
+        if: steps.helm.outcome == 'failure'
         run: |
           docker exec kubectl sh -c 'apk add curl'
           docker exec kubectl sh -c 'curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3'
@@ -123,7 +129,7 @@ jobs:
 
       - name: attendre monitoring
         run: |
-          kubectl wait --for=condition=available deployment --all -n monitoring
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n monitoring'
           sleep 60
       
   argocd:
@@ -134,7 +140,13 @@ jobs:
         run: |
           docker exec kubectl sh -c 'apk add curl'
 
+      - name: verif si argocd binnaire existe deja
+        run: docker exec kubectl sh -c 'argocd'
+        id: argocd
+        continue-on-error: true
+        
       - name: install argocd
+        if: steps.argocd.outcome == 'failure'
         run: |
           docker exec kubectl sh -c 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64' 
           docker exec kubectl sh -c 'install -m 555 argocd-linux-amd64 /usr/local/bin/argocd'
@@ -150,7 +162,7 @@ jobs:
 
       - name: attendre argocd
         run: |
-          kubectl wait --for=condition=available deployment --all -n argocd
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n argocd'
           sleep 60
 
 #      - name: load balancing
