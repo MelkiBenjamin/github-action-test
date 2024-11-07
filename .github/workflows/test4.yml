@@ -41,30 +41,30 @@ jobs:
       - if: steps.changes.outputs.product-service == 'true'
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
 
-  setup_k3stest:
-    runs-on: ubuntu-latest
+  setup_k3s:
+    runs-on: self-hosted
     steps:
-#      - name: verif si container k3s-server existe sur win
-#        run: docker ps -a | findstr k3s-server 
-#        id: k3s-server
-#        continue-on-error: true
+      - name: verif si container k3s-server existe sur win
+        run: docker ps -a | findstr k3s-server 
+        id: k3s-server
+        continue-on-error: true
 
-#       if: steps.k3s-server.outputs.stdout == ''
-      - name: setup k3s dans docker
+      - if: steps.k3s-server.outputs.stdout == ''
+        name: setup k3s dans docker
         run: |
           docker run -d --name k3s-server --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server
 
   kubectl:
-    runs-on: ubuntu-latest
-    needs: setup_k3stest
+    runs-on: self-hosted
+    needs: setup_k3s
     steps:
-#      - name: verif si container kubectl existe sur win
-#        run: docker ps -a | findstr kubectl 
-#        id: kubectl
-#        continue-on-error: true
+      - name: verif si container kubectl existe sur win
+        run: docker ps -a | findstr kubectl 
+        id: kubectl
+        continue-on-error: true
 
-#       if: steps.kubectl.outputs.stdout == ''
-      - name: setup kubectl
+      - if: steps.kubectl.outputs.stdout == ''
+        name: setup kubectl
         run: |
           docker run -d -p 8080:8080 --name kubectl alpine sh -c 'sleep 10000'
           docker exec kubectl sh -c 'apk add kubectl'
@@ -73,17 +73,13 @@ jobs:
         run: |
           docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
 
-      - name: met ip k3s-server dans une variable et modifie la config kubectl linux
+      - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
-          (sed -i 's/127.0.0.1/IP/g' k3s.yaml)
-#          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
-#          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
+          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
+          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
 
       - name: copie k3s.yaml dans le conteneur kubectl
         run: docker cp k3s.yaml kubectl:/home/k3s.yaml
-      - name: cat k3s.yaml
-        run: docker exec kubectl sh -c 'cat /home/k3s.yaml'
 
       - name: verif kubectl
         run: |
@@ -122,13 +118,18 @@ jobs:
       - name: install helm apli monitoring
         run: |
           docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --wait'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --atomic --timeout 15m'
+
+      - name: attendre monitoring
+        run: |
+          kubectl wait --for=condition=available deployment --all -n monitoring
+          sleep 60
       
   argocd:
     runs-on: self-hosted
     needs: kubectl
     steps:
-      - name: Setup ArgoCD CLI 
+      - name: install curl
         run: |
           docker exec kubectl sh -c 'apk add curl'
 
@@ -145,7 +146,7 @@ jobs:
 
       - name: Deploys application argocd
         run: | 
-          docker exec kubectl sh -c 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd' 
+          docker exec kubectl sh -c 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=15m' 
 
       - name: attendre argocd
         run: |
