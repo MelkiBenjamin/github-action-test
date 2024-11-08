@@ -194,11 +194,11 @@ jobs:
         run: |
           docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get namespace contoso || kubectl create namespace contoso'
       
-          - name: connexion argocd
-          env:
+      - name: connexion argocd
+        env:
             ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
             mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-          run: |
+        run: |
             docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
       - name: Create Application Contoso with Argocd avec namespace
