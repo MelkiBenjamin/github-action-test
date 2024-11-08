@@ -202,5 +202,5 @@ jobs:
             docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
       - name: Create Application Contoso with Argocd avec namespace
-        run: docker exec kubectl sh -c 'argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune --wait '
+        run: docker exec kubectl sh -c 'argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
