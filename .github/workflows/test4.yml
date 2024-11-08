@@ -64,10 +64,10 @@ jobs:
         id: kubectl
         continue-on-error: true
 
-      - if: steps.kubectl.outputs.stdout == ''
+      - if: steps.kubectl.outputs == ''
         name: setup kubectl
         run: |
-          docker run -d -p 8080:8080 --name kubectl alpine sh -c 'sleep 10000'
+          docker run -d -p 80:80 -p 8080:8080 --name kubectl alpine sh -c 'sleep 100000'
           docker exec kubectl sh -c 'apk add kubectl --no-cache'
         continue-on-error: true 
  
@@ -117,19 +117,19 @@ jobs:
       - name: installe helm
         if: steps.helm.outcome == 'failure'
         run: |
-          docker exec kubectl sh -c 'apk add curl'
+          docker exec kubectl sh -c 'apk add curl --no-cache'
           docker exec kubectl sh -c 'curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3'
           docker exec kubectl sh -c 'chmod 700 get_helm.sh'
-          docker exec kubectl sh -c 'apk add bash openssl && ./get_helm.sh'
+          docker exec kubectl sh -c 'apk add bash openssl --no-cache && ./get_helm.sh'
 
       - name: install helm apli monitoring
         run: |
           docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace  --timeout 15m'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=25m'
 
       - name: attendre monitoring
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n monitoring'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n monitoring --timeout=25m'
           sleep 60
       
   argocd:
@@ -158,31 +158,33 @@ jobs:
 
       - name: Deploys application argocd
         run: | 
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=15m' 
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=25m' 
 
       - name: attendre argocd
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n argocd'
-          sleep 60
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m'
 
 #      - name: load balancing
 #        run: |
 #          echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
 #          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)"
-                    
+        
       - name: connexion argocd
         env:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
-          docker exec kubectl sh -c 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
-          docker exec kubectl sh -c 'argocd login 127.0.0.1 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}'
-            
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl port-forward svc/argocd-server -n argocd 80:80 &'
+          docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password $(export KUBECONFIG=/home/k3s.yaml && kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}'
+        continue-on-error: true
+          
       - name: update ArgoCD password
+        if: steps.argocd.outputs == ''
         env:
-          ARGOCD: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-          mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+#          ARGOCD: export KUBECONFIG=/home/k3s.yaml && kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+          mdp: export KUBECONFIG=/home/k3s.yaml && kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: docker exec -it kubectl sh -c 'argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}'
+        continue-on-error: true
 
   contoso:
     runs-on: self-hosted
@@ -190,8 +192,7 @@ jobs:
     steps:
       - name: Create Contoso namespace
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml'
-          docker exec kubectl sh -c 'kubectl get namespace contoso || kubectl create namespace contoso'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get namespace contoso || kubectl create namespace contoso'
         
       - name: Create Application Contoso with Argocd avec namespace
         run: docker exec kubectl sh -c 'argocd create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
