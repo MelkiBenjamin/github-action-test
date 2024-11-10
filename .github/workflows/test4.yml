@@ -64,7 +64,7 @@ jobs:
         id: kubectl
         continue-on-error: true
 
-      - if: steps.kubectl.outputs == ''
+      - if: steps.helm.outcome == 'failure'
         name: setup kubectl
         run: |
           docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --name kubectl alpine sh -c 'sleep 100000'
