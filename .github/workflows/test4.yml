@@ -49,7 +49,7 @@ jobs:
         id: k3s-server
         continue-on-error: true
 
-      - if: steps.k3s-server.outputs == ''
+      - if: steps.k3s-server.outcome == 'failure'
         name: setup k3s dans docker
         run: |
           docker run -d --name k3s-server --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server
