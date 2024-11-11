@@ -125,11 +125,11 @@ jobs:
       - name: install helm apli monitoring
         run: |
           docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=25m'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
 
       - name: attendre monitoring
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n monitoring --timeout=25m'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n monitoring --timeout=35m'
           sleep 60
       
   argocd:
@@ -163,11 +163,11 @@ jobs:
 
       - name: Deploys application argocd
         run: | 
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=25m' 
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=35m' 
 
       - name: attendre argocd
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m'
+          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n argocd --timeout=35m'
 
 #      - name: load balancing
 #        run: |
@@ -204,6 +204,7 @@ jobs:
             ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
             mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
+            docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl port-forward svc/argocd-server -n argocd 80:80 &'
             docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
       - name: Create Application Contoso with Argocd avec namespace
