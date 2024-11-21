@@ -1,9 +1,12 @@
 name: test g
 on:
   workflow_dispatch:
-    
-#  push:
-#    branches: main
+    inputs:
+      mon_input:
+        description: 'mon input'
+        required: true
+        default: 'test'
+        type: string
 
 
 jobs:
