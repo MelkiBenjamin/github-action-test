@@ -15,8 +15,8 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
-        - name: install kubectl
-          run: apt update && apt install kubectl -y
+#        - name: install kubectl
+#          run: apt update && apt install kubectl -y
 
         - name: config kubeconfig
           run: echo "${{ secrets.KUBECONFIG }}" > /home/.kube/config/k3s.yaml
