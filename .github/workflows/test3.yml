@@ -5,8 +5,9 @@ on:
       mon_input:
         description: 'mon input'
         required: true
-        default: 'test'
+        default: 'valeur par defaut'
         type: string
+
 
 
 jobs:
