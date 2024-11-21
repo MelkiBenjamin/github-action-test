@@ -5,7 +5,6 @@ on:
       mon_input:
         description: 'mon input'
         required: true
-        default: 'valeur par defaut'
         type: string
 
 
@@ -13,6 +12,7 @@ on:
 jobs:
     job1:
         runs-on: ubuntu-latest
+        if: github.event.inputs.mon_input == 'test'
         steps:
         - name: date
           run: date
