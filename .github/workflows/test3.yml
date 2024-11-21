@@ -19,7 +19,7 @@ jobs:
 #          run: apt update && apt install kubectl -y
 
         - name: config kubeconfig
-          run: sudo echo "${{ secrets.KUBECONFIG }}" > /home/k3s.yaml
+          run: sudo echo "${{ secrets.KUBECONFIG }}" >> /home/k3s.yaml
 
         - name: kubectl get node
           run: sudo export KUBECONFIG=/home/k3s.yaml && kubectl get node  
