@@ -1,13 +1,6 @@
 name: test g
 on:
   workflow_dispatch:
-    inputs:
-      mon_input:
-        description: 'mon input'
-        required: true
-        type: string
-
-
 
 jobs:
     job1:
@@ -22,6 +15,16 @@ jobs:
           run: docker -v
         - name: Checkout
           uses: actions/checkout@v4
+
+        - name: install kubectl
+          run: apt update && apt install kubectl -y
+
+        - name: config kubeconfig
+          run: echo "${{ secrets.KUBECONFIG }}" > /home/.kube/config/k3s.yaml
+
+        - name: kubectl get node
+          run: export KUBECONFIG=/home/.kube/config/k3s.yaml && kubectl get node  
+
 #        - name: build
 #          run: docker build -t test1 .
 #        - name: lance docker
