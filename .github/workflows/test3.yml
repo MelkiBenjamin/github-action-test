@@ -5,7 +5,6 @@ on:
 jobs:
     job1:
         runs-on: ubuntu-latest
-        if: github.event.inputs.mon_input == 'test'
         steps:
         - name: date
           run: date
