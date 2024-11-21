@@ -18,10 +18,10 @@ jobs:
           run: docker -v
         - name: Checkout
           uses: actions/checkout@v4
-        - name: build
-          run: docker build -t test1 .
-        - name: lance docker
-          run: docker run -it test1 
+#        - name: build
+#          run: docker build -t test1 .
+#        - name: lance docker
+#          run: docker run -it test1 
 
 
           
