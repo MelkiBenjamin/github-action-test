@@ -179,7 +179,7 @@ jobs:
 
   contoso:
     runs-on: self-hosted
-    needs: [kubectl, argocd]
+    needs: [argocd]
     steps:
       - name: Create Contoso namespace
         run: |
