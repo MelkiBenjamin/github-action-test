@@ -58,7 +58,7 @@ jobs:
         run: docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
 
       - name: artifact k3s.yaml
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: k3s.yaml
           path: .
