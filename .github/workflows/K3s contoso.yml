@@ -85,6 +85,9 @@ jobs:
 #        run: |
 #          kubectl get nodes
 
+      - name: ls
+        run : ls
+
       - name: artefact k3s.yaml
         uses: actions/download-artifact@v4.1.7
         with:
