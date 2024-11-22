@@ -1,7 +1,7 @@
 name: build test 4
 on: 
-#  push:
-  workflow_dispatch:
+  push:
+#  workflow_dispatch:
 
 jobs:
   store-front:
@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: k3s.yaml
-          path: .
+          path: ./k3s.yaml
 
   monitoring:
     runs-on: ubuntu-latest
@@ -90,6 +90,10 @@ jobs:
         with:
           name: k3s.yaml
           path: /home
+
+      - name: node k3s
+        run: |
+          export KUBECONFIG=/home/k3s.yaml && kubectl get nodes
 
       - name: verif si helm est installé
         run: docker exec kubectl sh -c 'helm'
