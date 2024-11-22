@@ -106,7 +106,7 @@ jobs:
 
       - name: ping
         run: |
-          ping -c 4 8.8.8.8
+          curl 8.8.8.8
 
       - name: ping
         run: |
