@@ -106,6 +106,10 @@ jobs:
 
       - name: ping
         run: |
+          ping -c 4 8.8.8.8
+
+      - name: ping
+        run: |
           ping -c 4 ${{ secrets.ping}}
 
       - name: node k3s t
