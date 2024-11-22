@@ -57,6 +57,11 @@ jobs:
       - name: copie k3s.yaml
         run: docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
 
+      - name: met ip k3s-server dans une variable et modifie la config kubectl
+        run: |
+          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
+          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
+
       - name: artifact k3s.yaml
         uses: actions/upload-artifact@v4
         with:
