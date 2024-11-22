@@ -92,7 +92,9 @@ jobs:
         uses: actions/download-artifact@v4.1.7
         with:
           name: k3s.yaml
-          path: /home
+
+      - name: ls
+        run : ls
 
       - name: node k3s
         run: |
