@@ -104,7 +104,7 @@ jobs:
       - name: copie k3s.yaml /home
         run: sudo cp k3s.yaml /home/k3s.yaml 
 
-      - name: node k3s
+      - name: node k3s 
         run: |
           export KUBECONFIG=/home/k3s.yaml && kubectl get nodes
 
