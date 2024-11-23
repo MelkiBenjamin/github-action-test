@@ -19,6 +19,9 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
+        - name: test curl2
+          run: curl -Ik ${{ secrets.IP }}:6443
+
 #        - name: install kubectl
 #          run: apt update && apt install kubectl -y
 
