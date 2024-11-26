@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-    job1:
+    wireguard:
         runs-on: ubuntu-latest
         steps:
         - name: date
@@ -13,17 +13,34 @@ jobs:
           run: docker -v
         - name: date 1
           run: docker -v
-        - name: Checkout
-          uses: actions/checkout@v4
+#        - name: Checkout
+#          uses: actions/checkout@v4
 
         - name: test curl
           run: curl https://8.8.8.8
 
-        - name: test curl2
-          run: curl -Ik ${{ secrets.IP2 }}
+#        - name: test curl2
+#          run: curl -Ik ${{ secrets.IP2 }}
 
-        - name: test wget
-          run: wget ${{ secrets.IP2 }} --no-check-certificate
+        - name: install wireguard
+          run: apt update && apt install wireguard -y
+
+        - name: install cli argocd
+          run: |
+            curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+            sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+            rm argocd-linux-amd64
+
+        - name: install helm
+          run: |
+            curl -sSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+            chmod 700 get_helm.sh
+            ./get_helm.sh
+
+          
+
+#        - name: test wget
+#          run: wget ${{ secrets.IP2 }} --no-check-certificate
 
 #        - name: install kubectl
 #          run: apt update && apt install kubectl -y
