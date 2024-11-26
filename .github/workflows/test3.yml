@@ -22,8 +22,8 @@ jobs:
 #        - name: test curl2
 #          run: curl -Ik ${{ secrets.IP2 }}
 
-        - name: install wireguard
-          run: apt update && apt install wireguard -y
+#        - name: install wireguard
+#          run: apt update && apt install wireguard -y
 
         - name: install cli argocd
           run: |
