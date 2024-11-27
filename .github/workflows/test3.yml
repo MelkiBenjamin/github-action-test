@@ -25,17 +25,50 @@ jobs:
 #        - name: install wireguard
 #          run: apt update && apt install wireguard -y
 
-        - name: install cli argocd
-          run: |
-            curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-            sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-            rm argocd-linux-amd64
+#        - name: config wireguard secret
+#          run: echo "${{ secrets.w }}" > privatekey
 
-        - name: install helm
+#        - name: config wireguard 
+#          run: |
+#            chmod go-r privatekey
+            
+#        - name: config wireguard 
+#          run: |
+#            ip link add dev wg0 type wireguard
+#            sudo ip addr add 10.1.1.1/32 dev wg0
+#            sudo wg set wg0 private-key ./privatekey peer ${{ secrets.wpub }} allowed-ips 10.1.1.0/24 endpoint ${{ secrets.IPPC }}:51820
+#            ip link set wg0 up
+
+#        - name: test acces wireguard
+#          run: curl -Ik ${{ secrets.IP2 }}
+
+#        - name: install innernet
+#          run: apt update && apt install innernet -y
+
+#        - name: config innernet
+#          run: |
+#            innernet install {{ secrets.wpub }} >> innernet.conf
+#            innernet up 
+#            innernet sh
+
+#        - name: install headscale
+#          run: apt update && apt install headscale -y
+
+#        - name: config headscale
+#          run: |
+#            headscale init --admin={{ secrets.wpub }} --admin-password={{ secrets.w }} --server={{ secrets.IPPC }}:51820
+#            headscale serve
+
+        - name: installer bore
           run: |
-            curl -sSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-            chmod 700 get_helm.sh
-            ./get_helm.sh
+            curl -sSL https://github.com/ekzhang/bore/releases/download/v0.5.1/bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz
+            tar -xvf bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz
+            mv bore /usr/local/bin
+            ./bore local --port 8080 --to ${{ secrets.IPTUNNEL }}
+
+        - name: test acces bore
+          run: curl -Ik ${{ secrets.IPTUNNEL }}
+
 
           
 
