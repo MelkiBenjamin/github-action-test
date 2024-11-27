@@ -61,7 +61,7 @@ jobs:
 
         - name: installer bore t
           run: |
-            docker run -i --init --rm --network host ekzhang/bore local --port 6443 --to ${{ secrets.IPTUNNEL }}:7835
+            docker run -i --init --rm --network host ekzhang/bore local --port 6443 --to ${{ secrets.IPTUNNEL }} 7835
             
 
 #        - name: tar bore
