@@ -62,7 +62,12 @@ jobs:
         - name: installer bore
           run: |
             curl -sSL https://github.com/ekzhang/bore/releases/download/v0.5.1/bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz
-            tar -xvf bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz
+
+        - name: tar bore
+          run: tar -xvf bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz
+          
+        - name: mv bore+start 
+          run: |
             mv bore /usr/local/bin
             ./bore local --port 8080 --to ${{ secrets.IPTUNNEL }}
 
