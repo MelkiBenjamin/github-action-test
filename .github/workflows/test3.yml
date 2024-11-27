@@ -59,7 +59,7 @@ jobs:
 #            headscale init --admin={{ secrets.wpub }} --admin-password={{ secrets.w }} --server={{ secrets.IPPC }}:51820
 #            headscale serve
 
-        - name: installer bore
+        - name: installer bore t
           run: |
             docker run -i --init --rm --network host ekzhang/bore local --port 8080 --to ${{ secrets.IPTUNNEL }} 6443
             
