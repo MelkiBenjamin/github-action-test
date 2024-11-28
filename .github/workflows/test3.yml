@@ -60,7 +60,7 @@ jobs:
 #            headscale serve
 
         - name: tunnel bore avec action
-          uses: ekzhang/bore-action@v1.4.0
+          uses: codetalkio/expose-tunnel@v1.5.0
           id: bore
           with:
             sevice: bore.selfhosted
