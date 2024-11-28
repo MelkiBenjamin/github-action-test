@@ -27,7 +27,9 @@ jobs:
            port: 6443
 
         - name: Log tunnel URL
-          run: echo "Tunnel URL: ${{ steps.expose-tunnel.outputs.tunnel-url }}"
+          run: |
+            echo "Tunnel URL:"
+            echo "${{ steps.expose-tunnel.outputs.tunnel-url }}"
 
 #        - name: test curl2
 #          run: curl -Ik ${{ secrets.IP2 }}
