@@ -35,7 +35,7 @@ jobs:
           run: sudo echo "${{ secrets.KUBECONFIG }}" >> sudo /home/k3s.yaml
 
         - name: kubectl remplace server
-          run: sed -i 's/https://127.0.0.1:6443/https://${{ steps.expose-tunnel.outputs.tunnel-url }}:6443/g' ./k3s.yaml
+          run: sed -i 'e/https://127.0.0.1:6443/https://${{ steps.expose-tunnel.outputs.tunnel-url }}:6443/g' ./k3s.yaml
 
         - name: kubectl cp
           run: cp ./k3s.yaml /home/k3s.yaml
