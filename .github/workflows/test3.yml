@@ -32,7 +32,7 @@ jobs:
             echo "${{ steps.expose-tunnel.outputs.tunnel-url }}"
 
         - name : creation yaml k3s
-          run: sudo echo "${{ secrets.k3syaml }}" >> sudo k3s.yaml
+          run: sudo echo "${{ secrets.k3syaml }}" >> k3s.yaml
 
         - name: ls 
           run: ls 
