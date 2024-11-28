@@ -65,7 +65,7 @@ jobs:
           with:
             service: bore.selfhosted
             port: 6443
-            selfHostedEndpoint: ${{ secrets.IPTUNNELPUB }}
+            selfHostedEndpoint: ${{ secrets.IPTUNNEL }}
 
         - name: installer bore te
           run: |
