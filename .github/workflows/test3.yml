@@ -19,6 +19,13 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
+        - name: test action
+          uses: codetalkio/expose-tunnel@v1.5.0
+          id: expose-tunnel
+          with:
+           service: bore.pub
+           port: 8080
+
 #        - name: test curl2
 #          run: curl -Ik ${{ secrets.IP2 }}
 
@@ -59,17 +66,11 @@ jobs:
 #            headscale init --admin={{ secrets.wpub }} --admin-password={{ secrets.w }} --server={{ secrets.IPPC }}:51820
 #            headscale serve
 
-        - name: tunnel bore avec action
-          uses: codetalkio/expose-tunnel@v1.5.0
-          id: bore
-          with:
-            service: bore.selfhosted
-            port: 6443
-            selfHostedEndpoint: ${{ secrets.IPTUNNEL }}
 
-        - name: installer bore te
-          run: |
-            docker run -i --init --rm -p 6443:643 -p 7835:7835 ekzhang/bore local --port 6443 --to ${{ secrets.IPTUNNELPUB }} 7835
+
+#         - name: installer bore te
+#           run: |
+#            docker run -i --init --rm -p 6443:643 -p 7835:7835 ekzhang/bore local --port 6443 --to ${{ secrets.IPTUNNELPUB }} 7835
             
 
 #        - name: tar bore
