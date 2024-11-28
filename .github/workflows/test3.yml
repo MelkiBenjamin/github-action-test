@@ -39,7 +39,7 @@ jobs:
 
         - name: kubectl remplace server
           run: |
-            sed -i 'e/'https://127.0.0.1:6443'/'https://${{ steps.expose-tunnel.outputs.tunnel-url }}'/g' k3s.yaml
+            sed -i 'e/"https://127.0.0.1:6443"/"https://${{ steps.expose-tunnel.outputs.tunnel-url }}"/g' k3s.yaml
 
         - name: cp k3s.yaml
           run: sudo cp k3s.yaml /home/k3s.yaml
