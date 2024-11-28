@@ -24,7 +24,10 @@ jobs:
           id: expose-tunnel
           with:
            service: bore.pub
-           port: 8080
+           port: 6443
+
+        - name: Log tunnel URL
+          run: echo "Tunnel URL: ${{ steps.expose-tunnel.outputs.tunnel-url }}"
 
 #        - name: test curl2
 #          run: curl -Ik ${{ secrets.IP2 }}
