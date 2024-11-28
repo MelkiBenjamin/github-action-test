@@ -34,7 +34,7 @@ jobs:
         - name : creation yaml k3s
           run: sudo echo "${{ secrets.K3SYAML }}" >> k3s.yaml
 
-        - name: ls 
+        - name: ls t
           run: ls 
 
         - name: kubectl remplace server
@@ -45,7 +45,7 @@ jobs:
           run: sudo cp k3s.yaml /home/k3s.yaml
 
         - name: kubectl get node
-          run: sudo export KUBECONFIG=/home/k3s.yaml && kubectl get node
+          run: export KUBECONFIG=/home/k3s.yaml && kubectl get nodes
 
 
 
