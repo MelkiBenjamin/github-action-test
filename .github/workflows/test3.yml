@@ -31,6 +31,8 @@ jobs:
             echo "Tunnel URL:"
             echo "${{ steps.expose-tunnel.outputs.tunnel-url }}"
 
+
+
 #        - name: test curl2
 #          run: curl -Ik ${{ secrets.IP2 }}
 
@@ -86,10 +88,11 @@ jobs:
 #            mv bore /usr/local/bin
 #            ./bore local --port 8080 --to ${{ secrets.IPTUNNEL }}
 
+#        - name: test acces bore
+#          run: curl -Ik ${{ secrets.IPTUNNEL }}
+
         - name: test acces bore
-          run: curl -Ik ${{ secrets.IPTUNNEL }}
-
-
+          run: curl -Ik ${{ steps.expose-tunnel.outputs.tunnel-url }}
           
 
 #        - name: test wget
