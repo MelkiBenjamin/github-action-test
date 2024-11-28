@@ -59,6 +59,14 @@ jobs:
 #            headscale init --admin={{ secrets.wpub }} --admin-password={{ secrets.w }} --server={{ secrets.IPPC }}:51820
 #            headscale serve
 
+        - name: tunnel bore avec action
+          uses: ekzhang/bore-action@v1.4.0
+          id: bore
+          with:
+            sevice: bore.selfhosted
+            port: 6443
+            selfhostedEndpoint: ${{ secrets.IPTUNNELPUB }}
+
         - name: installer bore te
           run: |
             docker run -i --init --rm -p 6443:643 -p 7835:7835 ekzhang/bore local --port 6443 --to ${{ secrets.IPTUNNELPUB }} 7835
