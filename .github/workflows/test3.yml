@@ -63,9 +63,9 @@ jobs:
           uses: codetalkio/expose-tunnel@v1.5.0
           id: bore
           with:
-            sevice: bore.selfhosted
+            service: bore.selfhosted
             port: 6443
-            selfhostedEndpoint: ${{ secrets.IPTUNNELPUB }}
+            selfHostedEndpoint: ${{ secrets.IPTUNNELPUB }}
 
         - name: installer bore te
           run: |
