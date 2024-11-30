@@ -19,17 +19,17 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
-        - name: installer bore te
-          run: |
-           docker run -i --init --rm -p 80:80 -p 7835:7835 ekzhang/bore local --port 80 --to ${{ secrets.IPTUNNELPUB }} 7835
-
         - name: test action
           uses: codetalkio/expose-tunnel@v1.5.0
           id: expose-tunnel
           with:
-           service: bore.pub
-           port: 6443
+           service: bore.selfhosted
+           port: 80
+           selfHostedEndpoint: ${{ secrets.IPTUNNELPUB }}
 
+        - name: installer bore te
+          run: |
+           docker run -i --init --rm -p 80:80 -p 7835:7835 ekzhang/bore local --port 80 --to ${{ secrets.IPTUNNELPUB }} 7835
         - name: Log tunnel URL
           run: |
             echo "Tunnel URL:"
