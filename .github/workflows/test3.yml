@@ -19,12 +19,65 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
+        - name: installe wireguard
+          run: sudo apt install wireguard -y
+
+        - name: ip 
+          run: sudo ip addr
+
+        - name: config wireguard secret
+          run: |
+            wg genkey > privatekey
+            chmod go-r privatekey
+            wg publikey < privatekey
+
+        - name: config wireguard reseau suite
+          run: |
+            ip link add dev wg0 type wireguard
+            ip addr add dev wg0 10.1.1.1/24
+            wg set wg0 private-key ./privatekey 
+
+        - name: config wireguard reseau suite fin
+          run: |
+            ip link set wg0 up
+
+        - name: test acces wireguard
+          run: curl -Ik ${{ secrets.IP2 }}
+            
+
+
+        - name: config wireguard secret
+          run: echo "${{ secrets.w }}" > privatekey
+
+        - name: config wireguard
+          run: |
+            chmod go-r privatekey
+          
+        - name: config wireguard
+          run: |
+            ip link add dev wg0 type wireguard
+            sudo ip addr add
+
+        - name: test acces wireguard
+          run: curl -Ik ${{ secrets.IP2 }}
+
+        - name: tunnel ssh
+          run: ssh -R 80:localhost:80 192.168.0.123
+
+        - name: installe tailscale
+          run: curl -fsSL https://tailscale.com/install.sh | sh
+
+        - name: config tailscale
+          run: tailscale up --login-server https://login.tailscale.com --authkey ${{ secrets.TAILSCALE }} 
+
+
+
         - name: test action
           uses: codetalkio/expose-tunnel@v1.5.0
           id: expose-tunnel
           with:
            service: bore.selfhosted
-           port: 80
+           port: 6443
            selfHostedEndpoint: ${{ secrets.IPTUNNELPUB }}
 
         - name: installer bore te

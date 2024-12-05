@@ -208,7 +208,7 @@ jobs:
             mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
             docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl port-forward svc/argocd-server -n argocd 80:80 &'
-            sleep 10
+            sleep 5
             docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
       - name: Create Application Contoso with Argocd avec namespace

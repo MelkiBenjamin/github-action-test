@@ -6,12 +6,21 @@ services:
     restart: unless-stopped
     container_name: headscale
     ports:
-      - "127.0.0.1:8080:8080"
-      - "127.0.0.1:9090:9090"
+      - "0.0.0.0:8000:8000"
     volumes:
       # Please change <CONFIG_PATH> to the fullpath of the config folder just created
-      - ./test-head.yml:/etc/headscale
+      - ./config/config.yml:/etc/headscale/config.yml
     command: serve
+  tailscale-client:
+    image: alpine:latest
+    restart: unless-stopped
+    container_name: tailscale-client
+    ports:
+      - "10:10"
+    privileged: true
+    depends_on:
+      - headscale
+    entrypoint: ["/bin/sh", "-c", "sleep 3600"]
 
 volumes:
   test-head.yml:
