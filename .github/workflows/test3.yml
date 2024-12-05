@@ -31,8 +31,8 @@ jobs:
             wg genkey > privatekey
             wg pubkey < privatekey
 
-        - name: slepp 20
-          run: sleep 20
+        - name: slepp 30
+          run: sleep 30
 
         - name: config wireguard reseau suite
           run: |
@@ -46,12 +46,15 @@ jobs:
             sudo ip link set wg0 up
 
         - name: config wireguard sleep
-          run: sleep 20
+          run: sleep 5
 
         - name: config wireguard reseau suite fin 2
           run: |
             sudo wg set wg0 peer ${{ secrets.wpub }} persistent-keepalive 30
 
+        - name: config wireguard reseau sleep
+          run: |
+            sleep 60
 
         - name: test acces wireguard
           run: curl -Ik ${{ secrets.IP2 }}
