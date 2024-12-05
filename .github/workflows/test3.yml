@@ -29,7 +29,7 @@ jobs:
           run: |
             wg genkey > privatekey
             chmod go-r privatekey
-            wg publikey < privatekey
+            wg pubkey < privatekey
 
         - name: config wireguard reseau suite
           run: |
