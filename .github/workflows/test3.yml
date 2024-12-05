@@ -27,14 +27,14 @@ jobs:
 
         - name: config wireguard secret
           run: |
+            umask 077
             wg genkey > privatekey
-            chmod go-r privatekey
             wg pubkey < privatekey
 
         - name: config wireguard reseau suite
           run: |
             sudo ip link add dev wg0 type wireguard
-            sudo ip addr add dev wg0 10.1.1.1/24
+            sudo ip addr add dev wg0 10.1.1.1/32
             sudo wg set wg0 private-key ./privatekey 
 
         - name: config wireguard reseau suite fin
