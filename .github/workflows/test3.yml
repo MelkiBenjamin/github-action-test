@@ -33,8 +33,8 @@ jobs:
 
         - name: config wireguard reseau suite
           run: |
-            ip link add dev wg0 type wireguard
-            ip addr add dev wg0 10.1.1.1/24
+            sudo ip link add dev wg0 type wireguard
+            sudo ip addr add dev wg0 10.1.1.1/24
             wg set wg0 private-key ./privatekey 
 
         - name: config wireguard reseau suite fin
