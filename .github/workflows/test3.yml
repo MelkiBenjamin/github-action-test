@@ -48,6 +48,9 @@ jobs:
         - name: config wireguard sleep
           run: sleep 5
 
+        - name: test acces wireguard
+          run: sudo wg show
+
         - name: config wireguard reseau suite fin 2
           run: |
             sudo wg set wg0 peer ${{ secrets.wpub }} persistent-keepalive 30
@@ -55,6 +58,9 @@ jobs:
         - name: config wireguard reseau sleep
           run: |
             sleep 60
+        
+        - name: sudo tcpdump -i wg0 icmp
+          run: sudo tcpdump -i wg0 icmp
 
         - name: test acces wireguard
           run: curl -Ik ${{ secrets.IP2 }}
