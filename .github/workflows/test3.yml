@@ -39,7 +39,7 @@ jobs:
 
         - name: config wireguard reseau suite fin
           run: |
-            ip link set wg0 up
+            sudo ip link set wg0 up
 
         - name: test acces wireguard
           run: curl -Ik ${{ secrets.IP2 }}
