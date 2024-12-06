@@ -19,6 +19,15 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
+        - name: Get IP Addresses
+          id: ip
+          uses: candidob/get-runner-ip@v1.0.0
+
+        - name: See IP Addresses
+          run: |
+            echo ${{ steps.ip.outputs.ipv4 }}
+            echo ${{ steps.ip.outputs.ipv6 }}
+
         - name: installe wireguard
           run: sudo apt install wireguard -y
 
@@ -55,12 +64,12 @@ jobs:
           run: |
             sudo wg set wg0 peer ${{ secrets.wpub }} persistent-keepalive 360
 
+        - name: test acces wireguard
+          run: sudo wg show
+
         - name: config wireguard reseau sleep
           run: |
             sleep 360
-
-        - name: test acces wireguard
-          run: sudo wg show
 
         - name: test acces wireguard
           run: curl -Ik http://10.1.1.4
