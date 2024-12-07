@@ -31,6 +31,9 @@ jobs:
         - name: setup ssh key 2
           run: |
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
+
+        - name: test ssh
+          run: ssh -o StrictHostKeyChecking=no root@localhost "echo 'Connected successfully'"
             
         - name: test ssh
           run: ssh -o StrictHostKeyChecking=no ${{ secrets.user }}@${{ secrets.IPTUNNELPUB }} "echo 'Connected successfully'"
