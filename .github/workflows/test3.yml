@@ -33,7 +33,7 @@ jobs:
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
             
         - name: test ssh
-          run: ssh -i ~/.ssh/id_rsa ${{ secrets.user }}@${{ secrets.IPTUNNELPUB }} -p 22
+          run: ssh -o StrictHostKeyChecking=no ${{ secrets.user }}@${{ secrets.IPTUNNELPUB }} "echo 'Connected successfully'"
 
 
 
