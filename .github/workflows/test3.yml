@@ -19,26 +19,31 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
-        - name: Get IP Addresses
-          id: ip
-          uses: candidob/get-runner-ip@v1.0.0
-
-        - name: See IP Addresses
+        - name: setup ssh key
           run: |
-            echo ${{ steps.ip.outputs.ipv4 }}
-            echo ${{ steps.ip.outputs.ipv6 }}
+            echo "${{ secrets.SSH }}" > ~/.ssh/id_rsa
 
-        - name: installe wireguard
-          run: sudo apt install wireguard -y
-
-        - name: ip 
-          run: sudo ip addr
-
-        - name: config wireguard secret
+        - name: setup ssh key
           run: |
-            umask 077
-            wg genkey > privatekey
-            wg pubkey < privatekey
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -H ${{ secrets.IPTUNNELPUB }} >> ~/.ssh/known_hosts
+            
+        - name: test ssh
+          run: ssh -i ~/.ssh/id_rsa ${{ secrets.user }}@${{ secrets.IPTUNNELPUB }} -p 22
+
+
+
+#        - name: installe wireguard
+#          run: sudo apt install wireguard -y
+
+#        - name: ip 
+#          run: sudo ip addr
+
+#        - name: config wireguard secret
+#          run: |
+#            umask 077
+#            wg genkey > privatekey
+#            wg pubkey < privatekey
 
         - name: slepp 30
           run: sleep 30
