@@ -21,6 +21,7 @@ jobs:
 
         - name: setup ssh key
           run: |
+            mkdir -p ~/.ssh
             echo "${{ secrets.SSH }}" > ~/.ssh/id_rsa
 
         - name: setup ssh key
