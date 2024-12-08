@@ -19,16 +19,8 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
-        - name: Get public IP
-          id: get_ip
-          run: echo "PUBLIC_IP=$(curl -s ipinfo.io/ip)" >> $GITHUB_ENV
-  
-        - name: Set SSH user
-          run: echo "SSH_USER=your-username" >> $GITHUB_ENV
-  
-        - name: Test SSH connection
-          run: |
-            ssh -o StrictHostKeyChecking=no $SSH_USER@$PUBLIC_IP "echo 'SSH connection successful'"
+        - name: savoir si openssh-server est installé
+          run: which sshd
         
         - name: setup ssh key
           run: |
@@ -44,7 +36,7 @@ jobs:
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
 
         - name: test ssh
-          run: sudo ssh -o StrictHostKeyChecking=no root@localhost "echo 'Connected successfully'"
+          run: sudo ssh -o StrictHostKeyChecking=no user@localhost "echo 'Connected successfully'"
             
         - name: test ssh
           run: ssh -o StrictHostKeyChecking=no ${{ secrets.user }}@${{ secrets.IPTUNNELPUB }} "echo 'Connected successfully'"
