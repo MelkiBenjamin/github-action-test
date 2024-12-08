@@ -26,6 +26,11 @@ jobs:
             username: user
             script: whoami
             password: ${{ secrets.PASSWORD }}
+            proxy_host: ${{ secrets.IPPC }}
+            proxy_port: 22
+            proxy_username: user
+            proxy_password: ${{ secrets.PASSWORD }}
+            
 
         - name: savoir si openssh-server est installé
           run: which sshd
