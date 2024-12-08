@@ -19,11 +19,13 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
-        - name: action ssh
-          uses: webfactory/ssh-agent@v0.5.3
+        - name: executing remote ssh commands using password
+          uses: appleboy/ssh-action@v1.2.0
           with:
-            ssh-private-key: ${{ secrets.SSH }}
-            
+            host: ${{ secrets.IPTUNNELPUB }}
+            username: user
+            script: whoami
+
 
         - name: savoir si openssh-server est installé
           run: which sshd
