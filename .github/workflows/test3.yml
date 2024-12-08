@@ -19,6 +19,12 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
+        - name: action ssh
+          uses: webfactory/ssh-agent@v0.5.3
+          with:
+            ssh-private-key: ${{ secrets.SSH }}
+            
+
         - name: savoir si openssh-server est installé
           run: which sshd
         
@@ -36,7 +42,7 @@ jobs:
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
 
         - name: test avec redirection
-          run: ssh -L 22:localhost:22 user@${{ secrets.IPTUNNELPUB }}
+          run: ssh -tt -L 22:localhost:22 user@${{ secrets.IPTUNNELPUB }}
 
         - name: test ssh
           run: sudo ssh -o StrictHostKeyChecking=no user@${{ secrets.IPTUNNELPUB }} "echo 'Connected successfully'"
