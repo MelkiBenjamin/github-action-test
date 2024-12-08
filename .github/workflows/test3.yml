@@ -35,6 +35,9 @@ jobs:
           run: |
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
 
+        - name: test avec redirection
+          run: ssh -L 22:localhost:22 user@${{ secrets.IPTUNNELPUB }}
+
         - name: test ssh
           run: sudo ssh -o StrictHostKeyChecking=no user@${{ secrets.IPTUNNELPUB }} "echo 'Connected successfully'"
             
