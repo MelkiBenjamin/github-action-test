@@ -28,6 +28,9 @@ jobs:
         - name: Get Public IP
           run: curl ifconfig.me
 
+        - name: connaitre le nom user
+          run: whoami
+
         - name: setup ssh key
           run: |
             mkdir -p ~/.ssh
