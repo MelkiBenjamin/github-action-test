@@ -46,6 +46,9 @@ jobs:
 
         - name: test netstat
           run: sudo netstat -tuln 
+
+        - name: test nc
+          run: nc -zv ${{ secrets.IPTUNNELPUB }} 22
           
         - name: Create Reverse SSH Tunnel
           run: |
