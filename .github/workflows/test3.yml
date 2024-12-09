@@ -45,7 +45,15 @@ jobs:
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
 
         - name: test netstat
-          run: sudo netstat -tuln
+          run: sudo netstat -tuln 
+          
+        - name: Create Reverse SSH Tunnel
+          run: |
+            ssh -R 2222:localhost:22 root@${{ secrets.IPTUNNELPUB }}
+
+
+        
+
 
         - name: sleep 30
           run: sleep 180
