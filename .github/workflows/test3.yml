@@ -19,6 +19,28 @@ jobs:
         - name: test curl
           run: curl https://8.8.8.8
 
+        - name: savoir si openssh-server est installé
+          run: which sshd
+
+        - name: sudo systemctl status ssh
+          run: sudo systemctl status ssh
+        
+        - name: Get Public IP
+          run: curl ifconfig.me
+
+        - name: setup ssh key
+          run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SSH }}" > ~/.ssh/id_rsa
+
+        - name: setup ssh key 1
+          run: |
+            chmod 600 ~/.ssh/id_rsa
+          
+        - name: setup ssh key 2
+          run: |
+            echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
+
         - name: executing remote ssh commands using password
           uses: appleboy/ssh-action@v1.2.0
           with:
@@ -30,11 +52,7 @@ jobs:
             proxy_port: 22
             proxy_username: user
             proxy_password: ${{ secrets.PASSWORD }}
-            
 
-        - name: savoir si openssh-server est installé
-          run: which sshd
-        
         - name: setup ssh key
           run: |
             mkdir -p ~/.ssh
