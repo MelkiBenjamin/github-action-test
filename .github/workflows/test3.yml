@@ -41,6 +41,10 @@ jobs:
           run: |
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
 
+
+        - name: sleep 30
+          run: sleep 180
+
         - name: executing remote ssh commands using password
           uses: appleboy/ssh-action@v1.2.0
           with:
