@@ -44,6 +44,8 @@ jobs:
           run: |
             echo "${{ secrets.IPTUNNELPUB }}" >> ~/.ssh/known_hosts
 
+        - name: test netstat
+          run: sudo netstat -tuln | grep ssh
 
         - name: sleep 30
           run: sleep 180
