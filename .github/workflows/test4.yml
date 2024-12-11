@@ -113,7 +113,7 @@ jobs:
         id: helm
         continue-on-error: true
 
-      - name: installe helm
+      - name: installe helm 
         if: steps.helm.outcome == 'failure'
         run: |
           docker exec kubectl sh -c 'apk add curl --no-cache'
