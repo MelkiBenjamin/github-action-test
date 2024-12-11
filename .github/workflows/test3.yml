@@ -6,6 +6,8 @@ on:
 jobs:
     wireguard:
         runs-on: ubuntu-latest
+        env:
+          test1: ls
         steps:
         - name: date
           run: date
@@ -18,6 +20,18 @@ jobs:
 
         - name: test curl
           run: curl https://8.8.8.8
+
+        - name: test variables
+          run: echo ${{ env.test1 }}
+
+        - name: test variables
+          run: echo $test1
+
+        - name: test variables
+          run: ${{ secrets.test1 }} /bin/bash
+
+        - name: test variables
+          run: $test /bin/bash
 
         - name: savoir si openssh-server est installé
           run: which sshd
