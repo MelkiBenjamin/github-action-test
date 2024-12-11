@@ -1,13 +1,11 @@
 name: test g
 on:
   workflow_dispatch:
-  push:
+#  push:
 
 jobs:
     wireguard:
-        runs-on: self-hosted
-        container:
-          image: ubuntu:latest
+        runs-on: ubuntu-latest
         env:
           test1: ls
         steps:
