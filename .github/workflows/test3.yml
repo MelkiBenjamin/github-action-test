@@ -5,7 +5,9 @@ on:
 
 jobs:
     wireguard:
-        runs-on: ubuntu-latest
+        runs-on: self-hosted
+        container:
+          image: ubuntu:latest
         env:
           test1: ls
         steps:
