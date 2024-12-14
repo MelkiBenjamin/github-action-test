@@ -1,6 +1,6 @@
 name: build test 4
 on: 
-  push:
+#  push:
   workflow_dispatch:
 
 jobs:
@@ -78,6 +78,13 @@ jobs:
         run: |
           $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
           (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
+          #creer un secret github action pour tout le fichier k3s.yaml
+          echo k3s.yaml > secret.KUBE_CONFIG
+
+
+
+          
+
 
       - name: copie k3s.yaml dans le conteneur kubectl
         run: docker cp k3s.yaml kubectl:/home/k3s.yaml

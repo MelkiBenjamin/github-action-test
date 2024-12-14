@@ -1,11 +1,19 @@
 name: test g
 on:
-  workflow_dispatch:
-#  push:
+#  workflow_dispatch:
+  push:
 
 jobs:
+    test-container:
+      runs-on: self-hosted
+      container: 
+        image: alpine:latest     
+      steps:
+      - name: test
+        run: apk add --no-cache curl
     wireguard:
         runs-on: ubuntu-latest
+        if: github.event_name == 'workflow_dispatch'
         env:
           test1: ls
         steps:
@@ -39,11 +47,11 @@ jobs:
         - name: sudo systemctl status ssh
           run: sudo systemctl status ssh
         
-        - name: Get Public IP
-          run: curl ifconfig.me
+#        - name: Get Public IP
+#          run: curl ifconfig.me
 
-        - name: connaitre le nom user
-          run: whoami
+#        - name: connaitre le nom user
+#          run: whoami
 
         - name: setup ssh key
           run: |
