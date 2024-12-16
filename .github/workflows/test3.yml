@@ -9,14 +9,14 @@ jobs:
       steps:
       - name: install helm
         run: |
-          docker run -it alpine --name helm10 sh -c "apk add --no-cache helm"
+          docker run -d alpine --name helm10 sh -c "apk add --no-cache helm"
 
     helm2:
       runs-on: self-hosted    
       steps:
       - name: install helm
         run: |
-          docker run -it alpine --name helm20 sh -c "wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz \
+          docker run -d alpine --name helm20 sh -c "wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz \
           && tar -zxvf helm-v3.16.3-linux-amd64.tar.gz \
           && mv linux-amd64/helm /usr/local/bin/helm \
           && rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
