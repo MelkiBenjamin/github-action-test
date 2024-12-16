@@ -3,6 +3,9 @@ on:
 #  push:
   workflow_dispatch:
 
+env:
+  dex : docker exec kubectl sh -c
+
 jobs:
   store-front:
     runs-on: ubuntu-latest
@@ -52,7 +55,8 @@ jobs:
       - if: steps.k3s-server.outcome == 'failure'
         name: setup k3s dans docker
         run: |
-          docker run -d --name k3s-server --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server
+          docker network create k3s
+          docker run -d --name k3s-server --network k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server 
 
   kubectl:
     runs-on: self-hosted
@@ -66,77 +70,49 @@ jobs:
       - if: steps.kubectl.outcome == 'failure'
         name: setup kubectl
         run: |
-          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --name kubectl alpine sh -c 'sleep 100000'
-          docker exec kubectl sh -c 'apk add kubectl --no-cache'
+          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s --name kubectl alpine sh -c 'sleep infinity'
+          $dex 'apk add kubectl --no-cache \
+          && mkdir -p /root/.kube/'
         continue-on-error: true 
  
       - name: copie kubectl 
         run: |
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
+          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml kubectl:/root/.kube/config
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          $IP= (docker inspect --format '{{ .NetworkSettings.IPAddress }}' k3s-server)
-          (Get-Content .\k3s.yaml) -replace '127.0.0.1', "$IP" | Set-Content .\k3s.yaml | Out-Null
-          #creer un secret github action pour tout le fichier k3s.yaml
-          echo k3s.yaml > secret.KUBE_CONFIG
-
-
-
-          
-
-
-      - name: copie k3s.yaml dans le conteneur kubectl
-        run: docker cp k3s.yaml kubectl:/home/k3s.yaml
+          $dex 'sed -i "s/127.0.0.1/k3s-server/g" /root/.kube/config'
 
       - name: verif kubectl
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get nodes'
+          $dex 'kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
     needs: kubectl
     steps:
-#      - name: lancer commande echo avec ssh dans un autre conteneur
-#        run: 
-#          echo "echo 'Hello world'" | ssh -i /home/runner/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o User=root -o ConnectTimeout=10 root@${{ steps.install.outputs.ip }}
-
-#      - name: config kubectl 
-#        run: |
-#          sudo mkdir -p /home/.kube/config
-#          echo "${{ secrets.KUBE_CONFIG }}" > /home/.kube/config/k3s.yaml
-#          export KUBECONFIG=/home/.kube/config/k3s.yaml
-
-#      - name: verif kubectl
-#        run: |
-#          ls -alh /home/.kube/config
-
-#      - name: verif kubectl
-#        run: |
-#          kubectl get nodes
-
       - name: verif si helm est installé
-        run: docker exec kubectl sh -c 'helm'
+        run: $dex 'helm'
         id: helm
         continue-on-error: true
 
       - name: installe helm 
         if: steps.helm.outcome == 'failure'
         run: |
-          docker exec kubectl sh -c 'apk add curl --no-cache'
-          docker exec kubectl sh -c 'curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3'
-          docker exec kubectl sh -c 'chmod 700 get_helm.sh'
-          docker exec kubectl sh -c 'apk add bash openssl --no-cache && ./get_helm.sh'
+          $dex 'apk add curl --no-cache \
+          && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
+          && chmod 700 get_helm.sh \
+          && apk add bash openssl --no-cache \
+          && ./get_helm.sh'
 
       - name: install helm apli monitoring
         run: |
-          docker exec kubectl sh -c 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
+          $dex 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts \
+          && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
 
       - name: attendre monitoring
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n monitoring --timeout=35m'
-          sleep 60
+          $dex 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=35m'
       
   argocd:
     runs-on: self-hosted
@@ -144,36 +120,36 @@ jobs:
     steps:
       - name: install curl
         run: |
-          docker exec kubectl sh -c 'apk add curl --no-cache'
+          $dex 'apk add curl --no-cache'
 
       - name: verif si argocd binaire existe deja
-        run: docker exec kubectl sh -c 'argocd'
+        run: $dex 'argocd'
         id: argocd
         continue-on-error: true
         
       - name: install argocd
         if: steps.argocd.outcome == 'failure'
         run: |
-          docker exec kubectl sh -c 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64' 
-          docker exec kubectl sh -c 'install -m 555 argocd-linux-amd64 /usr/local/bin/argocd'
-          docker exec kubectl sh -c 'rm argocd-linux-amd64'
+          $dex 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 \
+          && install -m 555 argocd-linux-amd64 /usr/local/bin/argocd \
+          && rm argocd-linux-amd64'
 
       - name: create namespace argocd
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get namespace argocd || kubectl create namespace argocd'
+          $dex 'kubectl get namespace argocd || kubectl create namespace argocd'
 
       - name: verif si argocd-server est en service
-        run: docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get svc argocd-server -n argocd'
+        run: $dex 'kubectl get svc argocd-server -n argocd'
         id: argocd-server
         continue-on-error: true
 
       - name: Deploys application argocd
         run: | 
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=35m' 
+          $dex 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=35m' 
 
       - name: attendre argocd
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl wait --for=condition=available deployment --all -n argocd --timeout=35m'
+          $dex 'kubectl wait --for=condition=available deployment --all -n argocd --timeout=35m'
 
 #      - name: load balancing
 #        run: |
@@ -181,7 +157,7 @@ jobs:
 #          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)
 
       - name: affiche pod argocd
-        run: docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get pods -n argocd'
+        run: $dex 'kubectl get pods -n argocd'
 
       - name: connexion argocd
         if: steps.argocd-server.outcome == 'failure'
@@ -189,15 +165,15 @@ jobs:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl port-forward svc/argocd-server -n argocd 80:80 &'
+          $dex 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
           sleep 10
-          docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password $(export KUBECONFIG=/home/k3s.yaml && kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}'
+          $dex 'argocd login 127.0.0.1:80 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}'
         continue-on-error: true
           
       - name: update ArgoCD password
         if: steps.argocd-server.outcome == 'failure'
         env:
-          mdp: export KUBECONFIG=/home/k3s.yaml && kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+          mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: docker exec -it kubectl sh -c 'argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}'
         continue-on-error: true
 
@@ -207,17 +183,17 @@ jobs:
     steps:
       - name: Create Contoso namespace
         run: |
-          docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl get namespace contoso || kubectl create namespace contoso'
+          $dex 'kubectl get namespace contoso || kubectl create namespace contoso'
       
       - name: connexion argocd
         env:
             ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
             mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
-            docker exec kubectl sh -c 'export KUBECONFIG=/home/k3s.yaml && kubectl port-forward svc/argocd-server -n argocd 80:80 &'
+            $dex 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
             sleep 5
-            docker exec kubectl sh -c 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
+            $dex 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
       - name: Create Application Contoso with Argocd avec namespace
-        run: docker exec kubectl sh -c 'argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
+        run: $dex 'argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 

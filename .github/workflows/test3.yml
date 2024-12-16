@@ -4,13 +4,22 @@ on:
   push:
 
 jobs:
-    test-container:
-      runs-on: self-hosted
-      container: 
-        image: alpine:latest     
+    helm:
+      runs-on: self-hosted    
       steps:
-      - name: test
-        run: apk add --no-cache curl
+      - name: install helm
+        run: apk add --no-cache helm
+
+    helm2:
+      runs-on: self-hosted    
+      steps:
+      - name: install helm
+        run: |
+          wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz \
+          && tar -zxvf helm-v3.16.3-linux-amd64.tar.gz \
+          && mv linux-amd64/helm /usr/local/bin/helm \
+          && rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz
+
     wireguard:
         runs-on: ubuntu-latest
         if: github.event_name == 'workflow_dispatch'
