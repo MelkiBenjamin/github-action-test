@@ -77,7 +77,11 @@ jobs:
  
       - name: copie kubectl 
         run: |
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml kubectl:/root/.kube/config
+          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
+
+      - name: verif kubectl
+        run: |
+          docker cp k3s.yaml kubectl:/root/.kube/config
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
