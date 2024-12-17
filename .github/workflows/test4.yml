@@ -1,6 +1,6 @@
 name: build test 4
 on: 
-#  push:
+  push:
   workflow_dispatch:
 
 env:
@@ -99,17 +99,16 @@ jobs:
       - name: installe helm 
         if: steps.helm.outcome == 'failure'
         run: |
-          $dex 'apk add curl --no-cache \
-          && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
-          && chmod 700 get_helm.sh \
-          && apk add bash openssl --no-cache \
-          && ./get_helm.sh'
+          $dex 'wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz \
+          && tar -zxvf helm-v3.16.3-linux-amd64.tar.gz \
+          && mv linux-amd64/helm /usr/local/bin/helm \
+          && rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz'
 
       - name: install helm apli monitoring
         run: |
           $dex 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts \
           && helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
-
+  
       - name: attendre monitoring
         run: |
           $dex 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=35m'
@@ -127,10 +126,10 @@ jobs:
         id: argocd
         continue-on-error: true
         
-      - name: install argocd
+      - name: install cli-argocd
         if: steps.argocd.outcome == 'failure'
         run: |
-          $dex 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 \
+          $dex 'curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/download/v2.13.2/argocd-linux-amd64 \
           && install -m 555 argocd-linux-amd64 /usr/local/bin/argocd \
           && rm argocd-linux-amd64'
 
@@ -145,7 +144,7 @@ jobs:
 
       - name: Deploys application argocd
         run: | 
-          $dex 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml -n argocd --timeout=35m' 
+          $dex 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml -n argocd --timeout=35m' 
 
       - name: attendre argocd
         run: |
@@ -155,9 +154,6 @@ jobs:
 #        run: |
 #          echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
 #          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)
-
-      - name: affiche pod argocd
-        run: $dex 'kubectl get pods -n argocd'
 
       - name: connexion argocd
         if: steps.argocd-server.outcome == 'failure'
