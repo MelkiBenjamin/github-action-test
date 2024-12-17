@@ -75,7 +75,7 @@ jobs:
         run: |
           $dex "apk add kubectl --no-cache \
           && mkdir -p /root/.kube/"
-        shell: bash
+        shell: pwsh
         continue-on-error: true 
  
       - name: copie kubectl 
