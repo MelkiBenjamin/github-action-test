@@ -47,7 +47,7 @@ jobs:
   setup_k3s:
     runs-on: self-hosted
     steps:
-      - name: verif si container k3s-server existe sur win
+      - name: verif si container k3s-server existe sur win 
         run: docker ps -a | findstr k3s-server 
         id: k3s-server
         continue-on-error: true
