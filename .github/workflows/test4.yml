@@ -73,7 +73,7 @@ jobs:
           docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s --name kubectl alpine sh -c 'sleep infinity'
       - name: install kubectl
         run: |
-          ${dex} "apk add kubectl --no-cache \
+          $dex "apk add kubectl --no-cache \
           && mkdir -p /root/.kube/"
         shell: bash
         continue-on-error: true 
