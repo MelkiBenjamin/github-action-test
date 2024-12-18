@@ -77,22 +77,22 @@ jobs:
       
       - name: install kubectl
         run: |
-          $dex "apk add kubectl --no-cache \
-          && mkdir -p /root/.kube/"
+          dex apk add kubectl --no-cache \
+          && mkdir -p /root/.kube/
         continue-on-error: true 
  
       - name: copie k3s.yaml kubectl
         run: |
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml . && \
-          docker cp k3s.yaml kubectl:/root/.kube/config
+          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml . \
+          && docker cp k3s.yaml kubectl:/root/.kube/config
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          $dex 'sed -i "s/127.0.0.1/k3s-server/g" /root/.kube/config'
+          dex 'sed -i "s/127.0.0.1/k3s-server/g" /root/.kube/config'
 
       - name: verif kubectl
         run: |
-          $dex 'kubectl get nodes'
+          dex 'kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
