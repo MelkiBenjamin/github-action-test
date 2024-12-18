@@ -77,32 +77,32 @@ jobs:
       - name: install kubectl
         run: |
           echo "install kubectl" \
-          && ${{ env.dex }} 'apk add kubectl --no-cache' \
-          && echo "install kubectl terminé" \
-          && echo "creation du fichier de config kubectl" \
-          && ${{ env.dex }} 'mkdir -p /root/.kube/' \
-          && echo "creation du chemin de config kubectl terminé"
+          ; ${{ env.dex }} 'apk add kubectl --no-cache' \
+          ; echo "install kubectl terminé" \
+          ; echo "creation du fichier de config kubectl" \
+          ; ${{ env.dex }} 'mkdir -p /root/.kube/' \
+          ; echo "creation du chemin de config kubectl terminé"
          
       - name: copie k3s.yaml kubectl
         run: |
-          echo "copie du fichier de config k3s dans kubectl"
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml . \
-          && docker cp k3s.yaml kubectl:/root/.kube/config \
-          && echo "copie du fichier de config k3s dans kubectl terminé"
+          echo "copie du fichier de config k3s dans kubectl" \
+          ; docker cp k3s-server:/etc/rancher/k3s/k3s.yaml . \
+          ; docker cp k3s.yaml kubectl:/root/.kube/config \
+          ; echo "copie du fichier de config k3s dans kubectl terminé"
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          echo "Recuperation l'ip du k3s-server."
-          IP=$(hostname -I | awk '{print $1}') || { echo "Erreur de récupération de l'IP." >&2; exit 1; }
-          echo "Recupération de l'ip terminé avec succès."
-          echo "Modification du fichier de config kubectl"
-          ${{ env.dex }} "sed -i 's/127.0.0.1/$IP/g' /root/.kube/config" || { echo "Erreur de modification du fichier de config kubectl." >&2; exit 1; }
+          echo "Recuperation l'ip du k3s-server." \
+          ; IP=$(hostname -I | awk '{print $1}') || { echo "Erreur de récupération de l'IP." >&2; exit 1; } \
+          ; echo "Recupération de l'ip terminé avec succès." \
+          ; echo "Modification du fichier de config kubectl" \
+          ; ${{ env.dex }} "sed -i 's/127.0.0.1/$IP/g' /root/.kube/config" || { echo "Erreur de modification du fichier de config kubectl." >&2; exit 1; } \
           echo "Modification du fichier de config kubectl terminé avec succès."
 
       - name: verif kubectl
         run: |
-          echo "verif kubectl"
-          ${{ env.dex }} 'kubectl get nodes'
+          echo "verif kubectl" \
+          ; ${{ env.dex }} 'kubectl get nodes' \
           echo "verif kubectl terminé"
 
   monitoring:
