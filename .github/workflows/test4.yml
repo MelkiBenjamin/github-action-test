@@ -73,8 +73,8 @@ jobs:
       
       - name: install kubectl
         run: |
-          ${{ env.dex }} 'apk add kubectl --no-cache && \
-          mkdir -p /root/.kube/'
+          ${{ env.dex }} 'apk add kubectl --no-cache' 
+          ${{ env.dex }} 'mkdir -p /root/.kube/'
         continue-on-error: true 
  
       - name: copie k3s.yaml kubectl
@@ -84,7 +84,7 @@ jobs:
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
+          ip=docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server
           ${{ env.dex }} 'sed -i "s/127.0.0.1/$ip/g" /root/.kube/config'
 
       - name: verif kubectl
