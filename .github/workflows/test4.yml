@@ -62,29 +62,28 @@ jobs:
     runs-on: self-hosted
     needs: setup_k3s
     steps:
+      - name: creer fonction dex
+        run: function dex {docker exec kubectl sh -c "$($Args -join ' ')"} 
+
       - name: verif si container kubectl existe sur win
         run: docker ps -a | findstr kubectl 
         id: kubectl
         continue-on-error: true
 
-      - if: steps.kubectl.outcome == 'failure'
-        name: setup kubectl
+      - name: setup kubectl
+        if: steps.kubectl.outcome == 'failure'
         run: |
           docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s --name kubectl alpine sh -c 'sleep infinity'
+      
       - name: install kubectl
         run: |
           $dex "apk add kubectl --no-cache \
           && mkdir -p /root/.kube/"
-        env:
-          dex: docker exec kubectl sh -c
         continue-on-error: true 
  
-      - name: copie kubectl 
+      - name: copie k3s.yaml kubectl
         run: |
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml .
-
-      - name: verif kubectl
-        run: |
+          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml . && \
           docker cp k3s.yaml kubectl:/root/.kube/config
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
