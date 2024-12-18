@@ -77,8 +77,8 @@ jobs:
       
       - name: install kubectl
         run: |
-          ${{ env.dex }} 'apk add kubectl --no-cache \
-          && mkdir -p /root/.kube/'
+          ${{ env.dex }} 'apk add kubectl --no-cache
+          ${{ env.dex }} mkdir -p /root/.kube/
         continue-on-error: true 
  
       - name: copie k3s.yaml kubectl
