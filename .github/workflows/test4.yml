@@ -55,16 +55,12 @@ jobs:
       - if: steps.k3s-server.outcome == 'failure'
         name: setup k3s dans docker
         run: |
-          docker network create k3s
           docker run -d --name k3s-server --network k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server 
 
   kubectl:
     runs-on: self-hosted
     needs: setup_k3s
     steps:
-      - name: creer fonction dex
-        run: function dex {docker exec kubectl sh -c "$($Args -join ' ')"} 
-
       - name: verif si container kubectl existe sur win
         run: docker ps -a | findstr kubectl 
         id: kubectl
@@ -88,7 +84,8 @@ jobs:
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          ${{ env.dex }} 'sed -i "s/127.0.0.1/k3s-server/g" /root/.kube/config'
+          ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
+          ${{ env.dex }} 'sed -i "s/127.0.0.1/$ip/g" /root/.kube/config'
 
       - name: verif kubectl
         run: |
