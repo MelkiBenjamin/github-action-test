@@ -77,10 +77,10 @@ jobs:
       - name: install kubectl
         run: |
           echo "install kubectl" \
-          ; ${{ env.dex }} 'apk add kubectl --no-cache' \
+          ; ${{ env.dex }} 'apk add kubectl --no-cache'
           ; echo "install kubectl terminé" \
-          ; echo "creation du fichier de config kubectl" \
-          ; ${{ env.dex }} 'mkdir -p /root/.kube/' \
+          ; echo "creation du fichier de config kubectl" 
+          ; ${{ env.dex }} 'mkdir -p /root/.kube/' 
           ; echo "creation du chemin de config kubectl terminé"
          
       - name: copie k3s.yaml kubectl
