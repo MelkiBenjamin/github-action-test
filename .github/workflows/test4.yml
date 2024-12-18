@@ -92,7 +92,7 @@ jobs:
 
       - name: verif kubectl
         run: |
-          dex 'kubectl get nodes'
+          ${{ env.dex }} 'kubectl get nodes'
 
   monitoring:
     runs-on: self-hosted
