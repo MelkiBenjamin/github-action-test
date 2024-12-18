@@ -3,6 +3,9 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  dex: 'docker exec kubectl sh -c'
+
 jobs:
   store-front:
     runs-on: ubuntu-latest
@@ -74,7 +77,7 @@ jobs:
       
       - name: install kubectl
         run: |
-          dex apk add kubectl --no-cache \
+          ${{ env.dex }} apk add kubectl --no-cache \
           ; mkdir -p /root/.kube/
         continue-on-error: true 
  
@@ -85,7 +88,7 @@ jobs:
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          dex 'sed -i "s/127.0.0.1/k3s-server/g" /root/.kube/config'
+          ${{ env.dex }} 'sed -i "s/127.0.0.1/k3s-server/g" /root/.kube/config'
 
       - name: verif kubectl
         run: |
