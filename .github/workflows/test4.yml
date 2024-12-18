@@ -64,6 +64,7 @@ jobs:
       - name: verif si container kubectl existe sur win
         run: docker ps -a | findstr kubectl 
         id: kubectl
+        continue-on-error: true
 
       - name: setup kubectl
         if: steps.kubectl.outcome == 'failure'
