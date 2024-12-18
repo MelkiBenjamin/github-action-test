@@ -16,10 +16,16 @@ jobs:
       steps:
       - name: install helm
         run: |
+          echo "debut install helm"
+          echo " install container helm20 qui telecharge helm"
           docker run -d --name helm20 alpine sh -c "wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz \
+          && echo 'decompression du fichier' \
           && tar -zxvf helm-v3.16.3-linux-amd64.tar.gz \
+          && echo 'deplacement du fichier' \
           && mv linux-amd64/helm /usr/local/bin/helm \
+          && echo 'suppression du fichier compresser' \
           && rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
+          echo "Container helm20 avec helm installé."
 
     wireguard:
         runs-on: ubuntu-latest
