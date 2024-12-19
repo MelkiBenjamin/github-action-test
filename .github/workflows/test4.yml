@@ -5,7 +5,6 @@ on:
 
 env:
   dex: docker exec kubectl sh -c
-  IP: '
 
 jobs:
   store-front:
