@@ -97,7 +97,8 @@ jobs:
           && echo "Recupération de l'ip terminé avec succès." \
           && echo "Modification du fichier de config kubectl" \ 
           && "sed -i 's/127.0.0.1/$IP/g' /root/.kube/config" || { echo "Erreur de modification du fichier de config kubectl." >&2; exit 1; } \
-          && echo "Modification du fichier de config kubectl terminé avec succes."'
+          && echo "Modification du fichier de config kubectl terminé avec succes."
+          '
 
       - name: verif kubectl
         run: |
