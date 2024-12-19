@@ -97,8 +97,8 @@ jobs:
           ${{ env.dex }} echo "Recupération de l'ip terminé avec succès." 
           ${{ env.dex }} echo "Modification du fichier de config kubectl"  
           ${{ env.dex }} "sed -i 's/127.0.0.1/$IP/g' /root/.kube/config" || { echo "Erreur de modification du fichier de config kubectl." >&2; exit 1; }
-          ${{ env.dex }} echo "Modification du fichier de config kubectl terminé avec succes."
-          '
+          ${{ env.dex }} echo "Modification du fichier de config kubectl terminer avec succes."
+          
 
       - name: verif kubectl
         run: |
