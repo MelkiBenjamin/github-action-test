@@ -94,8 +94,8 @@ jobs:
         run: |
           ${{ env.dex }} "echo 'Recuperation ip du k3s-server.'"
           $IP=(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
-          ${{ env.dex }} "echo 'Recupération ip terminé avec succès.'" 
-          ${{ env.dex }} "echo 'Modification du fichier de config kubectl'"
+          ${{ env.dex }} "echo 'Recupération ip terminé avec succès.' \
+          && echo 'Modification du fichier de config kubectl'"
           ${{ env.dex }} "sed -i 's/127.0.0.1/$IP/g' /root/.kube/config"
           ${{ env.dex }} "echo 'Modification du fichier de config kubectl terminer avec succes.'"
         env:
@@ -103,9 +103,9 @@ jobs:
 
       - name: verif kubectl
         run: |
-          echo "verif kubectl" \
-          ; ${{ env.dex }} 'kubectl get nodes' \
-          echo "verif kubectl terminer"
+          ${{ env.dex }} "echo 'verif kubectl' \ 
+          && kubectl get nodes \
+          && echo 'verif kubectl terminer'"
 
   monitoring:
     runs-on: self-hosted
