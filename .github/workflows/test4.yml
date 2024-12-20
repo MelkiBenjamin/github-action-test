@@ -101,14 +101,13 @@ jobs:
         env:
           IP: (docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
 
-      - name: verif dokcer kubectl avec hote win
-        uses: philips-software/run-windows-docker-container-action@v1.2.0
+      - name: verif dokcer kubectl avec hote windows
+        uses: tj-actions/docker-run@v2
         with:
           image: alpine
-          entrypoint: sh
-          run: |
-            apk add curl
-            echo ca-marche
+          name: user-app
+          args: |
+            echo "Hello World"
           
 
   monitoring:
