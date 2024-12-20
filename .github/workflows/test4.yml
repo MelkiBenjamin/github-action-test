@@ -103,8 +103,7 @@ jobs:
 
       - name: verif kubectl
         run: |
-          ${{ env.dex }} "echo 'verif kubectl' \ 
-          && kubectl get nodes \
+          ${{ env.dex }} "kubectl get nodes \
           && echo 'verif kubectl terminer'"
 
   monitoring:
