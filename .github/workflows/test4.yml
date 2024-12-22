@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  dex: docker exec kubectl sh -c
+  dex: docker exec kubectl bin/sh -c
 
 jobs:
   store-front:
@@ -69,18 +69,19 @@ jobs:
       - name: setup kubectl
         if: steps.kubectl.outcome == 'failure'
         run: |
-          echo "setup kubectl" \
-          ; docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s --name kubectl alpine sh -c 'sleep infinity' \
-          ; echo "conteneur kubectl terminé"
+          echo "setup kubectl"
+          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s --name kubectl alpine sh -c 'sleep infinity'
+          echo "conteneur kubectl terminé"
         continue-on-error: true
 
       - name: install kubectl 
         run: |
           echo "install kubectl" 
-          ${{ env.dex }} 'apk add kubectl --no-cache && \
-            echo "install kubectl terminer" && \ 
-            echo "creation du fichier de config kubectl" && \
-            mkdir -p /root/.kube/ && \
+          ${{ env.dex }} '
+            apk add kubectl --no-cache 
+            echo "install kubectl terminer"
+            echo "creation du fichier de config kubectl"
+            mkdir -p /root/.kube/
             echo "creation du chemin de config kubectl terminer"'
          
       - name: copie k3s.yaml kubectl

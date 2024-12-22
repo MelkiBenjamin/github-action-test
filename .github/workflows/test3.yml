@@ -26,6 +26,26 @@ jobs:
           && echo 'suppression du fichier compresser' \
           && rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
           echo "Container helm20 avec helm installé."
+
+    test-docker-self-hosted:
+      runs-on: self-hosted
+      steps:
+      - name: test docker
+        run: docker -v
+      - name: test docker commande run avec alpine avec plusieur commande1
+        run: |
+          docker run -d --name test-docker alpine /bin/sh -c "
+            echo 'Running in Alpine container' &&
+            apk update &&
+            apk add kubectl &&
+            kubectl version --client
+            sleep infinity"
+        
+      - name: test docker commande run avec alpine avec plusieur commande
+        run: |
+          docker exec test-docker /bin/sh -c "
+            apk add --no-cache curl
+            echo curl"
     
     test-docker:
       runs-on: ubuntu-latest
