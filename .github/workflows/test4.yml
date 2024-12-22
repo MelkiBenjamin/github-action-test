@@ -78,7 +78,7 @@ jobs:
         run: |
           echo "install kubectl" 
           ${{ env.dex }} '
-          apk add kubectl --no-cache' 
+          apk add kubectl --no-cache
           echo "install kubectl terminer" 
           echo "creation du fichier de config kubectl" 
           mkdir -p /root/.kube/
