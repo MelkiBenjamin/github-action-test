@@ -35,11 +35,11 @@ jobs:
       - name: test docker commande run avec alpine avec plusieur commande
         run: >
           echo "test docker" &&
-          docker run -d --name test-docker alpine sh -c "apk add --no-cache curl &&
+          docker run -it --name test-docker alpine /bin/sh
+          apk add --no-cache curl
         
       - name: test docker commande run avec alpine avec plusieur commande
-        run: >
-          echo "test docker" &&
+        run: |
           docker exec test-docker sh -c "apk add --no-cache curl &&
           echo curl"
 
