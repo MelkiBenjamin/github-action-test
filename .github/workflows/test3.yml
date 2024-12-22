@@ -34,7 +34,7 @@ jobs:
         run: docker -v
       - name: test docker commande run avec alpine avec plusieur commande1
         run: |
-          docker run --name test-docker alpine /bin/sh -c "
+          docker run -d --name test-docker alpine /bin/sh -c "
             echo 'Running in Alpine container' &&
             apk update &&
             apk add kubectl &&
