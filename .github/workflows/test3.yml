@@ -40,8 +40,8 @@ jobs:
         
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
-          docker exec test-docker sh -c "apk add --no-cache curl &&
-          echo curl"
+          docker exec test-docker sh -c "apk add --no-cache curl"
+          echo curl
 
     wireguard:
         runs-on: ubuntu-latest
