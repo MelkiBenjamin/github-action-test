@@ -32,10 +32,10 @@ jobs:
       steps:
       - name: test docker
         run: docker -v
-      - name: test docker commande run avec alpine avec plusieur commande
+      - name: test docker commande run avec alpine avec plusieur commande1
         run: >
-          echo "test docker" &&
-          docker run -it --name test-docker alpine /bin/sh
+          echo "test docker"
+          docker run -i --name test-docker alpine /bin/sh
           apk add --no-cache curl
         
       - name: test docker commande run avec alpine avec plusieur commande
