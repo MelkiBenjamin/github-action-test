@@ -1,7 +1,7 @@
 name: test g
 on:
-  workflow_dispatch:
-#  push:
+#  workflow_dispatch:
+  push:
 
 jobs:
     helm:
@@ -26,6 +26,17 @@ jobs:
           && echo 'suppression du fichier compresser' \
           && rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
           echo "Container helm20 avec helm installé."
+    
+    test-docker:
+      runs-on: ubuntu-latest
+      steps:
+      - name: test docker
+        run: docker -v
+      - name: test docker
+        run: |
+          echo "test docker"
+          docker run -d --name test-docker alpine sh -c "apk add --no-cache docker" \
+          echo "fin test docker"
 
     wireguard:
         runs-on: ubuntu-latest

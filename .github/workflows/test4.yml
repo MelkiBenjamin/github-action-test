@@ -1,7 +1,7 @@
 name: build test 4
 on: 
-  push:
-#  workflow_dispatch:
+#  push:
+  workflow_dispatch:
 
 env:
   dex: docker exec kubectl sh -c
