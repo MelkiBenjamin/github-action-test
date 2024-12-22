@@ -38,7 +38,7 @@ jobs:
             echo 'Running in Alpine container' &&
             apk update &&
             apk add kubectl &&
-            kubectl version"
+            kubectl version --client"
         
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
