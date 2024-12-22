@@ -77,11 +77,11 @@ jobs:
       - name: install kubectl
         run: |
           echo "install kubectl" 
-          ; ${{ env.dex }} 'apk add kubectl --no-cache'
-          ; echo "install kubectl terminer" 
-          ; echo "creation du fichier de config kubectl" 
-          ; ${{ env.dex }} 'mkdir -p /root/.kube/' 
-          ; echo "creation du chemin de config kubectl terminer"
+          ${{ env.dex }} 'apk add kubectl --no-cache'
+          echo "install kubectl terminer" 
+          echo "creation du fichier de config kubectl" 
+          ${{ env.dex }} 'mkdir -p /root/.kube/' 
+          echo "creation du chemin de config kubectl terminer"
          
       - name: copie k3s.yaml kubectl
         run: |
@@ -129,7 +129,7 @@ jobs:
   
       - name: attendre monitoring
         run: |
-          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=35m'
+          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
       
   argocd:
     runs-on: self-hosted
@@ -162,11 +162,11 @@ jobs:
 
       - name: Deploys application argocd
         run: | 
-          ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml -n argocd --timeout=35m' 
+          ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml -n argocd --timeout=25m' 
 
       - name: attendre argocd
         run: |
-          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n argocd --timeout=35m'
+          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m'
 
 #      - name: load balancing
 #        run: |
@@ -188,7 +188,7 @@ jobs:
         if: steps.argocd-server.outcome == 'failure'
         env:
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-        run: ${{ env.dex }} 'argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}'
+        run: ${{ env.dex }} 'argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) ${{ env.sensible-pas-afficher }}'
         continue-on-error: true
 
   contoso:
