@@ -33,11 +33,10 @@ jobs:
       - name: test docker
         run: docker -v
       - name: test docker commande run avec alpine avec plusieur commande
-        run: |
-          echo "test docker" 
-          docker run -d --name test-docker alpine sh -c \
-            'apk add --no-cache docker \
-            echo container'
+        run: >
+          echo "test docker" &&
+          docker run -d --name test-docker alpine sh -c "apk add --no-cache curl &&
+          ls
 
     wireguard:
         runs-on: ubuntu-latest
