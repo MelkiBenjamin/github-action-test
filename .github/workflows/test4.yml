@@ -82,7 +82,7 @@ jobs:
           echo "creation du fichier de config kubectl"
           ${{ env.dex }} 'mkdir -p /root/.kube/'
           ${{ env.dex }} 'chmod go-r ~/.kube/config'
-          echo "creation du chemin de config kubectl terminer"'
+          echo "creation du chemin de config kubectl terminer"
          
       - name: copie k3s.yaml kubectl
         run: |
