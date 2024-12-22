@@ -77,11 +77,11 @@ jobs:
       - name: install kubectl 
         run: |
           echo "install kubectl" 
-          ${{ env.dex }} '
-          apk add kubectl --no-cache && \
-          echo "install kubectl terminer" && \ 
-          echo "creation du fichier de config kubectl" && \
-          mkdir -p /root/.kube/ && \
+          ${{ env.dex }} 'apk add kubectl --no-cache'
+          echo "install kubectl terminer" 
+          echo "creation du fichier de config kubectl"
+          ${{ env.dex }} 'mkdir -p /root/.kube/'
+          ${{ env.dex }} 'chmod go-r ~/.kube/config'
           echo "creation du chemin de config kubectl terminer"'
          
       - name: copie k3s.yaml kubectl
@@ -128,9 +128,9 @@ jobs:
           ${{ env.dex }} 'helm repo add prometheus-community https://prometheus-community.github.io/helm-charts'
           ${{ env.dex }} 'helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
   
-      - name: attendre monitoring
-        run: |
-          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
+#      - name: attendre monitoring
+#        run: |
+#          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
       
   argocd:
     runs-on: self-hosted
@@ -167,7 +167,8 @@ jobs:
 
       - name: attendre argocd
         run: |
-          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m'
+          ${{ env.dex }} 'kubectl wait --for=condition=ready pod --all -n argocd --timeout=25m'
+#          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m'
 
 #      - name: load balancing
 #        run: |
