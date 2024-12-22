@@ -36,7 +36,8 @@ jobs:
         run: |
           echo "test docker" 
           docker run -d --name test-docker alpine sh -c \
-            "apk add --no-cache docker"
+            'apk add --no-cache docker
+            echo "container test-docker avec alpine et docker installé"'
 
     wireguard:
         runs-on: ubuntu-latest
