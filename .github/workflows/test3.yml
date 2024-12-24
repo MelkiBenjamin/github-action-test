@@ -103,8 +103,9 @@ jobs:
             ls -alh && 
             ls /etc/ &&
             echo test"
-            - name: install kubectl
-      - run: |
+            
+      - name: install kubectl
+        run: |
           docker exec test-docker /bin/sh -c '
             echo install kubectl &&
             apk add kubectl --no-cache &&
