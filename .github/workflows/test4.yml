@@ -78,20 +78,16 @@ jobs:
       - name: install kubectl 
         run: |
           docker exec kubectl /bin/sh -c "
-            echo install kubectl &&
             apk add kubectl --no-cache &&
-            echo install kubectl terminer avec succes. &&
-            echo renomme le fichier de config kubectl &&
             cp /root/.kube/k3s.yaml /root/.kube/config &&
-            echo renomme le fichier de config kubectl terminer avec succes."
 
-      - name: met ip k3s-server dans une variable et modifie la config kubectl
+      - name: modifie la config kubectl
         run: |
           echo 'Modification du fichier de config kubectl'
           ${{ env.dex }} "sed -i 's/127.0.0.1/k3s-server/g' /root/.kube/config"
           echo 'Modification du fichier de config kubectl terminer avec succes.'
 
-      - name: verif dokcer kubectl avec hote windows
+      - name: verif docker kubectl
         run: ${{ env.dex }} 'kubectl get nodes'
           
   monitoring:
