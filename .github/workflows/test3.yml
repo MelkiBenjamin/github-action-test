@@ -103,6 +103,15 @@ jobs:
             ls -alh && 
             ls /etc/ &&
             echo test"
+            - name: install kubectl
+      - run: |
+          docker exec test-docker /bin/sh -c '
+            echo install kubectl &&
+            apk add kubectl --no-cache &&
+            echo install kubectl terminer avec succes. &&
+            echo renomme le fichier de config kubectl &&
+            cp /root/.kube/k3s.yaml /root/.kube/config &&
+            echo renomme le fichier de config kubectl terminer avec succes.'
 
     wireguard:
         runs-on: ubuntu-latest

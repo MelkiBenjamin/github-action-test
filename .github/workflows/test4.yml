@@ -77,13 +77,13 @@ jobs:
 
       - name: install kubectl 
         run: |
-          echo "install kubectl" 
           docker exec kubectl /bin/sh -c '
+            echo install kubectl &&
             apk add kubectl --no-cache &&
             echo install kubectl terminer avec succes. &&
             echo renomme le fichier de config kubectl &&
             cp /root/.kube/k3s.yaml /root/.kube/config &&
-            echo renomme le fichier de config kubectl terminer avec succes.'         
+            echo renomme le fichier de config kubectl terminer avec succes.'
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
