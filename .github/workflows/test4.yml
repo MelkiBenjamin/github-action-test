@@ -53,7 +53,7 @@ jobs:
         continue-on-error: true
 
       - if: steps.k3s-server.outcome == 'failure'
-        name: setup k3s dans docker 
+        name: setup k3s dans docker  
         run: |
           docker network create k3s
           docker run -d --name k3s-server --network k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server --tls-san k3s-server
