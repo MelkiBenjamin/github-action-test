@@ -99,7 +99,6 @@ jobs:
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
           docker exec test-docker /bin/sh -c "
-            apk add --no-cache curl &&
             echo curl"
 
     wireguard:
