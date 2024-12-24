@@ -56,7 +56,7 @@ jobs:
         name: setup k3s dans docker  
         run: |
           docker network create k3s
-          docker run -d --name k3s-server --network k3s --privileged --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server --tls-san k3s-server
+          docker run -d --name k3s-server --network k3s --privileged --v k3s-server:/etc/rancher/k3s --restart=always -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server --tls-san k3s-server
 
   kubectl:
     runs-on: self-hosted
@@ -71,7 +71,7 @@ jobs:
         if: steps.kubectl.outcome == 'failure'
         run: |
           echo "setup kubectl"
-          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s --name kubectl alpine sh -c 'sleep infinity'
+          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s -v k3s-server:/root/.kube/ --name kubectl alpine sh -c 'sleep infinity'
           echo "conteneur kubectl terminé"
         continue-on-error: true
 
@@ -80,29 +80,13 @@ jobs:
           echo "install kubectl" 
           docker exec kubectl /bin/sh -c '
           apk add kubectl --no-cache &&
-          echo install kubectl terminer &&
-          echo creation du fichier de config kubectl &&
-          mkdir -pv /root/.kube/ &&
-          echo creation du chemin de config kubectl terminer'
-         
-      - name: copie k3s.yaml kubectl
-        run: |
-          echo "copie du fichier de config k3s dans kubectl" 
-          docker cp k3s-server:/etc/rancher/k3s/k3s.yaml . 
-          docker cp k3s.yaml kubectl:/root/.kube/config 
-          rm k3s.yaml
-          echo "copie du fichier de config k3s dans kubectl terminer"
+          echo install kubectl terminer avec succes'
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
-          ${{ env.dex }} "echo 'Recuperation ip du k3s-server.'"
-          ${{ env.dex }} "echo 'Recupération ip terminé avec succès.'"
           echo 'Modification du fichier de config kubectl'
           ${{ env.dex }} "sed -i 's/127.0.0.1/k3s-server/g' /root/.kube/config"
-          ${{ env.dex }} "echo 'Modification du fichier de config kubectl terminer avec succes.'"
-          ${{ env.dex }} "chmod u-x,go-rx ~/.kube/config"
-        env:
-          IP: (docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' k3s-server)
+          echo 'Modification du fichier de config kubectl terminer avec succes.'
 
       - name: verif dokcer kubectl avec hote windows
         run: ${{ env.dex }} 'kubectl get nodes'
