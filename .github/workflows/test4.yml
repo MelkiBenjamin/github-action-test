@@ -4,7 +4,7 @@ on:
 #  workflow_dispatch:
 
 env:
-  dex: docker exec kubectl bin/sh -c
+  dex: docker exec kubectl /bin/sh -c
 
 jobs:
   store-front:
