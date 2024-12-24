@@ -99,8 +99,8 @@ jobs:
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
           docker exec test-docker /bin/sh -c "
-            echo curl"
-            ls
+            echo curl
+            ls"
 
     wireguard:
         runs-on: ubuntu-latest
