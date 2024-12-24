@@ -99,9 +99,9 @@ jobs:
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
           docker exec test-docker /bin/sh -c "
-            echo curl
-            ls -alh
-            ls /etc/
+            echo curl &&
+            ls -alh && 
+            ls /etc/ &&
             echo test"
 
     wireguard:
