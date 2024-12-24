@@ -1,7 +1,7 @@
 name: test g
 on:
-#  workflow_dispatch:
-  push:
+  workflow_dispatch:
+#  push:
 
 jobs:
     helm:
