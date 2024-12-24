@@ -77,13 +77,13 @@ jobs:
 
       - name: install kubectl 
         run: |
-          docker exec kubectl /bin/sh -c '
+          docker exec kubectl /bin/sh -c "
             echo install kubectl &&
             apk add kubectl --no-cache &&
             echo install kubectl terminer avec succes. &&
             echo renomme le fichier de config kubectl &&
             cp /root/.kube/k3s.yaml /root/.kube/config &&
-            echo renomme le fichier de config kubectl terminer avec succes.'
+            echo renomme le fichier de config kubectl terminer avec succes."
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
@@ -169,7 +169,7 @@ jobs:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
         run: |
-          ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 80:80 &'
+          ${{ env.dex }} 'nohup kubectl port-forward svc/argocd-server -n argocd 80:80 &'
           sleep 10
           ${{ env.dex }} 'argocd login 127.0.0.1:80 --username admin --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) --insecure ${{ env.sensible-pas-afficher }}'
           
