@@ -100,7 +100,8 @@ jobs:
         run: |
           docker exec test-docker /bin/sh -c "
             echo curl
-            ls"
+            ls -alh
+            ls /etc/"
 
     wireguard:
         runs-on: ubuntu-latest
