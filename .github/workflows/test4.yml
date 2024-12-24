@@ -191,6 +191,6 @@ jobs:
             ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 80:80 & sleep 5' 
             ${{ env.dex }} 'argocd login 127.0.0.1:80 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
-      - name: Create Application Contoso with Argocd avec namespace
+      - name: Create Application Contoso with Argocd avec namespace 
         run: ${{ env.dex }} 'argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
