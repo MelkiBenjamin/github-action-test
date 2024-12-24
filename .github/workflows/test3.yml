@@ -1,7 +1,7 @@
 name: test g
 on:
-#  workflow_dispatch:
-  push:
+  workflow_dispatch:
+#  push:
 
 jobs:
     helm:
@@ -36,8 +36,7 @@ jobs:
         run: docker -v
       - name: test docker commande run avec alpine avec plusieur commande1
         run: |
-          docker run -d --name test-docker alpine sh -c "
-            sleep infinity"
+          docker run -d --name test-docker alpine sh -c "sleep infinity"
         
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
