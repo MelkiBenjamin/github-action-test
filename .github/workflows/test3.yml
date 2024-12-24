@@ -110,7 +110,7 @@ jobs:
             echo install kubectl &&
             echo install kubectl terminer avec succes. &&
             echo renomme le fichier de config kubectl &&
-            cp /root/.kube/k3s.yaml /root/.kube/config &&
+            mkdir -pv /root/.kube/config &&
             echo renomme le fichier de config kubectl terminer avec succes.'
 
     wireguard:
