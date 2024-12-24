@@ -71,7 +71,7 @@ jobs:
         if: steps.kubectl.outcome == 'failure'
         run: |
           echo "setup kubectl"
-          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s -v k3s-server:/root/.kube/ --name kubectl alpine sh -c 'sleep infinity'
+          docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s -v k3s-server:/root/.kube --name kubectl alpine sh -c 'sleep infinity'
           echo "conteneur kubectl terminé"
         continue-on-error: true
 
@@ -80,7 +80,10 @@ jobs:
           echo "install kubectl" 
           docker exec kubectl /bin/sh -c '
           apk add kubectl --no-cache &&
-          echo install kubectl terminer avec succes'
+          echo install kubectl terminer avec succes. &&
+          echo renomme le fichier de config kubectl &&
+          cp /root/.kube/k3s.yaml /root/.kube/config &&
+          echo renomme le fichier de config kubectl terminer avec succes.'         
 
       - name: met ip k3s-server dans une variable et modifie la config kubectl
         run: |
