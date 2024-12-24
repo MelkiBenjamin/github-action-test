@@ -1,7 +1,7 @@
 name: test g
 on:
-  workflow_dispatch:
-#  push:
+#  workflow_dispatch:
+  push:
 
 jobs:
     helm:
@@ -11,6 +11,28 @@ jobs:
       - name: install helm
         run: |
           docker run -d --name helm10 alpine sh -c "apk add --no-cache helm"
+
+      - name: install en 'liste avec plusieur ligne' helm et kubectl et echo
+        run: |
+          docker run -d --name helm10 alpine sh -c "
+            apk add --no-cache helm &&
+            apk add --no-cache kubectl &&
+            echo installation de helm et kubectl terminé"
+
+      - name: install en 'liste avec plusieur ligne' helm et kubectl et echo dans le conteneur helm10
+        run: |
+          docker exec helm10 sh -c "
+            apk add --no-cache helm &&
+            apk add --no-cache kubectl &&
+            echo installation de helm et kubectl terminé"
+
+      - name: install en 'liste avec plusieur ligne' le volume et nom du nouveau conteneur helm11 sans rien d'autre
+        run: |
+          docker run -d --name helm11 -v /test:/test alpine sh -c "sleep infinity"
+
+      - name: install en 'liste avec plusieur ligne' le volume et nom du nouveau conteneur helm12 sans rien d'autre
+        run: |
+          docker run -d --name helm12 -v /test:/test alpine sh -c "echo 'sleep infinity'"
 
     helm2:
       runs-on: self-hosted
@@ -30,18 +52,30 @@ jobs:
           echo "Container helm20 avec helm installé."
 
     test-docker-self-hosted:
-      runs-on: self-hosted
+      runs-on: self-hosted, windows-latest
+      if: github.event_name == 'workflow_dispatch'
       steps:
       - name: test docker
         run: docker -v
       - name: test docker commande run avec alpine avec plusieur commande1
         run: |
           docker run -d --name test-docker alpine sh -c "sleep infinity"
+        # realiser l'etape dans le repertoire du conteneur depuis lhote
+#        working-directory: /var/lib/docker/overlay2/7b4e
+
+#      - name: test docker
+#        run: |
+#          docker run -d --name test-docker alpine sh -c "sleep infinity" -v /test:c:/test
+
+#      - name: test docker commande exec
+#        run: |
+#          docker exec test-docker sh -c "echo 'Running in Alpine container'"
+#        working-directory: c:/test
         
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
           docker exec test-docker sh -c "
-            echo 'Running in Alpine container' &&
+            echo Running in Alpine container &&
             apk update &&
             apk add kubectl &&
             kubectl version --client &&
@@ -65,7 +99,7 @@ jobs:
       - name: test docker commande run avec alpine avec plusieur commande
         run: |
           docker exec test-docker /bin/sh -c "
-            apk add --no-cache curl
+            apk add --no-cache curl &&
             echo curl"
 
     wireguard:
