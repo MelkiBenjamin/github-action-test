@@ -80,7 +80,7 @@ jobs:
           docker exec kubectl /bin/sh -c '
             apk add kubectl --no-cache &&
             echo "install kubectl terminer" &&
-            echo "creation du fichier de config kubectl" &&
+            echo "creation du fichier de config kubectl" && \
             mkdir -p /root/.kube/ &&
             echo "creation du chemin de config kubectl terminer"'
          
