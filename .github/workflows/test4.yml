@@ -76,8 +76,8 @@ jobs:
         continue-on-error: true
 
       - name: install kubectl 
-        run: |
-          docker exec kubectl /bin/sh -c "
+        run: >
+          ${{ env.dex }} "
           apk add kubectl --no-cache &&
           cp -v /root/.kube/k3s.yaml /root/.kube/config"
 
