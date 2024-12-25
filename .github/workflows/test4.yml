@@ -84,7 +84,8 @@ jobs:
       - name: test install kubectl
         run: >
           docker exec kubectl /bin/sh -c "
-          apk add kubectl --no-cache"
+          apk add kubectl --no-cache &&
+          cp -v /root/.kube/k3s.yaml root/.kube/config"
 
       - name: modifie la config kubectl
         run: |
