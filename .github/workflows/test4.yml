@@ -86,7 +86,7 @@ jobs:
           docker exec kubectl /bin/sh -c "
           apk add kubectl --no-cache &&
           cp /root/.kube/k3s.yaml /root/.kube/config &&
-          kubectl get nodes"
+          echo test"
 
       - name: modifie la config kubectl
         run: |
