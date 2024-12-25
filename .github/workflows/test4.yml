@@ -1,7 +1,7 @@
 name: build test 4
 on: 
-  push:
-#  workflow_dispatch:
+#  push:
+  workflow_dispatch:
 
 env:
   dex: docker exec kubectl /bin/sh -c
@@ -74,6 +74,12 @@ jobs:
           docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s -v k3s-server:/root/.kube --name kubectl alpine sh -c 'sleep infinity'
           echo "conteneur kubectl terminé"
         continue-on-error: true
+
+      - name: install kubectl 
+        run: >
+          docker exec kubectl /bin/sh -c "
+            apk add kubectl --no-cache &&
+            cp -v /root/.kube/k3s.yaml /root/.kube/config"
 
       - name: test install kubectl
         run: >

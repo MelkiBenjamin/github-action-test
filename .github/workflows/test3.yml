@@ -97,12 +97,13 @@ jobs:
             kubectl version --client"
         
       - name: test docker commande run avec alpine avec plusieur commande
-        run: |
+        run: >
           docker exec test-docker /bin/sh -c "
             echo curl &&
             ls -alh && 
             ls /etc/ &&
-            echo test"
+            echo test
+            apk add --no-cache curl"
 
       - name: install kubectl
         run: |
