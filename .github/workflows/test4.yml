@@ -75,12 +75,6 @@ jobs:
           echo "conteneur kubectl terminé"
         continue-on-error: true
 
-      - name: install kubectl 
-        run: >
-          docker exec kubectl /bin/sh -c "
-            apk add kubectl --no-cache &&
-            cp -v /root/.kube/k3s.yaml /root/.kube/config"
-
       - name: test install kubectl
         run: >
           docker exec kubectl /bin/sh -c "
