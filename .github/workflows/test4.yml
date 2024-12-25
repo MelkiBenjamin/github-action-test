@@ -188,7 +188,7 @@ jobs:
           ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
 
       - name: port-forward argocd
-        run: ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 8080:443 & sleep 10'
+        run: ${{ env.dex }} 'nohup kubectl port-forward svc/argocd-server -n argocd 8080:443 & sleep 10'
       
       - name: connexion argocd
         env:
