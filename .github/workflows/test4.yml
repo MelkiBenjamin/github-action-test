@@ -82,7 +82,7 @@ jobs:
           cp -v /root/.kube/k3s.yaml /root/.kube/config &&
           echo kubectl installé avec succès"
 
-      - name: modifie la config kubectl
+      - name: modifie la config kubectl 
         run: |
           echo 'Modification du fichier de config kubectl'
           ${{ env.dex }} "sed -i 's/127.0.0.1/k3s-server/g' /root/.kube/config"
