@@ -79,7 +79,8 @@ jobs:
         run: >
           ${{ env.dex }} "
           apk add kubectl --no-cache &&
-          cp -v /root/.kube/k3s.yaml /root/.kube/config"
+          cp -v /root/.kube/k3s.yaml /root/.kube/config &&
+          echo kubectl installé avec succès"
 
       - name: modifie la config kubectl
         run: |
