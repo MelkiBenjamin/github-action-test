@@ -148,11 +148,6 @@ jobs:
         id: argocd-server
         continue-on-error: true
 
-      - name: deployer argocd avec helm
-        if: steps.argocd-server.outcome == 'failure'
-        run: |
-          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm' 
-          ${{ env.dex }} 'helm install argocd argo/argo-cd -n argocd --timeout=25m --version 2.13.2 --set server.service.type=LoadBalancer --set server.ingress.enabled=true --set server.ingress.hosts[0]=argocd.$(kubectl get svc argocd-server -n argocd -o jsonpath="{.status.loadBalancer.ingress[0].ip}") --set server.ingress.annotations."kubernetes\.io/ingress\.class"=nginx --set server.ingress.annotations."nginx\.ingress\.kubernetes\.io/ssl-redirect"=false --set server.ingress.annotations."nginx\.ingress\.kubernetes\.io/force-ssl-redirect"=false --set server.ingress.annotations."nginx\.ingress\.kubernetes\.io/rewrite-target"=/ --set server.ingress.annotations."nginx\.ingress\.kubernetes\.io/ssl-redirect"=false --set server.ingress.annotations."nginx\  
       - name: Deploys application argocd
         run: | 
           ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml -n argocd --timeout=25m' 
@@ -193,7 +188,7 @@ jobs:
           ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
 
       - name: port-forward argocd
-        run: ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 8080:443 & sleep 10'
+        run: ${{ env.dex }} 'nohup kubectl port-forward svc/argocd-server -n argocd 8080:443 & sleep 10'
       
       - name: connexion argocd
         env:
