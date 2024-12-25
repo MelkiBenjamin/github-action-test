@@ -187,7 +187,7 @@ jobs:
     runs-on: self-hosted
     needs: [kubectl, argocd]
     steps:
-      - name: Create Contoso namespace
+      - name: Create Contoso namespace 
         run: |
           ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
 
