@@ -199,5 +199,5 @@ jobs:
             ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
         
       - name: Create Application Contoso with Argocd avec namespace 
-        run: ${{ env.dex }} 'argocd --port-forward app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
+        run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
