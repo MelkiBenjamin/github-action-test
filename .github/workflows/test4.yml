@@ -72,7 +72,7 @@ jobs:
         run: |
           echo "setup kubectl"
           docker run -d -p 80:80 -p 8080:8080 -p 9090:9090 -p 3000:3000 -p 3002:3002 --network k3s -v k3s-server:/root/.kube --name kubectl alpine sh -c 'sleep infinity'
-          echo "conteneur kubectl terminé"
+          echo "conteneur kubectl terminer"
         continue-on-error: true
 
       - name: install kubectl 
@@ -80,12 +80,12 @@ jobs:
           ${{ env.dex }} "
           echo Installation de kubectl &&
           apk add kubectl --no-cache &&
-          echo kubectl installé avec succès &&
+          echo kubectl installé avec reussite &&
           echo test kubectl &&
           ls -alh /root/.kube &&
           echo test kubectl terminer avec reussite &&  
           cp -v /root/.kube/k3s.yaml /root/.kube/config &&
-          echo terminer realiser avec reussite"
+          echo renomage realiser avec reussite"
 
       - name: modifie la config kubectl 
         run: |
@@ -141,8 +141,11 @@ jobs:
         if: steps.argocd.outcome == 'failure'
         run: >
           ${{ env.dex }} '
+          echo telechargement de argocd &&
           curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/download/v2.13.2/argocd-linux-amd64 &&
+          echo installation de argocd &&
           install -m 555 argocd-linux-amd64 /usr/local/bin/argocd &&
+          echo suppression de argocd-linux-amd64 &&
           rm argocd-linux-amd64'
 
       - name: create namespace argocd
