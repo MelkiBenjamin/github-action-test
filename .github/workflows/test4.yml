@@ -188,7 +188,7 @@ jobs:
         run: |
           ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
       
-#      - name: connexion argocd
+#      - name: connexion argocd 
 #        env:
 #            ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 #            mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
