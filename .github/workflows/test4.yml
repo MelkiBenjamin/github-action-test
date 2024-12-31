@@ -53,10 +53,10 @@ jobs:
         continue-on-error: true
 
       - if: steps.k3s-server.outcome == 'failure'
-        name: setup k3s dans docker   
+        name: setup k3s dans docker pour juste le server pas l'agent
         run: |
           docker network create k3s 
-          docker run -d --name k3s-server --network k3s --privileged -v k3s-server:/etc/rancher/k3s -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server --tls-san k3s-server
+          docker run -d --name k3s-server --network k3s --privileged -v k3s-server:/etc/rancher/k3s -p 6443:6443 rancher/k3s:v1.31.0-k3s1 server --tls-san k3s-server --
 
   kubectl:
     runs-on: self-hosted
@@ -180,7 +180,7 @@ jobs:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
         run: |
-          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ secrets.ARGOCD-B }} --insecure ${{ env.sensible-pas-afficher }}'
+          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}'
           
       - name: update ArgoCD password
 #        if: steps.argocd-server.outcome == 'failure'
