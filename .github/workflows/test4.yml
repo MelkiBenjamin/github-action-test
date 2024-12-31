@@ -82,6 +82,7 @@ jobs:
           apk add kubectl --no-cache &&
           echo kubectl installé avec reussite &&
           echo test kubectl &&
+          sleep 5 &&
           ls -alh /root/.kube &&
           echo test kubectl terminer avec reussite &&  
           cp -v /root/.kube/k3s.yaml /root/.kube/config &&
@@ -175,7 +176,7 @@ jobs:
 #        run: ${{ env.dex }} 'nohup kubectl port-forward svc/argocd-server -n argocd 8080:443 &'
 
       - name: connexion argocd
-#        if: steps.argocd-server.outcome == 'failure'
+        if: steps.argocd-server.outcome == 'failure'
         env:
           ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
@@ -183,10 +184,10 @@ jobs:
           ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}'
           
       - name: update ArgoCD password
-#        if: steps.argocd-server.outcome == 'failure'
+        if: steps.argocd-server.outcome == 'failure'
         env:
-          mdp: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-        run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) ${{ env.sensible-pas-afficher }}'
+          mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
+        run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}'
 
   contoso:
     runs-on: self-hosted
