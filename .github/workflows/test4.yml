@@ -84,7 +84,7 @@ jobs:
 
   kubectl:
     runs-on: self-hosted
-    needs: [setup_k3s_server, setup_k3s_agent]
+    needs: [setup_k3s_server]
     steps:
       - name: verif si container kubectl existe sur win
         run: docker ps -a | findstr kubectl 
