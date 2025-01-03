@@ -164,7 +164,7 @@ jobs:
 
       - name: Deploys application argocd
         run: | 
-          ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml se 
+          ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml' 
 
       - name: attendre argocd
         run: |
