@@ -157,10 +157,10 @@ jobs:
         run: ${{ env.dex }} 'kubectl get svc argocd-server -n argocd'
         id: argocd-server
         continue-on-error: true
-
+        
       - name: creer secret argocd-initial-admin-secret
         run: |
-          ${{ env.dex }} 'kubectl get secret argocd-initial-admin-secret -n argocd || kubectl create secret generic argocd-initial-admin-secret --from-literal=password=${{ secrets.ARGOCD }} -n argocd'
+          ${{ env.dex }} 'kubectl get secret argocd-initial-admin-secret -n argocd || kubectl create secret generic argocd-initial-admin-secret --from-literal=admin.password=${{ secrets.ARGOCD }} -n argocd'
 
       - name: Deploys application argocd
         run: | 
