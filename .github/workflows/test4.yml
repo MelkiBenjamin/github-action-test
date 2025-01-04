@@ -157,15 +157,12 @@ jobs:
         run: ${{ env.dex }} 'kubectl get svc argocd-server -n argocd'
         id: argocd-server
         continue-on-error: true
-        
-      - name: creer secret argocd-initial-admin-secret
+
+      - name: deployer argocd avec helm
         run: |
-          ${{ env.dex }} 'kubectl get secret argocd-initial-admin-secret -n argocd || kubectl create secret generic argocd-initial-admin-secret --from-literal=admin.password=${{ secrets.ARGOCD }} -n argocd'
-
-      - name: Deploys application argocd
-        run: | 
-          ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml -n argocd' 
-
+          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
+          ${{ env.dex }} 'helm upgrade --install my-argo-cd argo/argo-cd --version 7.7.13 -n argocd --set configs.secret.argocdServerAdminPassword=${{ secrets.ARGOCD }} --create-namespace --timeout=25m'
+        
       - name: attendre argocd 
         run: |
           ${{ env.dex }} 'kubectl wait --for=condition=ready pod --all -n argocd --timeout=25m'
