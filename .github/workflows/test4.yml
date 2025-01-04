@@ -166,7 +166,7 @@ jobs:
         run: | 
           ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/v2.13.2/manifests/install.yaml -n argocd' 
 
-      - name: attendre argocd
+      - name: attendre argocd 
         run: |
           ${{ env.dex }} 'kubectl wait --for=condition=ready pod --all -n argocd --timeout=25m'
           ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m'
