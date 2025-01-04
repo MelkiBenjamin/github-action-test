@@ -182,7 +182,7 @@ jobs:
       - name: connexion argocd
         if: steps.argocd-server.outcome == 'failure'
         env:
-          ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+          ip: kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
         run: |
           ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
