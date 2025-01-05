@@ -178,7 +178,7 @@ jobs:
 #          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)
 
 #      - name: port-forward argocd
-#        run: ${{ env.dex }} 'nohup kubectl port-forward svc/argocd-server -n argocd 8080:443 &'
+#        run: ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 8080:443 &'
 
       - name: connexion argocd
         if: steps.argocd-server.outcome == 'failure'
@@ -194,7 +194,6 @@ jobs:
         run: |
           ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd account update-password --account admin --new-password ${{ secrets.ARGOCD }} --current-password ${{ env.mdp }} ${{ env.sensible-pas-afficher }}'
           
-          
   contoso:
     runs-on: self-hosted
     needs: [kubectl, argocd]
@@ -205,4 +204,3 @@ jobs:
               
       - name: Create Application Contoso with Argocd avec namespace 
         run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
-
