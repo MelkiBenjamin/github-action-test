@@ -119,11 +119,11 @@ jobs:
         run: >
           ${{ env.dex }} '
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
-          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
+          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set crd.createCustomResource=false'
   
-#      - name: attendre monitoring
-#        run: |
-#          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
+      - name: attendre monitoring
+        run: |
+          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
       
   argocd:
     runs-on: self-hosted
