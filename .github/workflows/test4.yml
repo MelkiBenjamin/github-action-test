@@ -158,7 +158,7 @@ jobs:
         id: argocd-server
         continue-on-error: true
 
-      - name: cration mot de passe argocd
+      - name: creation mot de passe argocd
         run: |
           ${{ env.dex }} 'kubectl create secret generic argocd-initial-admin-secret --from-literal=password=${{ secrets.ARGOCD }} -n argocd'
 
