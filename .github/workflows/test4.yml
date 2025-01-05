@@ -165,6 +165,7 @@ jobs:
 #      - name: deployer argocd avec helm
 #        run: |
 #          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
+#          ${{ env.dex }} 'helm upgrade --install argocd argo/argo-cd -n argocd --version 7.7.13 --create-namespace --timeout=25m --set configs.secret.argocdServerAdminPassword=$ARGOCD'
         
       - name: attendre argocd 
         run: |
@@ -203,5 +204,5 @@ jobs:
           ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
               
       - name: Create Application Contoso with Argocd avec namespace 
-        run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune --t
+        run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
