@@ -158,10 +158,17 @@ jobs:
         id: argocd-server
         continue-on-error: true
 
-      - name: deployer argocd avec helm
+      - name: cration mot de passe argocd
         run: |
-          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
-          ${{ env.dex }} 'helm upgrade --install my-argo-cd argo/argo-cd --version 7.7.13 -n argocd --set configs.secret.argocdServerAdminPassword=${{ secrets.ARGOCD }} --create-namespace --timeout=25m'
+          ${{ env.dex }} 'kubectl create secret generic argocd-initial-admin-secret --from-literal=password=${{ secrets.ARGOCD }} -n argocd'
+
+      - name: deployer argocd
+        run: |
+          ${{ env.dex }} 'kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'
+
+#      - name: deployer argocd avec helm
+#        run: |
+#          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
         
       - name: attendre argocd 
         run: |
