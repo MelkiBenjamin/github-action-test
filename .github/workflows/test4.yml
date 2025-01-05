@@ -121,9 +121,9 @@ jobs:
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
           helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m'
   
-      - name: attendre monitoring
-        run: |
-          ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
+ #     - name: attendre monitoring
+ #       run: |
+ #         ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
       
   argocd:
     runs-on: self-hosted
@@ -158,14 +158,17 @@ jobs:
         id: argocd-server
         continue-on-error: true
 
-      - name: deployer argocd
-        run: |
-          ${{ env.dex }} 'kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'
-
-#      - name: deployer argocd avec helm
+#      - name: deployer argocd
 #        run: |
-#          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
-#          ${{ env.dex }} 'helm upgrade --install argocd argo/argo-cd -n argocd --version 7.7.13 --create-namespace --timeout=25m --set configs.secret.argocdServerAdminPassword=$ARGOCD'
+#          ${{ env.dex }} 'kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'
+
+      - name: deployer argocd avec helm
+        run: |
+          ${{ env.dex }} 'apk add apache2-utils --no-cache'
+          echo 'apk fait'
+          ${{ env.dex }} 'ARGOCD=$(htpasswd -bnBC 10 "" ${{ secrets.ARGOCD }} | tr -d ':\n')'
+          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
+          ${{ env.dex }} 'helm upgrade --install argocd argo/argo-cd -n argocd --version 7.7.13 --create-namespace --timeout=25m --set configs.secret.argocdServerAdminPassword=$ARGOCD'
         
       - name: attendre argocd 
         run: |
