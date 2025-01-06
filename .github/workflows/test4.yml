@@ -193,7 +193,7 @@ jobs:
         run: |
           ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
 
-      - name: update ArgoCD password
+      - name: update ArgoCD password 
         if: steps.argocd-server.outcome == 'failure'
         env:
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
