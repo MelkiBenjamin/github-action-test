@@ -158,17 +158,20 @@ jobs:
         id: argocd-server
         continue-on-error: true
 
-#      - name: deployer argocd
-#        run: |
-#          ${{ env.dex }} 'kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'
-
-      - name: deployer argocd avec helm
+      - name: deployer argocd
         run: |
-          ${{ env.dex }} 'apk add apache2-utils --no-cache'
-          echo 'apk fait'
-          ${{ env.dex }} 'ARGOCD=$(htpasswd -bnBC 10 "" ${{ secrets.ARGOCD }} | tr -d ':\n')'
-          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
-          ${{ env.dex }} 'helm upgrade --install argocd argo/argo-cd -n argocd --version 7.7.13 --create-namespace --timeout=25m --set configs.secret.argocdServerAdminPassword=$ARGOCD'
+          # curl manifest argocd
+          ${{ env.dex }} 'curl https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'
+          ${{ env.dex }} 'se'
+          # apply manifest argocd
+          ${{ env.dex }} 'kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'
+
+#      - name: deployer argocd avec helm
+#        run: |
+#          ${{ env.dex }} 'apk add apache2-utils --no-cache'
+#          ${{ env.dex }} 'ARGOCD=$(htpasswd -bnBC 10 "" ${{ secrets.ARGOCD }} | tr -d ':\n')'
+#          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
+#          ${{ env.dex }} 'helm upgrade --install argocd argo/argo-cd -n argocd --version 7.7.13 --create-namespace --timeout=25m --set configs.secret.argocdServerAdminPassword=$ARGOCD'
         
       - name: attendre argocd 
         run: |
@@ -188,7 +191,7 @@ jobs:
         env:
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
         run: |
-          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}'
+          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ secrets.ARGOCD }} --insecure ${{ env.sensible-pas-afficher }}'
 
       - name: update ArgoCD password
         if: steps.argocd-server.outcome == 'failure'
