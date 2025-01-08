@@ -100,7 +100,6 @@ jobs:
   monitoring:
     runs-on: self-hosted
     needs: kubectl
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: verif si helm est installé 
         run: ${{ env.dex }} 'helm'
@@ -129,6 +128,7 @@ jobs:
   argocd:
     runs-on: self-hosted
     needs: kubectl
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: install curl
         run: |
@@ -208,5 +208,5 @@ jobs:
       - name: Create Application Contoso with Argocd avec namespace 
         run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
-#      - name: deployement kube-prometheus-stack dans helm artifacthub
+#     - name: deployement kube-prometheus-stack dans helm artifacthub
 #       run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack --path kube-prometheus-stack --dest-server https://kubernetes.default.svc --dest-namespace monitoring --sync-policy automated --auto-prune'
