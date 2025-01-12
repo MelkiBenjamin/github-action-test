@@ -101,7 +101,7 @@ jobs:
     runs-on: self-hosted
     needs: contoso
     steps:
-      - name: verif si helm est installé 
+      - name: verif si helm est installé  
         run: ${{ env.dex }} 'helm'
         id: helm
         continue-on-error: true
