@@ -115,12 +115,12 @@ jobs:
           mv linux-amd64/helm /usr/local/bin/helm &&
           rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
 
-      - name: install helm apli monitoring
+      - name: install helm apli monitoring 
         run: >
           ${{ env.dex }} '
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
-          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set grafana.adminPassword=${{ secrets.ARGOCD }} 
-  
+          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set grafana.adminPassword=${{ secrets.ARGOCD }}'
+  s
  #     - name: attendre monitoring
  #       run: |
  #         ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
