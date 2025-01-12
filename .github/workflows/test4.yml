@@ -99,7 +99,7 @@ jobs:
           
   monitoring:
     runs-on: self-hosted
-    needs: kubectl
+    needs: contoso
     steps:
       - name: verif si helm est installé 
         run: ${{ env.dex }} 'helm'
@@ -127,7 +127,6 @@ jobs:
   argocd:
     runs-on: self-hosted
     needs: kubectl
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: install curl
         run: |
