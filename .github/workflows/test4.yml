@@ -99,22 +99,22 @@ jobs:
           
   monitoring:
     runs-on: self-hosted
-    needs: argocd
+    needs: kubectl
     steps:
-      - name: deployement kube-prometheus-stack dans helm artifacthub
-        run: |
-          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
-          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://prometheus-community.github.io/helm-charts --helm-chart kube-prometheus-stack --revision 57.0.3 --dest-server https://kubernetes.default.svc --dest-namespace monitoring --sync-policy automated --auto-prune'
-          
+#      - name: deployement kube-prometheus-stack dans helm artifacthub
+#        run: |
+#          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
+#          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://prometheus-community.github.io/helm-charts --helm-chart kube-prometheus-stack --revision 57.0.3 --dest-server https://kubernetes.default.svc --dest-namespace monitoring --sync-policy automated --auto-prune'
+
       - name: verif si helm est installé  
-        if: github.event_name == 'workflow_dispatch'
+#        if: github.event_name == 'workflow_dispatch'
         run: ${{ env.dex }} 'helm'
         id: helm
         continue-on-error: true
 
       - name: installe helm 
-#        if: steps.helm.outcome == 'failure'
-        if: github.event_name == 'workflow_dispatch'
+        if: steps.helm.outcome == 'failure'
+#        if: github.event_name == 'workflow_dispatch'
         run: >
           ${{ env.dex }} "
           wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz &&
@@ -123,7 +123,7 @@ jobs:
           rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
 
       - name: install helm apli monitoring 
-        if: github.event_name == 'workflow_dispatch'
+#        if: github.event_name == 'workflow_dispatch'
         run: >
           ${{ env.dex }} '
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
