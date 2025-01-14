@@ -99,16 +99,22 @@ jobs:
           
   monitoring:
     runs-on: self-hosted
-    needs: contoso
-    if: github.event_name == 'workflow_dispatch'
+    needs: argocd
     steps:
+      - name: deployement kube-prometheus-stack dans helm artifacthub
+        run: |
+          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
+          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://prometheus-community.github.io/helm-charts --helm-chart kube-prometheus-stack --revision 57.0.3 --dest-server https://kubernetes.default.svc --dest-namespace monitoring --sync-policy automated --auto-prune'
+          
       - name: verif si helm est installé  
+        if: github.event_name == 'workflow_dispatch'
         run: ${{ env.dex }} 'helm'
         id: helm
         continue-on-error: true
 
       - name: installe helm 
-        if: steps.helm.outcome == 'failure'
+#        if: steps.helm.outcome == 'failure'
+        if: github.event_name == 'workflow_dispatch'
         run: >
           ${{ env.dex }} "
           wget https://get.helm.sh/helm-v3.16.3-linux-amd64.tar.gz &&
@@ -117,10 +123,12 @@ jobs:
           rm -rf linux-amd64 helm-v3.16.3-linux-amd64.tar.gz"
 
       - name: install helm apli monitoring 
+        if: github.event_name == 'workflow_dispatch'
         run: >
           ${{ env.dex }} '
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
           helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set grafana.adminPassword=${{ secrets.ARGOCD }}'
+ 
  #     - name: attendre monitoring
  #       run: |
  #         ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n monitoring --timeout=20m'
@@ -207,7 +215,7 @@ jobs:
       - name: Create Application Contoso with Argocd avec namespace 
         run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
-      - name: deployement kube-prometheus-stack dans helm artifacthub
-        run: |
-          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
-          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://prometheus-community.github.io/helm-charts --helm-chart kube-prometheus-stack --revision 57.0.3 --dest-server https://kubernetes.default.svc --dest-namespace monitoring'
+#      - name: deployement kube-prometheus-stack dans helm artifacthub
+#        run: |
+#          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
+#          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://prometheus-community.github.io/helm-charts --helm-chart kube-prometheus-stack --revision 57.0.3 --dest-server https://kubernetes.default.svc --dest-namespace monitoring'
