@@ -206,8 +206,7 @@ jobs:
       - name: Create Application Contoso with Argocd avec namespace 
         run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
-      - name: attendre contoso
-        run: ${{ env.dex }} 'kubectl wait --for=condition=available deployment --all -n contoso --timeout=20m'
-
-#     - name: deployement kube-prometheus-stack dans helm artifacthub
-#       run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack --path kube-prometheus-stack --dest-server https://kubernetes.default.svc --dest-namespace monitoring --sync-policy automated --auto-prune'
+      - name: deployement kube-prometheus-stack dans helm artifacthub
+        run: |
+          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
+          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack --helm-chart prometheus-community/kube-prometheus-stack --sync-policy automated --auto-prune'
