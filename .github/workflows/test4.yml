@@ -138,16 +138,19 @@ jobs:
     needs: kubectl
     steps:
       - name: install curl
+        if: github.event_name == 'workflow_dispatch'
         run: |
           ${{ env.dex }} 'apk add curl --no-cache'
 
       - name: verif si argocd binaire existe deja
+        if: github.event_name == 'workflow_dispatch'
         run: ${{ env.dex }} 'argocd'
         id: argocd
         continue-on-error: true
         
       - name: install cli-argocd
-        if: steps.argocd.outcome == 'failure'
+#        if: steps.argocd.outcome == 'failure'
+        if: github.event_name == 'workflow_dispatch'
         run: >
           ${{ env.dex }} '
           echo telechargement de argocd &&
@@ -162,6 +165,7 @@ jobs:
           ${{ env.dex }} 'kubectl get namespace argocd || kubectl create namespace argocd'
 
       - name: verif si argocd-server est en service
+        if: github.event_name == 'workflow_dispatch'
         run: ${{ env.dex }} 'kubectl get svc argocd-server -n argocd'
         id: argocd-server
         continue-on-error: true
@@ -191,14 +195,16 @@ jobs:
 #        run: ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 8080:443 &'
 
       - name: connexion argocd
-        if: steps.argocd-server.outcome == 'failure'
+#        if: steps.argocd-server.outcome == 'failure'
+        if: github.event_name == 'workflow_dispatch'
         env:
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
         run: |
           ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd login 127.0.0.1:8080 --username admin --password ${{ env.mdp }} --insecure ${{ env.sensible-pas-afficher }}'
 
       - name: update ArgoCD password 
-        if: steps.argocd-server.outcome == 'failure'
+#        if: steps.argocd-server.outcome == 'failure'
+        if: github.event_name == 'workflow_dispatch'
         env:
           mdp: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
         run: |
@@ -208,12 +214,18 @@ jobs:
     runs-on: self-hosted
     needs: [kubectl, argocd]
     steps:
-      - name: Create Contoso namespace 
+      - name: recuperer fichier contoso.yml
         run: |
-          ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
+          ${{ env.dex }} 'wget https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/argocd/contoso.yml'
+
+#     - name: Create Contoso namespace 
+#        run: |
+#          ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
               
       - name: Create Application Contoso with Argocd avec namespace 
-        run: ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
+        run: |
+          ${{ env.dex }} 'kubectl apply -f contoso.yml'
+#          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
 #      - name: deployement kube-prometheus-stack dans helm artifacthub
 #        run: |
