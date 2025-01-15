@@ -100,6 +100,7 @@ jobs:
   monitoring:
     runs-on: self-hosted
     needs: kubectl
+    if: github.event_name == 'workflow_dispatch'
     steps:
 #      - name: deployement kube-prometheus-stack dans helm artifacthub
 #        run: |
