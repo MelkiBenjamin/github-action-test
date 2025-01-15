@@ -182,7 +182,7 @@ jobs:
 #          ${{ env.dex }} 'helm repo add argo https://argoproj.github.io/argo-helm'
 #          ${{ env.dex }} 'helm upgrade --install argocd argo/argo-cd -n argocd --version 7.7.13 --create-namespace --timeout=25m --set configs.secret.argocdServerAdminPassword=$ARGOCD --set configs.secret.createSecret=false'
         
-      - name: modifie le mot de passe argocd
+      - name: modifie le mot de passe argocd  
         run: |
           ${{ env.dex }} 'apk add apache2-utils --no-cache'
           ${{ env.dex }} 'ARGOCD=$(htpasswd -bnBC 10 "" "${{ secrets.ARGOCD }}" | tr -d ':\n')'
