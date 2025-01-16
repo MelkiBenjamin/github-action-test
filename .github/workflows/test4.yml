@@ -186,6 +186,7 @@ jobs:
         run: |
           ${{ env.dex }} 'apk add apache2-utils --no-cache'
           ${{ env.dex }} 'ARGOCD=$(htpasswd -bnBC 10 "" "${{ secrets.ARGOCD }}" | tr -d ':\n')'
+          echo fait 
           ${{ env.dex }} 'kubectl patch secret argocd-secret -n argocd -p "{\"stringData\": {\"admin.password\": \"$ARGOCD\"}}"'
 
       - name: attendre argocd 
