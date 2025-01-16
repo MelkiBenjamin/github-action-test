@@ -184,10 +184,11 @@ jobs:
         
       - name: modifie le mot de passe argocd  
         run: |
-          ${{ env.dex }} 'apk add apache2-utils --no-cache'
-          ${{ env.dex }} 'ARGOCD_HASH=$(htpasswd -bnBC 10 "" "${{ secrets.ARGOCD }}" | tr -d ':\n')'
-          echo fait 
-          ${{ env.dex }} 'kubectl patch secret argocd-secret -n argocd -p "{\"stringData\": {\"admin.password\": \"$ARGOCD_HASH\"}}"'
+          ${{ env.dex }} '
+          apk add apache2-utils --no-cache &&
+          ARGOCD_HASH=$(htpasswd -bnBC 10 "" "${{ secrets.ARGOCD }}" | tr -d ':\n') &&
+          echo fait &&
+          kubectl patch secret argocd-secret -n argocd -p "{\"stringData\": {\"admin.password\": \"$ARGOCD_HASH\"}}"'
 
       - name: attendre argocd 
         run: |
