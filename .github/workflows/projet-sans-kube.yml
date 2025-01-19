@@ -2,10 +2,6 @@ name: projet contoso local sans kubernetes
 on: 
   push:
   workflow_dispatch:
-  pull_request:
-    types:
-      - opened
-      - synchronize
 
 jobs:
   store-front:
@@ -54,23 +50,27 @@ jobs:
       - name: docker-compose version
         run: docker compose version
 
-  auto-merge:
-    runs-on: self-hosted
-    needs: infrastructure 
-    if: github.actor == 'dependabot[bot]' # S'assure que seule Dependabot est prise en compte
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Auto-Merge PR
-        run: gh pr merge ${{ github.event.pull_request.number }} --squash --admin --auto
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
-
   monitoring:
     runs-on: self-hosted
-    needs: [auto-merge]
+    needs: [infrastructure]
     steps:
+      - uses: actions/checkout@v4
+
+      - name: compare les image compose
+        id: image-grafana
+        run: $tagcompose = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
+
+      - name: compare les tag des image dans dockerhub
+        id: dockerhub-grafana
+        run: |
+          $response = Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/"
+          $latestTag = $response.results[5].name
+          echo "Derniere image tag : grafana/grafana:$latestTag"
+
+      - name: docker-compose up
+        if: steps.image-grafana.outputs != steps.dockerhub-grafana.outputs
+        run: sed -i 's/$tagcompose/$latestTag/g' ./compose/'docker-compose-monitoring - Copie'.yml
+
       - name: install apli monitoring prometheus grafana
         run: |
           docker compose -f ./compose/docker-compose-monitoring.yml up
@@ -78,7 +78,8 @@ jobs:
   contoso:
     runs-on: self-hosted
     needs: [infrastructure]
-    steps:              
+    steps:
+      - uses: actions/checkout@v4            
       - name: Create Application Contoso with Argocd avec namespace
         run: |
           docker compose -f ./compose/docker-compose-contoso.yml up
