@@ -67,7 +67,7 @@ jobs:
           $latestTag = $response.results[5].name
           echo "Derniere image tag : grafana/grafana:$latestTag"
 
-      - name: docker-compose up
+      - name: docker-compose up 
         if: steps.image-grafana.outputs != steps.dockerhub-grafana.outputs
         run: sed -i 's/$tagcompose/$latestTag/g' ./compose/'docker-compose-monitoring - Copie'.yml
 
