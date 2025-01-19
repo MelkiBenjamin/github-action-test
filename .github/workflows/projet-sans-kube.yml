@@ -46,16 +46,17 @@ jobs:
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
 
   infrastructure:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name : docker version
         run: docker --version
 
       - name: docker-compose version
-        run: docker-compose --version
+        run: docker compose version
 
   auto-merge:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    needs: infrastructure 
     if: github.actor == 'dependabot[bot]' # S'assure que seule Dependabot est prise en compte
     steps:
       - name: Checkout Code
