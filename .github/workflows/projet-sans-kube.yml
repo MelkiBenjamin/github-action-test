@@ -80,7 +80,7 @@ jobs:
     needs: [infrastructure]
     steps:
       - uses: actions/checkout@v4
-      - uses: ls
+      - run: ls
       - name: Create Application Contoso with Argocd avec namespace
         run: |
           docker compose -f ./compose/docker-compose-contoso.yml up
