@@ -4,3 +4,4 @@ updates:
     directory: "compose/docker-compose-monitoring.yaml"
     schedule:
       interval: "daily"
+
