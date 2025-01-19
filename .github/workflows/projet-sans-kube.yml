@@ -69,11 +69,11 @@ jobs:
 
   monitoring:
     runs-on: self-hosted
-    needs: infrastructure
+    needs: [auto-merge]
     steps:
       - name: install apli monitoring prometheus grafana
         run: |
-          docker compose up -f compose/docker-compose-monitoring.yaml
+          docker compose -f compose/docker-compose-monitoring.yml up
  
   contoso:
     runs-on: self-hosted
@@ -81,5 +81,5 @@ jobs:
     steps:              
       - name: Create Application Contoso with Argocd avec namespace
         run: |
-          docker compose up -f contoso/docker-compose.yaml
+          docker compose -f compose/docker-compose-contoso.yml up
           
