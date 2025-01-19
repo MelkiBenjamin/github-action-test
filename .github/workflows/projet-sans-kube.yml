@@ -63,17 +63,16 @@ jobs:
       - name: compare les tag des image dans dockerhub
         id: dockerhub-grafana
         run: |
-          $response = Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/"
-          $latestTag = $response.results[5].name
+          $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           echo "Derniere image tag : grafana/grafana:$latestTag"
 
       - name: docker-compose up 
         if: steps.image-grafana.outputs != steps.dockerhub-grafana.outputs
-        run: sed -i 's/$tagcompose/$latestTag/g' ./compose/'docker-compose-monitoring - Copie'.yml
+        run: ((Get-Content -Path compose/'docker-compose-monitoring - Copie'.yml) -replace "$tagcompose","$latestTag")
 
       - name: install apli monitoring prometheus grafana
         run: |
-          docker compose -f ./compose/docker-compose-monitoring.yml up
+          docker compose -df ./compose/docker-compose-monitoring.yml up -d
  
   contoso:
     runs-on: self-hosted
@@ -83,5 +82,5 @@ jobs:
       - run: ls
       - name: Create Application Contoso with Argocd avec namespace
         run: |
-          docker compose -f ./compose/docker-compose-contoso.yml up
+          docker compose -f ./compose/docker-compose-contoso.yml up -d
           
