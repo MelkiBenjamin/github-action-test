@@ -1,0 +1,84 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.17-management-alpine
+    container_name: 'rabbitmq'
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 350M
+        reservations:
+          cpus: '0.25'
+          memory: 200M
+    environment:
+      - "RABBITMQ_DEFAULT_USER=username"
+      - "RABBITMQ_DEFAULT_PASS=password"
+    ports:
+      - 15672:15672
+      - 5672:5672
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - reseau_contoso
+  aks-store-demo-order-service:
+    container_name: 'order-service2'
+    restart: always
+    image: order-service2
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 350M
+        reservations:
+          cpus: '0.25'
+          memory: 200M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    ports:
+      - 3000:3000
+    networks:
+      - reseau_contoso
+  store-front:
+    container_name: 'store-front'
+    image: benjaminmelki/store-front-test:latest
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 350M
+        reservations:
+          cpus: '0.25'
+          memory: 200M
+    ports:
+      - 8080:8080
+    networks:
+      - reseau_contoso
+  product-service:
+    container_name: 'product-service'
+    image: benjaminmelki/product-service-test2:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 350M
+        reservations:
+          cpus: '0.25'
+          memory: 200M
+    restart: always
+    ports:
+      - 3002:3002
+    networks:
+      - reseau_contoso
+
+networks:
+  reseau_contoso:
+    driver: bridge
+

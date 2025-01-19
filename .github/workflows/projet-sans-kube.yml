@@ -1,0 +1,84 @@
+name: projet contoso local sans kubernetes
+on: 
+  push:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  store-front:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3.0.2
+        id: changes 
+        with: 
+          filters: | 
+            store-front:
+              - 'store-front/**'
+      - name: docker build
+        if: steps.changes.outputs.store-front == 'true'
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test store-front
+      - run: docker image ls
+      - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - if: steps.changes.outputs.store-front == 'true'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
+
+  product-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - uses: dorny/paths-filter@v3.0.2
+        id: changes 
+        with: 
+          filters: | 
+            product-service:
+              - 'product-service/**'
+      - name: docker build
+        if: steps.changes.outputs.product-service == 'true'
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
+      - run: docker image ls
+      - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - if: steps.changes.outputs.product-service == 'true'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
+
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - name : docker version
+        run: docker --version
+
+      - name: docker-compose version
+        run: docker-compose --version
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]' # S'assure que seule Dependabot est prise en compte
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Auto-Merge PR
+        run: gh pr merge ${{ github.event.pull_request.number }} --squash --admin --auto
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+  monitoring:
+    runs-on: self-hosted
+    needs: infrastructure
+    steps:
+      - name: install apli monitoring prometheus grafana
+        run: |
+          docker compose up -f compose/docker-compose-monitoring.yaml
+ 
+  contoso:
+    runs-on: self-hosted
+    needs: [infrastructure]
+    steps:              
+      - name: Create Application Contoso with Argocd avec namespace
+        run: |
+          docker compose up -f contoso/docker-compose.yaml
+          
