@@ -79,7 +79,8 @@ jobs:
     runs-on: self-hosted
     needs: [infrastructure]
     steps:
-      - uses: actions/checkout@v4            
+      - uses: actions/checkout@v4
+      - uses: ls
       - name: Create Application Contoso with Argocd avec namespace
         run: |
           docker compose -f ./compose/docker-compose-contoso.yml up
