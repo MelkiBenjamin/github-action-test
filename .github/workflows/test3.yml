@@ -10,6 +10,8 @@ jobs:
       - name: docker version
         run: docker --version
 
+      - uses: actions/checkout@v4
+
       - name: compare les image compose
         run: |
           $tagcompose = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
