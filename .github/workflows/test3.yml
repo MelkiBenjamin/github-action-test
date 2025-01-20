@@ -51,9 +51,6 @@ jobs:
           $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
           $tagcompose = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
-          echo "Derniere image tag compose : $tagcompose"
-          echo "Derniere image tag dockerhub : grafana/grafana:$latestTag"
-          echo "le path2 est $path2"
           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) -replace "$tagcompose", "grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0", "prom/prometheus:v2.49.0" -replace "cadvisor:v0.47.2", "cadvisor:v0.48.2"))
 
     helm:
