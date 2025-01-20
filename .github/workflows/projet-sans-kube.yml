@@ -1,6 +1,6 @@
 name: projet contoso local sans kubernetes
 on: 
-  push:
+#  push:
   workflow_dispatch:
 
 jobs:
@@ -57,22 +57,29 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: compare les image compose
-        id: image-grafana
         run: |
           $tagcompose = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
           echo "Derniere image tag compose : $tagcompose"
 
       - name: compare les tag des image dans dockerhub
-        id: dockerhub-grafana
         run: |
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           echo "Derniere image tag dockerhub : grafana/grafana:$latestTag"
 
       - name: docker-compose up 
-        if: steps.image-grafana.outputs != steps.dockerhub-grafana.outputs
         run: |
            $path = "compose/docker-compose-monitoring - Copie.yml"
-           (Get-Content $path) -replace "$tagcompose","$latestTag" | Set-Content $path
+           (Get-Content $path) \ 
+              -replace "$tagcompose","grafana/grafana:$latestTag" \ 
+              -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" \
+              -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
+              | Set-Content $path
+           
+           $path2 = ".\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring33.yml"           
+           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) \ 
+             -replace $tagcompose, grafana/grafana:$latestTag
+             -replace prom/prometheus:v2.48.0, prom/prometheus:v2.48.0 \
+             -replace cadvisor:v0.47.2, cadvisor:v0.47.2))
 
       - name: install apli monitoring prometheus grafana
         run: |
