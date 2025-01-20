@@ -39,7 +39,7 @@ jobs:
           $modif = (Get-Content $path) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
           echo $modif
           echo 'debut modif image'
-          ((Get-Content -Path "./compose/docker-compose-monitoring-get.yml") -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2") | Set-Content -Path ./compose/docker-compose-monitoring-get.yml
+          ((Get-Content -Path "./compose/docker-compose-monitoring-get.yml") -replace "$tagcompose", "grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0", "prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2", "cadvisor:v0.47.2") | Set-Content -Path ./compose/docker-compose-monitoring-get.yml
           echo 'fin1 modif image'
           echo 'debut modif image2'
           $modif2 = (Get-Content -Path "$path") -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" | Set-Content -Path "$path"
