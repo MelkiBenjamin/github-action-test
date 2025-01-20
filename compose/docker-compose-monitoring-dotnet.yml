@@ -1,6 +1,6 @@
 services:
   prometheus:
-    image: grafana/grafana:$latestTag
+    image: prom/prometheus:v2.48.0
     restart: always
     deploy: 
       resources:
