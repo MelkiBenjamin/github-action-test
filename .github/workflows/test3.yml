@@ -20,18 +20,22 @@ jobs:
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           echo "Derniere image tag dockerhub : grafana/grafana:$latestTag"
 
+      - name : var
+        run: |
+          $path = "compose/docker-compose-monitoring-get"
+          $path2 = ".\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"           
+
+
       - name: docker-compose up 
         run: |
-           $path = "compose/docker-compose-monitoring-get"
-           (Get-Content $path) \ 
-              -replace "$tagcompose","grafana/grafana:$latestTag" \ 
-              -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" \
-              -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
+           (Get-Content $path) / 
+              -replace "$tagcompose","grafana/grafana:$latestTag" /
+              -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" /
+              -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" /
               | Set-Content $path
 
       - name: docker-compose up
         run: | 
-          $path2 = ".\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"           
           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) \ 
             -replace $tagcompose, grafana/grafana:$latestTag
             -replace prom/prometheus:v2.48.0, prom/prometheus:v2.48.0 \
