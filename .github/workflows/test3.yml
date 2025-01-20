@@ -29,7 +29,7 @@ jobs:
 
       - name: docker-compose up 
         run: |
-            $path = "compose/docker-compose-monitoring-get.yml"
+            $path = ".\compose\docker-compose-monitoring-get.yml"
             (Get-Content $path) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" | Set-Content $path
 
       - name: docker-compose up
