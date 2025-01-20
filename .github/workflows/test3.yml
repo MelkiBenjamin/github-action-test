@@ -36,7 +36,7 @@ jobs:
           echo "Derniere image tag dockerhub : grafana/grafana:$latestTag"
           echo "le path est $path"
           ls ./compose/docker-compose-monitoring-get.yml
-          $modif = (Get-Content $path) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" | Set-Content $path
+          $modif = (Get-Content $path) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
           echo $modif
           echo 'debut modif image'
           (Get-Content $path) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" | Set-Content $path
