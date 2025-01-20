@@ -1,0 +1,92 @@
+services:
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    restart: always
+    deploy: 
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 250M
+        reservations:
+          cpus: '0.25'
+          memory: 50M
+      replicas: 2   
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+    - cadvisor
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - --web.listen-address=0.0.0.0:9090
+    ports:
+      - 9090-9091:9090
+    networks:
+      - backend_services
+  cadvisor:
+    container_name: 'cadvisor'
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    restart: always
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock:ro
+#      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    privileged: true
+    command:
+    - '-port=80'
+    ports:
+      - 80:80
+    networks:
+      - backend_services
+  alpine:
+    container_name: 'alpine'
+    image: alpine:latest
+    restart: always
+    command: sh -c "apk add --no-cache openssl && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /certs/grafana.key -out /certs/grafana.crt -subj '/CN=localhost' && chmod 644 /certs/grafana.key /certs/grafana.crt && sleep 365d"
+    volumes:
+      - certs:/certs
+    networks:
+      - backend_services
+  grafana:
+    image: grafana/grafana:10.2.2
+    restart: always
+    deploy: 
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 350M
+        reservations:
+          cpus: '0.25'
+          memory: 200M
+    volumes:
+      - ./grafana.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml:ro
+      - ./dasboard.json:/etc/grafana/provisioning/dashboards/dashboard2.json:ro
+      - certs:/etc/grafana/certs/
+    environment:
+      - GF_SERVER_HTTP_PORT=10
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SERVER_PROTOCOL=https
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt
+      - GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key
+      - GF_SERVER_ROOT_URL=https://0.0.0.0:10
+    depends_on:
+      - alpine
+      - prometheus
+    ports:
+      - 443:10
+    networks:
+      - backend_services
+networks:
+  backend_services:
+    driver: bridge
+
+volumes:
+  certs:
+
