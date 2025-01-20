@@ -35,7 +35,7 @@ jobs:
       - name: docker-compose up
         run: | 
           $path2 = ".\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
-          [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) -replace $tagcompose, grafana/grafana:$latestTag -replace prom/prometheus:v2.48.0, prom/prometheus:v2.48.0 -replace cadvisor:v0.47.2, cadvisor:v0.47.2))
+          [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) -replace $tagcompose, 'grafana/grafana:$latestTag' -replace prom/prometheus:v2.48.0, 'prom/prometheus:v2.48.0' -replace cadvisor:v0.47.2, 'cadvisor:v0.47.2'))
 
     helm:
       runs-on: self-hosted
