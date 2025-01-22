@@ -36,7 +36,7 @@ jobs:
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
           $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
-          ((Get-Content -Path "$path") -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
+          ((Get-Content -Path "$path") -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
 
       - name: docker-compose methode 2
         run: |
@@ -47,7 +47,7 @@ jobs:
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
           $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
-          [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) -replace "$tagcompose_grafana", "grafana/grafana:$latestTag" -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "cadvisor:$latestTag_cadvisor"))
+          [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) -replace "$tagcompose_grafana", "grafana/grafana:$latestTag" -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor"))
 
     helm:
       runs-on: self-hosted
