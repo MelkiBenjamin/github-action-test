@@ -7,8 +7,7 @@ jobs:
     modif-image:
       runs-on: self-hosted
       env:
-        test: bonjour
-        path: C:/Users/mbenj/Desktop/devops/'github action'/'test github action'/github-action-test/compose/docker-compose-monitoring-get.yml
+        path: "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
         path2: "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotnet.yml"
         tagcompose_grafana: docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
         tagcompose_prometheus: docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
@@ -17,13 +16,16 @@ jobs:
         latestTag_prometheus: (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
         latestTag_cadvisor: (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
       steps:
-      - name: test1
-        run: echo $test
-
-      - name: docker-compose methode 1
-        if: github.event_name == 'workflow_dispatch' 
+      - name: docker-compose methode 1 
         run: |
-          ((Get-Content -Path $path) -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
+          $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+          $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
+          $tagcompose_prometheus = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
+          $tagcompose_cadvisor = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor
+          $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
+          $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
+          $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
+          ((Get-Content -Path "$path") -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
 
       - name: docker-compose methode 2
         run: |
