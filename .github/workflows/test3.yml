@@ -27,7 +27,10 @@ jobs:
       - name: docker-compose methode 2
         run: |
           $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
-          [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
+          [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) `
+          -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
+          -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
+          -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
 
     helm:
       runs-on: self-hosted
