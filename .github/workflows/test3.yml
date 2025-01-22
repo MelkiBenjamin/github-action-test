@@ -7,26 +7,6 @@ jobs:
     modif-image:
       runs-on: self-hosted
       steps:
-      - name: docker version
-        run: docker --version
-
-      - uses: actions/checkout@v4
-
-      - name: compare les image compose
-        run: |
-          $tagcompose = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
-          echo "Derniere image tag compose : $tagcompose"
-
-      - name: compare les tag des image dans dockerhub
-        run: |
-          $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
-          echo "Derniere image tag dockerhub : grafana/grafana:$latestTag"
-
-      - name : var
-        run: |
-          $path = ".\compose\docker-compose-monitoring-get.yml"
-          $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
-
       - name: docker-compose methode 1 
         run: |
           $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
