@@ -29,14 +29,16 @@ jobs:
 
       - name: docker-compose methode 1 
         run: |
-          $path_origine = "./compose/docker-compose-monitoring-get.yml"
-          $path_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+          $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
           $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
+          $tagcompose_prometheus = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
+          $tagcompose_cadvisor = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
-          ((Get-Content -Path "$path_origine") -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") | Set-Content -Path $path_destination
+          $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
+          $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
+          ((Get-Content -Path "$path") -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") | Set-Content -Path $path
 
       - name: docker-compose methode 2
-        if: github.event_name == 'workflow_dispatch'
         run: |
           $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
           $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
