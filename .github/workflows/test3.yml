@@ -14,22 +14,12 @@ jobs:
         latestTag: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name)
         latestTag_prometheus: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name)
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
+        path: $(echo "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml")
 
       steps:
-      - name: test
-        run: echo '$test'
-      - name: test2
-        run: echo $test
-      - name: test3
-        run: echo ${{ env.test }}
-      - name: test4
-        run: echo "$test"
-
-
       - name: docker-compose methode 1  
         run: |
-          $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
-          ((Get-Content -Path "$path") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" | Set-Content -Path $path
+          ((Get-Content -Path "${{ env.path }}") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" | Set-Content -Path ${{ env.path }}
 
       - name: docker-compose methode 2
         run: |
