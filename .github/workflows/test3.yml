@@ -7,7 +7,7 @@ jobs:
     modif-image:
       runs-on: self-hosted
       env:
-        path: "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+        path: C:/Users/mbenj/Desktop/devops/'github action'/'test github action'/github-action-test/compose/docker-compose-monitoring-get.yml
         path2: "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotnet.yml"
         tagcompose_grafana: docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
         tagcompose_prometheus: docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
