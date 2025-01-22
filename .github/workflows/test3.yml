@@ -9,6 +9,8 @@ jobs:
       env:
         test: ls
         tagcompose_grafana: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana)
+        tagcompose_prometheus: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus)
+        tagcompose_cadvisor: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor)
       steps:
       - name: test
         run: echo '$test'
@@ -23,12 +25,11 @@ jobs:
       - name: docker-compose methode 1 
         run: |
           $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
-          $tagcompose_prometheus = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
           $tagcompose_cadvisor = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
           $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
-          ((Get-Content -Path "$path") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
+          ((Get-Content -Path "$path") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:$latestTag") -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:$latestTag_prometheus" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
 
       - name: docker-compose methode 2
         run: |
