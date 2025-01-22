@@ -51,7 +51,7 @@ jobs:
 
       - name: dockcr-compose methode 1 test2
         run: |
-          cp ./compose/docker-compose-monitoring-get.yml c:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml
+          cp ./compose/docker-compose-monitoring-get.yml c:/Users/mbenj/Desktop/devops/'github action'/'test github action'/github-action-test/compose/docker-compose-monitoring-get.yml
 
       - name: docker-compose methode 2
         if: github.event_name == 'workflow_dispatch'
