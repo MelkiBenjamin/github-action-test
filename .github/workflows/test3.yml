@@ -18,7 +18,7 @@ jobs:
       steps:
       - name: docker-compose methode 1 
         run: |
-          ((Get-Content -Path "$path") -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
+          ((Get-Content -Path $path) -replace "$tagcompose_grafana", "grafana/grafana:$latestTag") -replace "$tagcompose_prometheus", "prom/prometheus:$latestTag_prometheus" -replace "$tagcompose_cadvisor", "gcr.io/cadvisor/cadvisor:$latestTag_cadvisor" | Set-Content -Path $path
 
       - name: docker-compose methode 2
         run: |
