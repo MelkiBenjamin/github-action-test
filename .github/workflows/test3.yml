@@ -5,7 +5,7 @@ on:
 
 jobs:
     modif-image:
-      runs-on: windows-latest
+      runs-on: self-hosted
       steps:
       - name: docker version
         run: docker --version
@@ -44,9 +44,13 @@ jobs:
           echo 'debut modif image2'
           $modif2 = (Get-Content -Path "$path") -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" | Set-Content -Path "$path"
           $modif2 | Set-Content $path
+
+      - name: docker-compose methode 1 test
+        run: |    
           cat ./compose/docker-compose-monitoring-get.yml
 
-      - name: docker-compose up
+      - name: docker-compose methode 2
+        if: github.event_name == 'workflow_dispatch'
         run: |
           $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
           $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
