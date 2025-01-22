@@ -7,7 +7,7 @@ jobs:
     modif-image:
       runs-on: self-hosted
       env:
-        test: $bonjour
+        test: $(bonjour)
       steps:
       - name: test
         run: echo '$test'
@@ -16,7 +16,7 @@ jobs:
       - name: test3
         run: echo ${{ env.test }}
       - name: test4
-        run: echo "test"
+        run: echo "$test"
 
 
       - name: docker-compose methode 1 
