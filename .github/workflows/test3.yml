@@ -10,7 +10,6 @@ jobs:
         test: $(ls)
         tagcompose_grafana: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana)
         tagcompose_prometheus: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus)
-        tagcompose_cadvisor: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor)
       steps:
       - name: test
         run: echo '$test'
