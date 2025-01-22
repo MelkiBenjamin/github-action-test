@@ -29,33 +29,23 @@ jobs:
 
       - name: docker-compose methode 1 
         run: |
-          $path = "./compose/docker-compose-monitoring-get.yml"
+          $path_origine = "./compose/docker-compose-monitoring-get.yml"
+          $path_destination = "C:/Users/mbenj/Desktop/devops/'github action'/'test github action'/github-action-test/compose/docker-compose-monitoring-get.yml"
           $tagcompose = docker compose -f ./compose/docker-compose-monitoring-get.yml config --quiet --images | findstr grafana
           $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
           echo "Derniere image tag compose : $tagcompose"
           echo "Derniere image tag dockerhub : grafana/grafana:$latestTag"
           echo "le path est $path"
           ls ./compose/docker-compose-monitoring-get.yml
-          $modif = (Get-Content $path) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
+          $modif = (Get-Content $path_origine) -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
           echo $modif
           echo 'debut modif image'
-          ((Get-Content -Path "./compose/docker-compose-monitoring-get.yml") -replace "$tagcompose", "grafana/grafana:$latestTag") | Set-Content -Path ./compose/docker-compose-monitoring-get.yml
+          ((Get-Content -Path "$path_origine") -replace "$tagcompose", "grafana/grafana:$latestTag") | Set-Content -Path $path_destination
           echo 'fin1 modif image'
           echo 'debut modif image2'
           $modif2 = (Get-Content -Path "$path") -replace "$tagcompose","grafana/grafana:$latestTag" -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" -replace "cadvisor:v0.47.2","cadvisor:v0.47.2" | Set-Content -Path "$path"
           $modif2 | Set-Content $path
 
-      - name: docker-compose methode 1 test
-        run: |    
-          cat ./compose/docker-compose-monitoring-get.yml
-
-      - name: dockcr-compose methode 1 test2
-        run: |
-          cp ./compose/docker-compose-monitoring-get.yml c:/Users/mbenj/Desktop/devops/'github action'/'test github action'/github-action-test/compose/docker-compose-monitoring-get.yml
-
-      - name: docker-compose methode 1 test3
-        run: $GITHUB_WORKSPACE
-        
       - name: docker-compose methode 2
         if: github.event_name == 'workflow_dispatch'
         run: |

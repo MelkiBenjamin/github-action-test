@@ -52,7 +52,7 @@ services:
     networks:
       - backend_services
   grafana:
-    image: grafana/grafana:11.4.0
+    image: grafana/grafana:10.2.2
     restart: always
     deploy: 
       resources:
