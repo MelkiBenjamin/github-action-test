@@ -16,7 +16,7 @@ jobs:
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
 
       steps:
-      - name: docker-compose methode 1  
+      - name: docker-compose methode 1   
         run: |
           $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
           ((Get-Content -Path "$path") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" | Set-Content -Path $path
