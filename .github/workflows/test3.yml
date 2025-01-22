@@ -14,12 +14,12 @@ jobs:
         latestTag: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name)
         latestTag_prometheus: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name)
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
-        path: "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+        chemin: "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
 
       steps:
       - name: docker-compose methode 1   
         run: |
-          ((Get-Content -Path "${{ env.path }}") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" | Set-Content -Path ${{ env.path }}
+          ((Get-Content -Path "${{ env.chemin }}") -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" | Set-Content -Path ${{ env.chemin }}
 
       - name: docker-compose methode 2
         run: |
