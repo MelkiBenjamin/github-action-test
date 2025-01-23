@@ -17,7 +17,7 @@ jobs:
 
       steps:
       - uses: actions/checkout@v4.2.2
-      - name: docker-compose methode 1  
+      - name: docker-compose methode 1   
         if: runner.os == 'Windows' 
         run: |
           $path_origine = "./compose/docker-compose-monitoring-get.yml"
