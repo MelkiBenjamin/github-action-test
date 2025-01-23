@@ -44,7 +44,7 @@ jobs:
       - name: netoyage fichier temporaires work windows
         if: always()
         run: |
-          rm "${{ github.workspace }}"/*
+          Remove-Item -Recurse -Force "${{ github.workspace }}\*"
 
       - name: verif netoyage fichier temporaires work windows
         if: always()
