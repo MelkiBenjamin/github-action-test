@@ -22,7 +22,6 @@ jobs:
           sparse-checkout: | 
             compose/docker-compose-monitoring-get.yml
           sparse-checkout-cone-mode: false
-
       - name: ls 
         run: ls
       - name: docker-compose methode 1   
@@ -34,7 +33,7 @@ jobs:
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
           | Set-Content -Path $path
 
-      - name: docker-compose methhode 2
+      - name: docker-compose methhode 2 
         run: |
           $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) `
