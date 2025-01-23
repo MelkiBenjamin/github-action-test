@@ -22,7 +22,7 @@ jobs:
           sparse-checkout: | 
             compose
 
-      - name: ls
+      - name: ls 
         run: ls
       - name: docker-compose methode 1   
         run: |
