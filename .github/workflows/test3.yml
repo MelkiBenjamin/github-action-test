@@ -22,7 +22,6 @@ jobs:
           ref: main
           sparse-checkout: | 
             README.md
-          sparse-checkout-cone-mode: false
 
       - name: ls
         run: ls
