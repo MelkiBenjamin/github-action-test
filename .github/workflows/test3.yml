@@ -44,13 +44,13 @@ jobs:
           echo verification de la var path2
           echo $path2
           echo lecture du contenu du fichier avec modification
-          $read = ([System.IO.File]::ReadAllText($path2) ` // lire le contenu du fichier avec modification
+          $read = ([System.IO.File]::ReadAllText($path2) ` 
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
           cat $read
           echo ecriture du contenu du fichier avec modification
-          [System.IO.File]::WriteAllText($path2, $read) // ecrire le contenu du fichier avec modification
+          [System.IO.File]::WriteAllText($path2, $read) 
           echo fin de la modification du fichier
 
     helm:
