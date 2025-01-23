@@ -20,9 +20,7 @@ jobs:
         with:
           ref: main
           sparse-checkout: 
-            compose/docker-compose-monitoring.yml
-            compose/docker-compose-monitoring-get.yml
-            compose/docker-compose-monitoring-dotnet.yml
+            compose
           sparse-checkout-cone-mode: false
       - run: ls
       - name: docker-compose methode 1   
