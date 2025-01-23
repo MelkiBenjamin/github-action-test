@@ -41,21 +41,7 @@ jobs:
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
-
-          echo creation de la var path2
-          $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml" 
-          echo verification de la var path2
-          echo $path2
-          echo lecture du contenu du fichier avec modification
-          $read = ([System.IO.File]::ReadAllText($path2) ` 
-          -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
-          -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
-          -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
-          cat $read
-          echo ecriture du contenu du fichier avec modification
-          [System.IO.File]::WriteAllText($path2, $read) 
-          echo fin de la modification du fichier
-
+          
     helm:
       runs-on: self-hosted
       if: github.event_name == 'workflow_dispatch'    
