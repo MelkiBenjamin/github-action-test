@@ -20,7 +20,7 @@ jobs:
       - name: docker-compose methode 1  
         if: runner.os == 'Windows' 
         run: |
-          $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+          $path = "./compose/docker-compose-monitoring-get.yml"
           ((Get-Content -Path "$path") `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
