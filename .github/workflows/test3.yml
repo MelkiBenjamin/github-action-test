@@ -44,7 +44,8 @@ jobs:
       - name: netoyage fichier temporaires work windows
         if: always()
         run: |
-          rm *
+          rm ./
+
       - name: verif netoyage fichier temporaires work windows
         if: always()
         run: ls
