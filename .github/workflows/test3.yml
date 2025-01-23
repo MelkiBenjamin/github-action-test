@@ -22,7 +22,7 @@ jobs:
           ref: main
           sparse-checkout: | 
             compose
-          sparse-checkout-cone-mode: false
+          sparse-checkout-cone-mode: true
 
       - name: ls
         run: ls
