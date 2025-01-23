@@ -19,9 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4.2.2
         with:
-          ref: main
           sparse-checkout: | 
-            README.md
             compose
 
       - name: ls
@@ -42,7 +40,15 @@ jobs:
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
-          
+
+      - name: netoyage fichier temporaires work windows
+        if: always()
+        run: |
+          rm *
+      - name: verif netoyage fichier temporaires work windows
+        if: always()
+        run: ls
+        
     helm:
       runs-on: self-hosted
       if: github.event_name == 'workflow_dispatch'    
