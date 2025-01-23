@@ -16,14 +16,6 @@ jobs:
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
 
       steps:
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
-        with:
-          sparse-checkout: | 
-            compose/docker-compose-monitoring-get.yml
-          sparse-checkout-cone-mode: false
-      - name: ls 
-        run: ls
       - name: docker-compose methode 1   
         run: |
           $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
@@ -39,17 +31,7 @@ jobs:
           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
-          -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
-
-      - name: netoyage fichier temporaires work windows
-        if: always()
-        run: |
-          Remove-Item -Recurse -Force "${{ github.workspace }}\*"
-
-      - name: verif netoyage fichier temporaires work windows
-        if: always()
-        run: ls
-        
+          -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))        
     helm:
       runs-on: self-hosted
       if: github.event_name == 'workflow_dispatch'    
