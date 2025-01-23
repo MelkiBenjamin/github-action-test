@@ -31,7 +31,7 @@ jobs:
       - name: docker-compose methhode 2
         if: runner.os == 'Windows'
         run: |
-          $path2_origine = "C:\Users\mbenj\Desktop\devops\github action\test github action\runner github-action-test\actions-runner\_work\github-action-test\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
+          $path2_origine = "C:/Users/mbenj/Desktop/devops/github action/test github action/runner github-action-test/actions-runner/_work/github-action-test/github-action-test/compose/docker-compose-monitoring-dotnet.yml"
           $path2_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotnet.yml"
           [System.IO.File]::WriteAllText($path2_origine, ([System.IO.File]::ReadAllText($path2_destination) `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
