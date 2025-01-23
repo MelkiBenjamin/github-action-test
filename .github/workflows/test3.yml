@@ -24,7 +24,7 @@ jobs:
             compose/docker-compose-monitoring-get.yml
             compose/docker-compose-monitoring-dotnet.yml
           sparse-checkout-cone-mode: false
-
+      - run: ls
       - name: docker-compose methode 1   
         if: runner.os == 'Windows' 
         run: |
