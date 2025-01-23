@@ -1,6 +1,6 @@
 services:
   prometheus:
-    image: prom/prometheus:v3.0.1
+    image: prom/prometheus:v2.48.0
     restart: always
     deploy: 
       resources:
@@ -28,7 +28,7 @@ services:
       - backend_services
   cadvisor:
     container_name: 'cadvisor'
-    image: gcr.io/cadvisor/cadvisor:v0.49.2
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
     restart: always
     volumes:
       - //var/run/docker.sock:/var/run/docker.sock:ro
@@ -52,7 +52,7 @@ services:
     networks:
       - backend_services
   grafana:
-    image: grafana/grafana:11.4.0
+    image: grafana/grafana:10.2.2
     restart: always
     deploy: 
       resources:

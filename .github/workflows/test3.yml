@@ -20,7 +20,8 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           sparse-checkout: | 
-            compose/docker-compose-monitoring.yml
+            compose/docker-compose-monitoring-get.yml
+            compose/docker-compose-monitoring-dotnet.yml
           sparse-checkout-cone-mode: false
 
       - name: ls 
