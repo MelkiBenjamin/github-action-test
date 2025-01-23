@@ -62,8 +62,6 @@ jobs:
       - name: ls
         run: ls 
 
-      
-        
       - name: docker-compose up 
         if: github.event_name == 'workflow_dispatch'
         run: |
@@ -92,4 +90,7 @@ jobs:
       - name: Create Application Contoso
         run: |
           docker compose -f ./compose/docker-compose-contoso.yml up -d
+
+      - name : netoyage
+        run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
           
