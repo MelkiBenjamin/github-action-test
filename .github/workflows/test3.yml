@@ -55,8 +55,8 @@ jobs:
           sed -i "s/${{ env.tagcompose_prometheus }}/prom/prometheus:${{ env.latestTag_prometheus }}/g" $path3_destination
           sed -i "s/${{ env.tagcompose_cadvisor }}/gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}/g" $path3_destination
 
-      - name: netoyage job
-        run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
+     # - name: netoyage job
+     #   run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
           
     helm:
       runs-on: self-hosted
