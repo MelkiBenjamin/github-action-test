@@ -17,6 +17,14 @@ jobs:
 
       steps:
       - uses: actions/checkout@v4.2.2
+        with:
+          ref: main
+          sparse-checkout: 
+            compose/docker-compose-monitoring.yml
+            compose/docker-compose-monitoring-get.yml
+            compose/docker-compose-monitoring-dotnet.yml
+          sparse-checkout-cone-mode: false
+
       - name: docker-compose methode 1   
         if: runner.os == 'Windows' 
         run: |
@@ -37,6 +45,15 @@ jobs:
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
+
+      - name: docker-compose methode 3
+        if: runner.os == 'linux'
+        run: |
+          $path3_origine = "./compose/docker-compose-monitoring-get.yml"
+          $path3_destination = "./compose/docker-compose-monitoring-get.yml"
+          sed -i "s/${{ env.tagcompose_grafana }}/grafana/grafana:${{ env.latestTag }}/g" $path3_destination
+          sed -i "s/${{ env.tagcompose_prometheus }}/prom/prometheus:${{ env.latestTag_prometheus }}/g" $path3_destination
+          sed -i "s/${{ env.tagcompose_cadvisor }}/gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}/g" $path3_destination
 
       - name: netoyage job
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
