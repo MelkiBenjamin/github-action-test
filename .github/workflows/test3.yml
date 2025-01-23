@@ -16,7 +16,7 @@ jobs:
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
 
       steps:
-      - uses: actions/checkout@v4.2.2
+     # - uses: actions/checkout@v4.2.2
       - name: docker-compose methode 1  
         if: runner.os == 'Windows' 
         run: |
