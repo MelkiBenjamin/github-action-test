@@ -16,9 +16,8 @@ jobs:
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
 
       steps:
-      - name: ls
-        run: ls
-      - name: docker-compose methode 1   
+      - name: docker-compose methode 1  
+        if: runner.os == 'Windows' 
         run: |
           $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
           ((Get-Content -Path "$path") `
@@ -28,6 +27,7 @@ jobs:
           | Set-Content -Path $path
 
       - name: docker-compose methhode 2
+        if: runner.os == 'Windows'
         run: |
           $path2 = "C:\Users\mbenj\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring-dotnet.yml"
           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) `

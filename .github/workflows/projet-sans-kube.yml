@@ -47,7 +47,7 @@ jobs:
       - name : docker version
         run: docker --version
 
-      - name: docker-compose version
+      - name: docker compose version
         run: docker compose version
 
   monitoring:
