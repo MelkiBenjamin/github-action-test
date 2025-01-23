@@ -21,6 +21,7 @@ jobs:
         with:
           sparse-checkout: | 
             compose/docker-compose-monitoring.yml
+          sparse-checkout-cone-mode: false
 
       - name: ls 
         run: ls
