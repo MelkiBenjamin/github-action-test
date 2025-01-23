@@ -20,12 +20,13 @@ jobs:
       - name: docker-compose methode 1  
         if: runner.os == 'Windows' 
         run: |
-          $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
-          ((Get-Content -Path "$path") `
+          $path_origine = "./compose/docker-compose-monitoring-get.yml"
+          $path_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+          ((Get-Content -Path "$path_origine") `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
-          | Set-Content -Path $path
+          | Set-Content -Path $path_destination
 
       - name: docker-compose methhode 2
         if: runner.os == 'Windows'
