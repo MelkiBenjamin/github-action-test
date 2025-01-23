@@ -54,7 +54,18 @@ jobs:
     runs-on: self-hosted
     needs: [infrastructure]
     steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          ref: main
+          sparse-checkout: compose/docker-compose-monitoring.yml
+
+      - name: ls
+        run: ls 
+
+      
+        
       - name: docker-compose up 
+        if: github.event_name == 'workflow_dispatch'
         run: |
            $path = "compose/docker-compose-monitoring - Copie.yml"
            (Get-Content $path) \ 
@@ -78,7 +89,7 @@ jobs:
     needs: [infrastructure]
     steps:
       - uses: actions/checkout@v4
-      - name: Create Application Contoso with Argocd avec namespace
+      - name: Create Application Contoso
         run: |
           docker compose -f ./compose/docker-compose-contoso.yml up -d
           
