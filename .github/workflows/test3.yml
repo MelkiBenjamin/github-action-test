@@ -16,13 +16,12 @@ jobs:
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
 
       steps:
-
       - name: Checkout
         uses: actions/checkout@v4.2.2
         with:
           ref: main
           sparse-checkout: | 
-            compose/docker-compose-monitoring.yml
+            compose
       - name: docker-compose methode 1   
         run: |
           $path = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
