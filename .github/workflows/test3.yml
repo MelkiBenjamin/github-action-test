@@ -16,14 +16,6 @@ jobs:
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
 
       steps:
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
-        with:
-          ref: main
-          sparse-checkout: | 
-            README.md
-            compose
-
       - name: ls
         run: ls
       - name: docker-compose methode 1   
