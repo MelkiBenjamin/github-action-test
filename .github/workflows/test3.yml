@@ -37,7 +37,6 @@ jobs:
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
-          cat ./compose/docker-compose-monitoring-dotnet.yml
 
       - name: netoyage job
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
