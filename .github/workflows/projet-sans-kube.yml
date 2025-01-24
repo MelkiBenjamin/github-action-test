@@ -53,43 +53,76 @@ jobs:
   monitoring:
     runs-on: self-hosted
     needs: [infrastructure]
+    env:
+      test: ls
+      tagcompose_grafana: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana)
+      tagcompose_prometheus: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus)
+      tagcompose_cadvisor: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor)
+      latestTag: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name)
+      latestTag_prometheus: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name)
+      latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
     steps:
       - uses: actions/checkout@v4.2.2
         with:
           ref: main
-          sparse-checkout: compose/docker-compose-monitoring.yml
-
-      - name: ls
-        run: ls 
-
-      - name: docker-compose up 
-        if: github.event_name == 'workflow_dispatch'
+          sparse-checkout: |
+            compose/docker-compose-monitoring.yml
+            compose/docker-compose-monitoring-get.yml
+            compose/docker-compose-monitoring-dotnet.yml
+          sparse-checkout-cone-mode: false
+      - run: ls
+      - name: docker-compose methode 1   
+        if: runner.os == 'Windows' 
         run: |
-           $path = "compose/docker-compose-monitoring - Copie.yml"
-           (Get-Content $path) \ 
-              -replace "$tagcompose","grafana/grafana:$latestTag" \ 
-              -replace "prom/prometheus:v2.48.0","prom/prometheus:v2.48.0" \
-              -replace "cadvisor:v0.47.2","cadvisor:v0.47.2"
-              | Set-Content $path
-           
-           $path2 = ".\Desktop\devops\github action\test github action\github-action-test\compose\docker-compose-monitoring33.yml"           
-           [System.IO.File]::WriteAllText($path2, ([System.IO.File]::ReadAllText($path2) \ 
-             -replace $tagcompose, 'grafana/grafana:$latestTag'
-             -replace prom/prometheus:v2.48.0, 'prom/prometheus:v2.48.0' \
-             -replace cadvisor:v0.47.2, 'cadvisor:v0.47.2'))
+          $path_origine = "./compose/docker-compose-monitoring-get.yml"
+          $path_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
+          ((Get-Content -Path "$path_origine") `
+          -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") `
+          -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
+          -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
+          | Set-Content -Path $path_destination
+
+      - name: docker-compose methhode 2
+        if: runner.os == 'Windows'
+        run: |
+          $path2_origine = "$pwd/compose/docker-compose-monitoring-dotnet.yml"
+          $path2_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotnet.yml"
+          [System.IO.File]::WriteAllText($path2_destination, ([System.IO.File]::ReadAllText($path2_origine) `
+          -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
+          -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
+          -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
+
+      - name: docker-compose methode 3
+        if: runner.os == 'linux'
+        run: |
+          $path3_origine = "./compose/docker-compose-monitoring-get.yml"
+          $path3_destination = "./compose/docker-compose-monitoring-get.yml"
+          sed -i "s/${{ env.tagcompose_grafana }}/grafana/grafana:${{ env.latestTag }}/g" $path3_destination
+          sed -i "s/${{ env.tagcompose_prometheus }}/prom/prometheus:${{ env.latestTag_prometheus }}/g" $path3_destination
+          sed -i "s/${{ env.tagcompose_cadvisor }}/gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}/g" $path3_destination
 
       - name: install apli monitoring prometheus grafana
-        run: |
-          docker compose -f ./compose/docker-compose-monitoring.yml up -d
+        uses: hoverkraft-tech/compose-action@v2.1.0
+        with:
+          compose-file: ./compose/docker-compose-monitoring.yml
+          up-flags: -d
+
+#      - name: install apli monitoring prometheus grafana
+#        run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
  
   contoso:
     runs-on: self-hosted
     needs: [infrastructure]
     steps:
-      - uses: actions/checkout@v4
-      - name: Create Application Contoso
-        run: |
-          docker compose -f ./compose/docker-compose-contoso.yml up -d
+      - uses: actions/checkout@v4.2.2
+        with:
+          ref: main
+          sparse-checkout: |
+            compose/docker-compose-contoso.yml
+          sparse-checkout-cone-mode: false
+          
+      - name: Create Application Contoso docker compose -f
+        uses: docker/compose-cli-action@v0.1.1
 
       - name : netoyage
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"

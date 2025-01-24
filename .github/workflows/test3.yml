@@ -14,7 +14,9 @@ jobs:
         latestTag: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name)
         latestTag_prometheus: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name)
         latestTag_cadvisor: $((Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39])
-
+      permissions:
+        contents: read
+        packages: none
       steps:
       - uses: actions/checkout@v4.2.2
         with:
@@ -23,6 +25,7 @@ jobs:
             compose/docker-compose-monitoring.yml
             compose/docker-compose-monitoring-get.yml
             compose/docker-compose-monitoring-dotnet.yml
+          persist-credentials: false
           sparse-checkout-cone-mode: false
       - run: ls
       - name: docker-compose methode 1   
