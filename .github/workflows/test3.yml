@@ -62,7 +62,7 @@ jobs:
         with:
           compose-file: ./compose/docker-compose-monitoring.yml
           up-flags: -d
-          down-flags: ""
+          down-flags: "--remove-orphans"
 
       - name: netoyage job
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
