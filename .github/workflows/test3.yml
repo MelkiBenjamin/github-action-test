@@ -62,6 +62,7 @@ jobs:
         with:
           compose-file: ./compose/docker-compose-monitoring.yml
           up-flags: -d
+          down-flags: ""
 
       - name: netoyage job
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
