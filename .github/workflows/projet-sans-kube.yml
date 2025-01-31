@@ -15,7 +15,7 @@ jobs:
           filters: | 
             store-front:
               - 'store-front/**'
-      - name: docker build
+      - name: docker build 
         if: steps.changes.outputs.store-front == 'true'
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test store-front
       - run: docker image ls
