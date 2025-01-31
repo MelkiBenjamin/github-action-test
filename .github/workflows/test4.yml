@@ -47,12 +47,19 @@ jobs:
   setup_k3s:
     runs-on: self-hosted
     steps:
-      - name: verif si container k3s-server existe sur win  
+      - name: verif si container k3s-server existe sur win 
+        if: runner.os == 'Windows' 
         run: docker ps -a | findstr k3s-server 
         id: k3s-server
         continue-on-error: true
 
-      - if: steps.k3s-server.outcome == 'failure'
+      - name: verif si container k3s-server existe sur linux
+        if: runner.os == 'Linux'
+        run: docker ps -a | grep k3s-server 
+        id: k3s-server1
+        continue-on-error: true
+
+      - if: steps.k3s-server.outcome == 'failure' || steps.k3s-server1.outcome == 'failure'
         name: setup k3s dans docker pour juste le server pas l'agent
         run: |
           docker network create k3s 

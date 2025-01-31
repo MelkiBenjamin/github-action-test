@@ -81,4 +81,3 @@ services:
 networks:
   reseau_contoso:
     driver: bridge
-

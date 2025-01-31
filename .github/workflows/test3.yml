@@ -1,7 +1,7 @@
 name: test g
 on:
-#  workflow_dispatch:
-  push:
+  workflow_dispatch:
+#  push:
 
 jobs:
     modif-image:
@@ -62,7 +62,6 @@ jobs:
         with:
           compose-file: ./compose/docker-compose-monitoring.yml
           up-flags: -d
-          down-flags: "--remove-orphans"
 
       - name: netoyage job
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
