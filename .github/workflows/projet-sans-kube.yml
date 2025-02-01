@@ -69,6 +69,11 @@ jobs:
             compose/docker-compose-monitoring.yml
             compose/docker-compose-monitoring-get.yml
             compose/docker-compose-monitoring-dotnet.yml
+            compose/prometheus.yml
+            compose/grafana.yml
+            compose/datasource.yml
+            compose/dashboards.yml
+            compose/dashboard2.json
           sparse-checkout-cone-mode: false
       - name: docker-compose methode 1   
         if: runner.os == 'Windows' 
