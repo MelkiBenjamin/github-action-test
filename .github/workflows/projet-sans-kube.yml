@@ -50,6 +50,15 @@ jobs:
       - name: docker compose version
         run: docker compose version
 
+      - uses: actions/checkout@v4.2.2
+        with:
+          ref: main
+          sparse-checkout: |
+            composdockere/docker-compose-monitoring.yml
+            compose/docker-compose-monitoring-get.yml
+            compose/docker-compose-monitoring-dotnet.yml
+          sparse-checkout-cone-mode: false
+
   monitoring:
     runs-on: self-hosted
     needs: [infrastructure]
@@ -66,7 +75,7 @@ jobs:
         with:
           ref: main
           sparse-checkout: |
-            compose/docker-compose-monitoring.yml
+            composdockere/docker-compose-monitoring.yml
             compose/docker-compose-monitoring-get.yml
             compose/docker-compose-monitoring-dotnet.yml
           sparse-checkout-cone-mode: false
@@ -119,6 +128,9 @@ jobs:
       - name: Create Application Contoso docker compose -f
         run: docker compose -f ./compose/docker-compose-contoso.yml up -d
 
+  netoyage:
+    runs-on: self-hosted
+    steps:
       - name : netoyage si windows
         if: runner.os == 'windows'
         run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
