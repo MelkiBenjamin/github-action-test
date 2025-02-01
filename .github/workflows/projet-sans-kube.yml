@@ -75,7 +75,7 @@ jobs:
             compose/dashboards.yml
             compose/dashboard2.json
           sparse-checkout-cone-mode: false
-      - name: docker-compose methode 1   
+      - name: docker-compose methode 1    
         if: runner.os == 'Windows' 
         run: |
           $path_origine = "./compose/docker-compose-monitoring-get.yml"
@@ -126,6 +126,7 @@ jobs:
 
   netoyage:
     runs-on: self-hosted
+    needs: [monitoring, contoso]
     steps:
       - name : netoyage si windows
         if: runner.os == 'windows'

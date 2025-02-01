@@ -80,7 +80,7 @@ services:
       - alpine
       - prometheus
     ports:
-      - 443:10
+      - 10:10
     networks:
       - backend_services
 networks:
