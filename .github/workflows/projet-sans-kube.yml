@@ -129,8 +129,8 @@ jobs:
       - name: Create Application Contoso docker compose -f
         run: docker compose -f ./compose/docker-compose-contoso.yml up -d
 
-      - name: netoyage job contoso
+      - name: Remove File
         if: always()
-        run: |
-          Remove-Item -Recurse -Force "${{ github.workspace }}\compose/docker-compose-contoso.yml"
-
+        uses: Lyoko-Jeremie/js-rm-github-action@v1.2.1
+        with:
+            path: '${{ github.workspace }}/compose/docker-compose-contoso.yml'
