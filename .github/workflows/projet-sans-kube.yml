@@ -84,7 +84,7 @@ jobs:
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
-          | Set-Content $path_destination
+          | sc $path_destination
 
       - name: docker-compose methhode 2
         if: runner.os == 'Windows'
