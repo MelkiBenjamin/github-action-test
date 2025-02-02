@@ -110,19 +110,10 @@ jobs:
       - name: install apli monitoring prometheus grafana
         run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
 
-      - name: Remove File
+      - name: netoyage job monitoring
         if: always()
-        uses: Lyoko-Jeremie/js-rm-github-action@master
-        with:
-          path: |
-            ${{ github.workspace }}/compose/docker-compose-monitoring.yml
-            ${{ github.workspace }}/compose/docker-compose-monitoring-get.yml
-            ${{ github.workspace }}/compose/docker-compose-monitoring-dotnet.yml
-            ${{ github.workspace }}/compose/prometheus.yml
-            ${{ github.workspace }}/compose/grafana.yml
-            ${{ github.workspace }}/compose/datasource.yml
-            ${{ github.workspace }}/compose/dashboards.yml
-            ${{ github.workspace }}/compose/dashboard2.json
+        run: |
+          rm -r -Fo "${{ github.workspace }}\*" -Exclude "compose/docker-compose-contoso.yml"
 
   contoso:
     runs-on: self-hosted
