@@ -109,7 +109,12 @@ jobs:
 
       - name: install apli monitoring prometheus grafana
         run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
- 
+
+      - name: netoyage job monitoring
+        if: always()
+        run: |
+          Remove-Item -Recurse -Force "${{ github.workspace }}\*" -Exclude "compose/docker-compose-contoso.yml"
+
   contoso:
     runs-on: self-hosted
     needs: [infrastructure]
@@ -124,14 +129,16 @@ jobs:
       - name: Create Application Contoso docker compose -f
         run: docker compose -f ./compose/docker-compose-contoso.yml up -d
 
-  netoyage:
-    runs-on: self-hosted
-    needs: [monitoring, contoso]
-    steps:
-      - name : netoyage si windows
-        if: runner.os == 'windows'
-        run: Remove-Item -Recurse -Force "${{ github.workspace }}\*"
-          
-      - name : netoyage si linux
-        if: runner.os == 'linux'
-        run: rm -rf "${{ github.workspace }}\*"
+      - name: netoyage job contoso
+        if: always()
+        run: |
+          Remove-Item -Recurse -Force "${{ github.workspace }}\*" 
+          -Exclude "compose/docker-compose-monitoring.yml"
+          -Exclude "compose/docker-compose-monitoring-get.yml"
+          -Exclude "compose/docker-compose-monitoring-dotnet.yml"
+          -Exclude "compose/prometheus.yml"
+          -Exclude "compose/grafana.yml"
+          -Exclude "compose/datasource.yml"
+          -Exclude "compose/dashboards.yml"
+          -Exclude "compose/dashboard2.json"
+
