@@ -80,17 +80,17 @@ jobs:
         run: |
           $path_origine = "./compose/docker-compose-monitoring-get.yml"
           $path_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-get.yml"
-          ((Get-Content -Path "$path_origine") `
+          ((cat "$path_origine") `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}") `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
-          | Set-Content -Path $path_destination
+          | Set-Content $path_destination
 
       - name: docker-compose methhode 2
         if: runner.os == 'Windows'
         run: |
           $path2_origine = "$pwd/compose/docker-compose-monitoring-dotnet.yml"
-          $path2_destination = "$pwd/compose/docker-compose-monitoring-dotne.yml"
+          $path2_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotne.yml"
           [System.IO.File]::WriteAllText($path2_destination, ([System.IO.File]::ReadAllText($path2_origine) `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
@@ -110,10 +110,19 @@ jobs:
       - name: install apli monitoring prometheus grafana
         run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
 
-      - name: netoyage job monitoring
+      - name: Remove File
         if: always()
-        run: |
-          Remove-Item -Recurse -Force "${{ github.workspace }}\*" -Exclude "compose/docker-compose-contoso.yml"
+        uses: Lyoko-Jeremie/js-rm-github-action@master
+        with:
+          path: |
+            ${{ github.workspace }}/compose/docker-compose-monitoring.yml
+            ${{ github.workspace }}/compose/docker-compose-monitoring-get.yml
+            ${{ github.workspace }}/compose/docker-compose-monitoring-dotnet.yml
+            ${{ github.workspace }}/compose/prometheus.yml
+            ${{ github.workspace }}/compose/grafana.yml
+            ${{ github.workspace }}/compose/datasource.yml
+            ${{ github.workspace }}/compose/dashboards.yml
+            ${{ github.workspace }}/compose/dashboard2.json
 
   contoso:
     runs-on: self-hosted
