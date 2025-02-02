@@ -127,7 +127,7 @@ jobs:
           sparse-checkout-cone-mode: false
           
       - name: Create Application Contoso docker compose -f
-        run: docker compose -f ./compose/docker-compose-contoso.yml up -d
+        run: docker compose -f ./compose/docker-compose-contoso.yml up -d 
 
       - name: Remove File
         if: always()
