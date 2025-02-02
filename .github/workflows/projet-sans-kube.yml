@@ -90,7 +90,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           $path2_origine = "$pwd/compose/docker-compose-monitoring-dotnet.yml"
-          $path2_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotne.yml"
+          $path2_destination = "C:/Users/mbenj/Desktop/devops/github action/test github action/github-action-test/compose/docker-compose-monitoring-dotnet.yml"
           [System.IO.File]::WriteAllText($path2_destination, ([System.IO.File]::ReadAllText($path2_origine) `
           -replace "${{ env.tagcompose_grafana }}", "grafana/grafana:${{ env.latestTag }}" `
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
