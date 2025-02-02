@@ -132,13 +132,13 @@ jobs:
       - name: netoyage job contoso
         if: always()
         run: |
-          Remove-Item -Recurse -Force "${{ github.workspace }}\*" 
-          -Exclude "compose/docker-compose-monitoring.yml"
-          -Exclude "compose/docker-compose-monitoring-get.yml"
-          -Exclude "compose/docker-compose-monitoring-dotnet.yml"
-          -Exclude "compose/prometheus.yml"
-          -Exclude "compose/grafana.yml"
-          -Exclude "compose/datasource.yml"
-          -Exclude "compose/dashboards.yml"
-          -Exclude "compose/dashboard2.json"
+          Remove-Item -Recurse -Force "${{ github.workspace }}\*" `
+          -Exclude "compose/docker-compose-monitoring.yml" `
+          -Exclude "compose/docker-compose-monitoring-get.yml" `
+          -Exclude "compose/docker-compose-monitoring-dotnet.yml" `
+          -Exclude "compose/prometheus.yml" `
+          -Exclude "compose/grafana.yml" `
+          -Exclude "compose/datasource.yml" `
+          -Exclude "compose/dashboards.yml" `
+          -Exclude "compose/dashboard2.json" `
 
