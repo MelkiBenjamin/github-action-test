@@ -79,6 +79,7 @@ jobs:
             compose/datasource.yml
             compose/dashboards.yml
             compose/dashboard2.json
+            compose/docker-compose-monitoring-action.yml
           sparse-checkout-cone-mode: false
 
       - name: docker compose methode 1      
