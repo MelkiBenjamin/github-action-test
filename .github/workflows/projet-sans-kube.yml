@@ -122,10 +122,7 @@ jobs:
       - name: install apli monitoring prometheus grafana
         run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
 
-      - name: netoyage job monitoring
-        if: always()
-        run: |      
-          rm -r -Fo "${{ github.workspace }}\*" -Exclude "compose/docker-compose-contoso.yml"
+
 
   contoso:
     runs-on: self-hosted
