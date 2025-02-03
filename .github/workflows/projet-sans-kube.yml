@@ -1,7 +1,7 @@
 name: projet contoso local sans kubernetes
 on: 
-  push:
-#  workflow_dispatch:
+#  push:
+  workflow_dispatch:
 
 jobs:
   store-front:
@@ -45,15 +45,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - name : docker version
-        if: runner.os == 'linux'
         run: docker --version
 
       - name: docker compose version
-        if: runner.os == 'linux'
         run: docker compose version
-
-      - name: test docker compose
-        run: ls 
 
   monitoring:
     runs-on: self-hosted
@@ -92,16 +87,6 @@ jobs:
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
           | sc $path_destination
-
-      - name: creation variable dans powershell
-        run: |
-          
-          $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
-          $tagcompose_prometheus = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
-          $tagcompose_cadvisor = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor
-          $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
-          $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
-          $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
 
       - name: methode action github 2
         uses: flcdrg/replace-multiple-action@v2.0.319
@@ -146,13 +131,11 @@ jobs:
           $path3_destination
 
       - name: install apli monitoring prometheus grafana
-        if: github.event_name == 'workflow_dispatch'
         run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
 
   contoso:
     runs-on: self-hosted
     needs: [infrastructure]
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4.2.2
         with:
