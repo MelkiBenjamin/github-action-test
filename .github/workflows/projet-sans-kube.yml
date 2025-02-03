@@ -93,14 +93,20 @@ jobs:
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
           | sc $path_destination
 
+      - name: creation variable dans powershell
+        run: |
+          $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
+          $tagcompose_prometheus = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
+          $tagcompose_cadvisor = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor
+          $latestTag = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name
+          $latestTag_prometheus = (Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/prom/prometheus/tags/").results[5].name
+          $latestTag_cadvisor = (Invoke-RestMethod -Uri "https://gcr.io/v2/cadvisor/cadvisor/tags/list").tags[39]
+
       - name: methode action github 2
         uses: flcdrg/replace-multiple-action@v2.0.319
         with:
           files: ./compose/docker-compose-monitoring-action.yml
-          find: '[{ "find": "${{ env.tagcompose_grafana }}", "replace": "11.5.1" }]'
-        env:
-          env.tagcompose_grafana: ${{ env.tagcompose_grafana }}
-          latestTag: ${{ env.latestTag }}
+          find: '[{ "find": "$tagcompose_grafana", "replace": "11.5.1" }]'
           
       - name: docker compose methode 2
         if: runner.os == 'Windows'
