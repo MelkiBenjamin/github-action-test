@@ -122,8 +122,8 @@ jobs:
         with:
           files: './compose/docker-compose-monitoring-action.yml'
           search-text: "${{ env.tagcompose_grafana }}"
-          replacement-text: "grafana/grafana:${{ env.latestTag }}
-          
+          replacement-text: "grafana/grafana:${{ env.latestTag }}"       
+             
       - name: docker compose methode 2
         if: runner.os == 'Windows'
         run: |
