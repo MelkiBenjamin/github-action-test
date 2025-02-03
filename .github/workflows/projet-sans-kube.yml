@@ -95,6 +95,7 @@ jobs:
 
       - name: creation variable dans powershell
         run: |
+          
           $tagcompose_grafana = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana
           $tagcompose_prometheus = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus
           $tagcompose_cadvisor = docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor
@@ -107,6 +108,16 @@ jobs:
         with:
           files: ./compose/docker-compose-monitoring-action.yml
           find: '[{ "find": "$tagcompose_grafana", "replace": "11.5.1" }]'
+
+      - uses: htsnvhoang/find-replace-multiple@master
+        with:
+          finds: |
+            ${{ env.tagcompose_grafana }},
+            ${{ env.tagcompose_prometheus }}, 
+          replaces: |
+            grafana/grafana:${{ env.latestTag }},
+            prom/prometheus:${{ env.latestTag_prometheus }}
+          include: "./compose/docker-compose-monitoring-action.yml"
           
       - name: docker compose methode 2
         if: runner.os == 'Windows'
