@@ -116,6 +116,13 @@ jobs:
           replaces: |
             grafana/grafana:${{ env.latestTag }}
           include: "./compose/docker-compose-monitoring-action.yml"
+
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "${{ env.tagcompose_grafana }}"
+          replace: "grafana/grafana:${{ env.latestTag }}"
+          include: "./compose/docker-compose-monitoring-action.yml"
           
       - name: docker compose methode 2
         if: runner.os == 'Windows'
