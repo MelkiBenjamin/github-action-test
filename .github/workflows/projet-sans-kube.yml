@@ -43,13 +43,17 @@ jobs:
 
   infrastructure:
     runs-on: self-hosted
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name : docker version
+        if: runner.os == 'linux'
         run: docker --version
 
       - name: docker compose version
+        if: runner.os == 'linux'
         run: docker compose version
+
+      - name: test docker compose
+        run: ls 
 
   monitoring:
     runs-on: self-hosted
