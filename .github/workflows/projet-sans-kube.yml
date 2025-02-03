@@ -97,7 +97,7 @@ jobs:
         uses: flcdrg/replace-multiple-action@v2.0.319
         with:
           files: ./compose/docker-compose-monitoring-action.yml
-          find: '[{ "find": "10.2.2", "replace": "11.5.1" }]'
+          find: '[{ "find": "${{ env.tagcompose_grafana }}", "replace": "11.5.1" }]'
           
       - name: docker compose methode 2
         if: runner.os == 'Windows'
@@ -121,6 +121,7 @@ jobs:
           $path3_destination
 
       - name: install apli monitoring prometheus grafana
+        if: github.event_name == 'workflow_dispatch'
         run: docker compose -f ./compose/docker-compose-monitoring.yml up -d
 
   contoso:
