@@ -1,7 +1,7 @@
 name: projet contoso local sans kubernetes
 on: 
   push:
-  workflow_dispatch:
+#  workflow_dispatch:
 
 jobs:
   store-front:
@@ -43,6 +43,7 @@ jobs:
 
   infrastructure:
     runs-on: self-hosted
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name : docker version
         run: docker --version
@@ -75,7 +76,8 @@ jobs:
             compose/dashboards.yml
             compose/dashboard2.json
           sparse-checkout-cone-mode: false
-      - name: docker-compose methode 1    
+
+      - name: docker compose methode 1      
         if: runner.os == 'Windows' 
         run: |
           $path_origine = "./compose/docker-compose-monitoring-get.yml"
@@ -86,7 +88,13 @@ jobs:
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" `
           | sc $path_destination
 
-      - name: docker-compose methhode 2
+      - name: methode action github 2
+        uses: flcdrg/replace-multiple-action@v2.0.319
+        with:
+          files: ./compose/docker-compose-monitoring-action.yml
+          find: '[{ "find": "${{ env.tagcompose_grafana }}", "replace": "grafana/grafana:${{ env.latestTag }}" }, { "find": "${{ env.tagcompose_prometheus }}", "replace": "prom/prometheus:${{ env.latestTag_prometheus }}" }, { "find": "${{ env.tagcompose_cadvisor }}", "replace": "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}" }]'
+          
+      - name: docker compose methode 2
         if: runner.os == 'Windows'
         run: |
           $path2_origine = "$pwd/compose/docker-compose-monitoring-dotnet.yml"
@@ -96,7 +104,7 @@ jobs:
           -replace "${{ env.tagcompose_prometheus }}", "prom/prometheus:${{ env.latestTag_prometheus }}" `
           -replace "${{ env.tagcompose_cadvisor }}", "gcr.io/cadvisor/cadvisor:${{ env.latestTag_cadvisor }}"))
 
-      - name: docker-compose methode 3
+      - name: docker compose methode 3
         if: runner.os == 'linux'
         run: |
           path3_origine="./compose/docker-compose-monitoring-get.yml"
@@ -112,7 +120,7 @@ jobs:
 
       - name: netoyage job monitoring
         if: always()
-        run: |
+        run: |      
           rm -r -Fo "${{ github.workspace }}\*" -Exclude "compose/docker-compose-contoso.yml"
 
   contoso:
