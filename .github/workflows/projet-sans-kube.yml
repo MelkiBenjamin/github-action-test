@@ -97,7 +97,7 @@ jobs:
         uses: flcdrg/replace-multiple-action@v2.0.319
         with:
           files: ./compose/docker-compose-monitoring-action.yml
-          find: '[{ "find": "${{ env.tagcompose_grafana }}", "replace": "11.5.1" }]'
+          find: '[{ "find": "10.2.2", "replace": "${{ env.latestTag }}" }]'
           
       - name: docker compose methode 2
         if: runner.os == 'Windows'
