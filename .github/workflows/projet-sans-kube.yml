@@ -60,7 +60,7 @@ jobs:
     needs: [infrastructure]
     env:
       test: ls
-      tagcompose_grafana: 10.2.2
+      tagcompose_grafana: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana)
       tagcompose_prometheus: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr prometheus)
       tagcompose_cadvisor: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr cadvisor)
       latestTag: $((Invoke-RestMethod -Uri "https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/").results[5].name)
@@ -98,6 +98,9 @@ jobs:
         with:
           files: ./compose/docker-compose-monitoring-action.yml
           find: '[{ "find": "${{ env.tagcompose_grafana }}", "replace": "11.5.1" }]'
+        env:
+          env.tagcompose_grafana: ${{ env.tagcompose_grafana }}
+          latestTag: ${{ env.latestTag }}
           
       - name: docker compose methode 2
         if: runner.os == 'Windows'
