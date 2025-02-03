@@ -112,10 +112,10 @@ jobs:
       - uses: htsnvhoang/find-replace-multiple@master
         with:
           finds: |
-            ${{ env.tagcompose_grafana }},
-            ${{ env.tagcompose_prometheus }}, 
+            "${{ env.tagcompose_grafana }}",
+            ${{ env.tagcompose_prometheus }}
           replaces: |
-            grafana/grafana:${{ env.latestTag }},
+            "grafana/grafana:${{ env.latestTag }}",
             prom/prometheus:${{ env.latestTag_prometheus }}
           include: "./compose/docker-compose-monitoring-action.yml"
           
