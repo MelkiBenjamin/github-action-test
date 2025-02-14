@@ -211,6 +211,15 @@ jobs:
 #      - name: port-forward argocd
 #        run: ${{ env.dex }} 'kubectl port-forward svc/argocd-server -n argocd 8080:443 &'
 
+      - name: wget password
+        run: ${{ env.dex }} 'wget https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/argocd/password-argocd.yml'
+
+      - name: modif mot de passe 
+        run: ${{ env.dex }} 'sed -i "s/"\"/"${{ secrets.ARGOCD }}\"/g" password-argocd.yml'
+
+      - name: kubectl aply password
+        run: ${{ env.dex }} 'kubectl apply -f password-argocd.yml'
+
       - name: connexion argocd
 #        if: steps.argocd-server.outcome == 'failure'
         if: github.event_name == 'workflow_dispatch'
@@ -230,21 +239,9 @@ jobs:
   contoso:
     runs-on: self-hosted
     needs: [kubectl, argocd]
-    steps:
-      - name: recuperer fichier contoso.yml
-        run: |
-          ${{ env.dex }} 'wget https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/argocd/contoso.yml'
-
-#     - name: Create Contoso namespace 
-#        run: |
-#          ${{ env.dex }} 'kubectl get namespace contoso || kubectl create namespace contoso'
-              
+    steps:              
       - name: Create Application Contoso with Argocd avec namespace 
         run: |
-          ${{ env.dex }} 'kubectl apply -f contoso.yml'
+          ${{ env.dex }} 'kubectl apply -f https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/argocd/contoso.yml'
 #          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create contoso --repo https://github.com/MelkiBenjamin/deploiement-apli-kubernetes-argocd --path ecommerce --dest-server https://kubernetes.default.svc --dest-namespace contoso --sync-policy automated --auto-prune'
 
-#      - name: deployement kube-prometheus-stack dans helm artifacthub
-#        run: |
-#          ${{ env.dex }} 'kubectl get namespace monitoring || kubectl create namespace monitoring'
-#          ${{ env.dex }} 'argocd --port-forward --port-forward-namespace argocd app create kube-prometheus-stack --repo https://prometheus-community.github.io/helm-charts --helm-chart kube-prometheus-stack --revision 57.0.3 --dest-server https://kubernetes.default.svc --dest-namespace monitoring'

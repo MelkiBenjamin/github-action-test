@@ -1,0 +1,135 @@
+name: contoso vm
+on: 
+  push:
+#  workflow_dispatch:
+
+jobs:
+  store-front:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3.0.2
+        id: changes 
+        with: 
+          filters: | 
+            store-front:
+              - 'store-front/**'
+      - name: docker build
+        if: steps.changes.outputs.store-front == 'true'
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test store-front
+      - run: docker image ls
+      - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - if: steps.changes.outputs.store-front == 'true'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/store-front-test
+
+  product-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - uses: dorny/paths-filter@v3.0.2
+        id: changes 
+        with: 
+          filters: | 
+            product-service:
+              - 'product-service/**'
+      - name: docker build
+        if: steps.changes.outputs.product-service == 'true'
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2 product-service
+      - run: docker image ls
+      - run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - if: steps.changes.outputs.product-service == 'true'
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/product-service-test2
+
+  infrastructure-terraform:
+    runs-on: self-hosted
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - nmae : checkout
+        uses: actions/checkout@v4.1.7
+
+      - name: terraform init
+        run: terraform init
+
+      - name: terraform plan
+        run: terraform plan
+
+      - name: terraform apply
+        run: terraform apply -auto-approve
+
+  configure-infra:
+    runs-on: [self-hosted, vm]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.1.7
+
+      - name: intsall ansible
+        run: sudo apt-get install ansible
+
+      - name: ansible-playbook
+        run: ansible-playbook -i inventory playbook.yml
+
+      - name: run kubectl
+        run: kubectl get pods
+
+  k3s-install:
+    runs-on: self-hosted, vm
+    steps:
+      - name: install k3s
+        run: curl -sfL https://get.k3s.io | sh -
+      
+      - name: kubectl
+        run: sudo k3s kubectl get node 
+
+
+  monitoring:
+    runs-on: self-hosted, vm
+    needs: k3s-install
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: installe helm 
+        uses: azure/setup-helm@v4.2.0
+
+      - name: install helm apli monitoring 
+#        if: github.event_name == 'workflow_dispatch'
+        run: >
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
+          helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set grafana.adminPassword=${{ secrets.ARGOCD }}
+       
+  argocd:
+    runs-on: self-hosted, linux
+    needs: k3s-install
+    steps:
+      - name: create namespace argocd
+        run: |
+          kubectl get namespace argocd || kubectl create namespace argocd
+
+      - name: deployer argocd
+        run: |
+          kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+      - name: attendre argocd 
+        run: |
+          kubectl wait --for=condition=ready pod --all -n argocd --timeout=25m
+#          kubectl wait --for=condition=available deployment --all -n argocd --timeout=25m
+
+#      - name: load balancing
+#        run: |
+#          echo '{"spec": {"type": "LoadBalancer"}}' > patch.json
+#          kubectl patch svc argocd-server -n argocd --type merge --patch "$(cat patch.json)
+
+#      - name: port-forward argocd
+#        run: kubectl port-forward svc/argocd-server -n argocd 8080:443 &
+
+  contoso:
+    runs-on: self-hosted, linux
+    needs: [argocd]
+    steps:
+      - name: recuperer fichier contoso.yml
+        run: |
+          wget https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/argocd/contoso.yml
+              
+      - name: Create Application Contoso with Argocd avec namespace 
+        run: |
+          kubectl apply -f contoso.yml
