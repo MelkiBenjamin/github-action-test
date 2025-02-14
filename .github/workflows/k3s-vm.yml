@@ -99,7 +99,8 @@ jobs:
     runs-on: [self-hosted, vm]
     steps:
       - name: install k3s
-        run: curl -sfL https://get.k3s.io | sh
+        run: |
+          echo {{ secrets.sudo_password }} | sudo -S curl -sfL https://get.k3s.io | sh 
       
       - name: kubectl
         run: sudo k3s kubectl get node
@@ -156,10 +157,9 @@ jobs:
     runs-on: [self-hosted, vm]
     needs: [argocd]
     steps:
-      - name: recuperer fichier contoso.yml
-        run: |
-          wget https://github.com/MelkiBenjamin/github-action-test/blob/main/argocd/contoso.yml -O contoso.yml
-          
+      - name: recuperer fichier contoso.yml avec checkout
+        uses: actions/checkout@v4.1.7
+
       - name: Create Application Contoso with Argocd avec namespace 
         run: |
           kubectl apply -f contoso.yml
