@@ -74,7 +74,7 @@ jobs:
         run: kubectl get pods
 
   k3s-install:
-    runs-on: self-hosted, vm
+    runs-on: [self-hosted, vm]
     steps:
       - name: install k3s
         run: curl -sfL https://get.k3s.io | sh -
