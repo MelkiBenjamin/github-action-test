@@ -100,7 +100,7 @@ jobs:
     steps:
       - name: install k3s
         run: |
-          echo {{ secrets.sudo_password }} | sudo -S curl -sfL https://get.k3s.io | sh 
+          echo {{ secrets.sudo }} | sudo -S curl -sfL https://get.k3s.io | sh 
       
       - name: kubectl
         run: sudo k3s kubectl get node
