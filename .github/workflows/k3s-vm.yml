@@ -73,18 +73,49 @@ jobs:
       - name: run kubectl
         run: kubectl get pods
 
+
+  infra-test:
+    runs-on: [self-hosted, vm]
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4.1.7
+
+      - name: run kubectl
+        if: github.event_name == 'workflow_dispatch'
+        #creer vm avec virtualbox avec image ubuntu
+        run: | 
+          vboxmanage createvm --name k3s-vm --ostype Ubuntu_64 --register --memory 2048 --cpus 2 --vram 16 --imagefile k3s-vm.vdi --format VDI --size 10240 --basefolder /home/benjamin/VirtualBox\ VMs
+            vboxmanage storagectl k3s-vm --name "SATA Controller" --add sata --controller IntelAhci
+            vboxmanage storageattach k3s-vm --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium k3s-vm.vdi
+            vboxmanage storageattach k3s-vm --storagectl "SATA Controller" --port 1 --device 0 --type dvddrive --medium /home/benjamin/Downloads/ubuntu-20.04.3-live-server-amd64.iso
+            vboxmanage modifyvm k3s-vm --boot1 dvd --boot2 disk --boot3 none --boot4 none
+            vboxmanage startvm k3s-vm --type headless
+
+      - name: run kubectl
+        run: ssh
+
   k3s-install:
     runs-on: [self-hosted, vm]
     steps:
       - name: install k3s
-        run: curl -sfL https://get.k3s.io | sh -
+        run: curl -sfL https://get.k3s.io | sh
       
       - name: kubectl
-        run: sudo k3s kubectl get node 
+        run: sudo k3s kubectl get node
 
+      - name: passer sans sudo
+        run: |
+          mkdir $HOME/.kube
+          sudo k3s kubectl config view --raw > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+#          sudo install -D -o $(whoami) -g $(whoami) -m 600 /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
 
+      - name: test sans sudo
+        run: k3s kubectl get node
+          
   monitoring:
-    runs-on: self-hosted, vm
+    runs-on: [self-hosted, vm]
     needs: k3s-install
     if: github.event_name == 'workflow_dispatch'
     steps:
@@ -96,9 +127,9 @@ jobs:
         run: >
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
           helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set grafana.adminPassword=${{ secrets.ARGOCD }}
-       
+          
   argocd:
-    runs-on: self-hosted, linux
+    runs-on: [self-hosted, vm]
     needs: k3s-install
     steps:
       - name: create namespace argocd
@@ -123,7 +154,7 @@ jobs:
 #        run: kubectl port-forward svc/argocd-server -n argocd 8080:443 &
 
   contoso:
-    runs-on: self-hosted, linux
+    runs-on: [self-hosted, vm]
     needs: [argocd]
     steps:
       - name: recuperer fichier contoso.yml
