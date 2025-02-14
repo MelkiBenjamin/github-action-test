@@ -106,7 +106,7 @@ jobs:
 
       - name: passer sans sudo
         run: |
-          mkdir $HOME/.kube
+          mkdir -p $HOME/.kube
           sudo k3s kubectl config view --raw > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 #          sudo install -D -o $(whoami) -g $(whoami) -m 600 /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
@@ -117,7 +117,6 @@ jobs:
   monitoring:
     runs-on: [self-hosted, vm]
     needs: k3s-install
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: installe helm 
         uses: azure/setup-helm@v4.2.0
@@ -159,8 +158,8 @@ jobs:
     steps:
       - name: recuperer fichier contoso.yml
         run: |
-          wget https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/argocd/contoso.yml
-              
+          wget https://github.com/MelkiBenjamin/github-action-test/blob/main/argocd/contoso.yml -O contoso.yml
+          
       - name: Create Application Contoso with Argocd avec namespace 
         run: |
           kubectl apply -f contoso.yml
