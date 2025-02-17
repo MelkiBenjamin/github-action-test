@@ -82,7 +82,7 @@ jobs:
         run: VBoxManage list vms | Select-String -Pattern k3s-vm
 
       - name: creer vm avec virtualbox
-        if: steps.vm.outputs.vm == null
+        if: steps.vm.outputs.vm == 'false'
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
@@ -103,20 +103,19 @@ jobs:
         run: |  
           VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/
           VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
-        #  ssh-keyscan -H $ip >> ~/.ssh/known_hosts
+       #   ssh-keyscan -H $ip >> ~/.ssh/known_hosts -o StrictHostKeyChecking=no -oke
 
       - name: voir si le runner est installé
         id: runner
-        run: ssh test@$ip 'ls /home/test/actions-runner' || echo "runner not installed"
+        run: ssh test@$ip 'ls /home/test/actions-runner' || echo "runner not installed" -o StrictHostKeyChecking=accept-new
 
       - name: install runner github action  
         if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
-          ssh test@$ip 'mkdir -p /home/test/actions-runner'
+          ssh test@$ip 'mkdir -p /home/test/actions-runner' 
           ssh test@$ip 'curl -o actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
-          ssh test@$ip 'tar xzf ./actions-runner-linux-x64-2.322.0.tar.gz'
-          ssh test@$ip './config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMHZD7AEG553MMLRUALHWL3C4 --tags vm --unattended'
-          ssh test@$ip 'systemctl enable actions-runner.service'
+          ssh test@$ip 'tar xzf ./actions-runner-linux-x64-2.322.0.tar.gz' 
+          ssh test@$ip './config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMHZD7AEG553MMLRUALHWL3C4 --tags vm --unattended' 
           ssh test@$ip 'systemctl start actions-runner.service'
           ssh test@$ip 'systemctl status actions-runner.service'
                   
