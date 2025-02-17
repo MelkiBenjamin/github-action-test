@@ -108,23 +108,23 @@ jobs:
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }  
           echo $ip
 
+      - name: îp de la vm
+        run: echo $ip
+
       - name: attendre que la vm soit prête
         run: sleep 130
-
-#      - name: copier la clé ssh
-#        run: |
-#          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/ --verbose
-#          VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys" --verbose
-       #   ssh-keyscan -H $ip >> ~/.ssh/known_hosts -o StrictHostKeyChecking=no -oke
 
       - name: voir si le runner est installé
         id: runner
         run: |
+          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] }  
+          echo $ip
           ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner || echo "runner not installed"'
 
       - name: install runner github action   
         if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
+          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
           ssh test@$ip 'mkdir -p ./actions-runner' 
           ssh test@$ip 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$ip 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner' 
