@@ -82,7 +82,7 @@ jobs:
         run: VBoxManage list vms | Select-String -Pattern k3s-vm
 
       - name: creer vm avec virtualbox avec image ubuntu
-        if: 
+        if: steps.vm.outputs.vm != 'null'
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64 --basefolder "C:\Users\mbenj\VirtualBox VMs" 
@@ -95,6 +95,7 @@ jobs:
 #         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
           
       - name : recuperer ip de la vm 
+        if: github.event_name == 'workflow_dispatch'
         run: |          
           sleep 130
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
@@ -109,30 +110,36 @@ jobs:
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }  
           echo $ip
 
-      - name: copier la clé ssh
-        run: |
-          echo 'copie de la clé ssh1'
-          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/ --verbose
-          echo 'copie de la clé ssh2'
-          VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys" --verbose
+      - name: attendre que la vm soit prête
+        if: github.event_name == 'workflow_dispatch'
+        run: sleep 130
+
+      - name: test ping
+        run: ping $ip
+
+#      - name: copier la clé ssh
+#        run: |
+#          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/ --verbose
+#          VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys" --verbose
        #   ssh-keyscan -H $ip >> ~/.ssh/known_hosts -o StrictHostKeyChecking=no -oke
 
       - name: voir si le runner est installé
         id: runner
-        run: ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner | echo "runner not installed"'
+        run: |
+          set -x
+          ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner || echo "runner not installed"'
 
       - name: install runner github action   
         if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
-          ssh test@$ip 'mkdir -p /home/test/actions-runner' 
-          ssh test@$ip 'curl -o actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz
-          ssh test@$ip 'tar xzf ./actions-runner-linux-x64-2.322.0.tar.gz' 
-          ssh test@$ip './config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --tags vm --unattended' 
-          ssh test@$ip 'systemctl start actions-runner.service'
-          ssh test@$ip 'systemctl status actions-runner.service'
+          ssh test@$ip 'mkdir -p ./actions-runner' 
+          ssh test@$ip 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
+          ssh test@$ip 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner' 
+          ssh test@$ip './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --unattended' 
+          ssh test@$ip './actions-runner/run.sh &'
                   
   k3s-install:
-    runs-on: [self-hosted, vm]
+    runs-on: [self-hosted, linux]
     needs: creer-runner
     steps:
       - name: install k3s
@@ -153,7 +160,7 @@ jobs:
         run: k3s kubectl get node
           
   monitoring:
-    runs-on: [self-hosted, vm]
+    runs-on: [self-hosted, linux]
     needs: contoso
     steps:
       - name: installe helm 
@@ -166,7 +173,7 @@ jobs:
           helm upgrade --install my-kube-prometheus-stack prometheus-community/kube-prometheus-stack --version 57.0.3 -n monitoring --create-namespace --timeout=35m --set grafana.adminPassword=${{ secrets.ARGOCD }}
           
   argocd:
-    runs-on: [self-hosted, vm]
+    runs-on: [self-hosted, linux]
     needs: k3s-install
     steps:
       - name: create namespace argocd
@@ -191,7 +198,7 @@ jobs:
 #        run: kubectl port-forward svc/argocd-server -n argocd 8080:443 &
 
   contoso:
-    runs-on: [self-hosted, vm]
+    runs-on: [self-hosted, linux]
     needs: [argocd]
     steps:
       - name: recuperer fichier contoso.yml avec checkout
