@@ -82,8 +82,6 @@ jobs:
         run: VBoxManage list vms | Select-String -Pattern k3s-vm
 
       - name: creer vm avec virtualbox avec image ubuntu
-        if: github.event_name == 'workflow_dispatch'
-    #    if: steps.vm.outputs.vm != '"k3s-vm" {}'
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64 --basefolder "C:\Users\mbenj\VirtualBox VMs" 
@@ -96,7 +94,6 @@ jobs:
 #         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
           
       - name : recuperer ip de la vm 
-        if: github.event_name == 'workflow_dispatch'
         run: |          
           sleep 130
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
@@ -112,7 +109,6 @@ jobs:
           echo $ip
 
       - name: attendre que la vm soit prête
-        if: github.event_name == 'workflow_dispatch'
         run: sleep 130
 
       - name: test ping
