@@ -77,8 +77,7 @@ jobs:
   infra-test:
     runs-on: [self-hosted]
     steps:
-      - name: run kubectl
-        if: github.event_name == 'workflow_dispatch'
+      - name: creer vm avec virtualbox
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
