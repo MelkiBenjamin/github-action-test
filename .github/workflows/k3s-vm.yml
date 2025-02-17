@@ -96,7 +96,7 @@ jobs:
           
       - name : recuperer ip de la vm
         run: |
-          sleep 80
+          sleep 120
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
           
       - name: ssh sur la vm
@@ -116,7 +116,9 @@ jobs:
           ssh test@$ip 'curl -o actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$ip 'tar xzf ./actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$ip './config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMHZD7AEG553MMLRUALHWL3C4 --tags vm --unattended'
-          ssh test@$ip './run.sh &'
+          ssh test@$ip 'systemctl enable actions-runner.service'
+          ssh test@$ip 'systemctl start actions-runner.service'
+          ssh test@$ip 'systemctl status actions-runner.service'
                   
   k3s-install:
     runs-on: [self-hosted, vm]
