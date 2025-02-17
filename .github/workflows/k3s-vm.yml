@@ -102,27 +102,27 @@ jobs:
 
       - name: creer var ip
         run: |
-          echo "$ip=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })" >> $GITHUB_ENV
-          echo $ip
+          echo "$IP=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })" >> $GITHUB_ENV
+          echo $IP
 
       - name: voir si var reste
-        run: echo $ip
+        run: echo $IP
 
       - name: voir si le runner est installé
         id: runner
         run: |
-          ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner || echo "runner not installed"'
+          ssh -o StrictHostKeyChecking=accept-new test@$IP 'ls /home/test/actions-runner || echo "runner not installed"'
 
       - name: install runner github action   
         if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
-          ssh test@$ip 'mkdir -p ./actions-runner' 
-          ssh test@$ip 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
-          ssh test@$ip 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner' 
-          ssh test@$ip './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --unattended' 
+          ssh test@$IP 'mkdir -p ./actions-runner' 
+          ssh test@$IP 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
+          ssh test@$IP 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner' 
+          ssh test@$IP './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --unattended' 
 
       - name: lance runner 
-        run: ssh test@$ip './actions-runner/run.sh &'
+        run: ssh test@$IP './actions-runner/run.sh &'
                   
   k3s-install:
     runs-on: [self-hosted, linux]
