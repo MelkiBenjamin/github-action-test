@@ -111,7 +111,9 @@ jobs:
 
       - name: copier la clé ssh
         run: |
+          echo 'copie de la clé ssh1'
           VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/ --verbose
+          echo 'copie de la clé ssh2'
           VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys" --verbose
        #   ssh-keyscan -H $ip >> ~/.ssh/known_hosts -o StrictHostKeyChecking=no -oke
 
@@ -131,7 +133,7 @@ jobs:
                   
   k3s-install:
     runs-on: [self-hosted, vm]
-    needs: config-runner
+    needs: creer-runner
     steps:
       - name: install k3s
         run: |
