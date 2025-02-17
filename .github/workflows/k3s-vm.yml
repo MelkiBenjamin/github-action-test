@@ -82,7 +82,7 @@ jobs:
         run: VBoxManage list vms | Select-String -Pattern k3s-vm
 
       - name: creer vm avec virtualbox
-        if: steps.vm.outputs.vm == 'false'
+        if: steps.vm.outputs.vm == 'null'
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
