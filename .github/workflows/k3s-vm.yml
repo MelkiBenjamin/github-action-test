@@ -76,11 +76,7 @@ jobs:
 
   infra-test:
     runs-on: [self-hosted, vm]
-    if: github.event_name == 'workflow_dispatch'
     steps:
-      - name: checkout
-        uses: actions/checkout@v4.1.7
-
       - name: run kubectl
         if: github.event_name == 'workflow_dispatch'
         #creer vm avec virtualbox avec image ubuntu
