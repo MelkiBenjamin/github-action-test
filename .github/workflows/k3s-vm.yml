@@ -111,9 +111,6 @@ jobs:
       - name: attendre que la vm soit prête
         run: sleep 130
 
-      - name: test ping
-        run: ping $ip
-
 #      - name: copier la clé ssh
 #        run: |
 #          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/ --verbose
