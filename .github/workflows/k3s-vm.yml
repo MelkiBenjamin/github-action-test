@@ -82,6 +82,7 @@ jobs:
         run: VBoxManage list vms | Select-String -Pattern k3s-vm
 
       - name: creer vm avec virtualbox
+        if: 
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
@@ -97,16 +98,21 @@ jobs:
         run: |          
           sleep 130
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
-          
+  
+  config-runner:
+    runs-on: [self-hosted]
+    needs: infra-test
+    steps:        
       - name: ssh sur la vm
-        run: |  
+        run: |
+          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }  
           VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/
           VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
        #   ssh-keyscan -H $ip >> ~/.ssh/known_hosts -o StrictHostKeyChecking=no -oke
 
       - name: voir si le runner est installé
         id: runner
-        run: ssh test@$ip 'ls /home/test/actions-runner' || echo "runner not installed" -o StrictHostKeyChecking=accept-new
+        run: ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner | echo "runner not installed"'
 
       - name: install runner github action  
         if: steps.runner.outputs.runner == 'runner not installed'       
