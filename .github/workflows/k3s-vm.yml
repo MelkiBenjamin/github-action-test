@@ -85,16 +85,34 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         #creer vm avec virtualbox avec image ubuntu
         run: | 
-          vboxmanage createvm --name k3s-vm --ostype Ubuntu_64 --register --memory 2048 --cpus 2 --vram 16 --imagefile k3s-vm.vdi --format VDI --size 10240 --basefolder /home/benjamin/VirtualBox\ VMs
-            vboxmanage storagectl k3s-vm --name "SATA Controller" --add sata --controller IntelAhci
-            vboxmanage storageattach k3s-vm --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium k3s-vm.vdi
-            vboxmanage storageattach k3s-vm --storagectl "SATA Controller" --port 1 --device 0 --type dvddrive --medium /home/benjamin/Downloads/ubuntu-20.04.3-live-server-amd64.iso
-            vboxmanage modifyvm k3s-vm --boot1 dvd --boot2 disk --boot3 none --boot4 none
-            vboxmanage startvm k3s-vm --type headless
+          vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
+          #configurer vm avec bridge
+          VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260"
+          VBoxManage storagectl k3s-vm --name "SATA" --add sata --bootable on
+          VBoxManage storageattach k3s-vm --storagectl "SATA" --port 0 --device 0 --type hdd --medium 'C:\Users\mbenj\VirtualBox VMs\Clone de ubuntu24-server\Clone de ubuntu24-server.vdi'
+          vboxmanage startvm k3s-vm --type headless
+#         configurer vm avec nat
+#         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
+          
+      - name : recuperer ip de la vm
+        run: |
+          sleep 120
+          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] } > $ENV
+          
+      - name: ssh sur la vm
+        run: |  
+          ssh-keyscan -H $ip >> ~/.ssh/known_hosts
+          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password test --target-directory /home/test/.ssh/
+          VBoxManage guestcontrol k3s-vm run --username test --password test --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
 
-      - name: run kubectl
-        run: ssh
-
+      - name: install runner github action          
+        run: |
+          ssh test@$ip 'mkdir -p /home/test/actions-runner'
+          ssh test@$ip 'curl -o actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
+          ssh test@$ip 'tar xzf ./actions-runner-linux-x64-2.322.0.tar.gz'
+          ssh test@$ip './config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMHZD7AEG553MMLRUALHWL3C4 --tags vm 
+          ssh test@$ip './run.sh &'
+                  
   k3s-install:
     runs-on: [self-hosted, vm]
     steps:
@@ -117,7 +135,7 @@ jobs:
           
   monitoring:
     runs-on: [self-hosted, vm]
-    needs: k3s-install
+    needs: contoso
     steps:
       - name: installe helm 
         uses: azure/setup-helm@v4.2.0
