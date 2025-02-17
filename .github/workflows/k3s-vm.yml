@@ -92,33 +92,25 @@ jobs:
           vboxmanage startvm k3s-vm --type headless
 #         configurer vm avec nat
 #         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
-          
-      - name : recuperer ip de la vm 
-        run: |          
-          sleep 130
-          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
-          echo $ip
   
   creer-runner:
     runs-on: [self-hosted]
     needs: infra-test
     steps:        
-      - name: ssh sur la vm
+      - name: attendre que la vm soit prête
+        run: sleep 120
+
+      - name: creer var ip
         run: |
-          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }  
+          echo "$ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] }" > $GITHUB_ENV
           echo $ip
 
-      - name: îp de la vm
+      - name: voir si var reste
         run: echo $ip
-
-      - name: attendre que la vm soit prête
-        run: sleep 130
 
       - name: voir si le runner est installé
         id: runner
         run: |
-          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] }  
-          echo $ip
           ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner || echo "runner not installed"'
 
       - name: install runner github action   
@@ -129,7 +121,9 @@ jobs:
           ssh test@$ip 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$ip 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner' 
           ssh test@$ip './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --unattended' 
-          ssh test@$ip './actions-runner/run.sh &'
+
+      - name: lance runner 
+        run: ssh test@$ip './actions-runner/run.sh &'
                   
   k3s-install:
     runs-on: [self-hosted, linux]
@@ -137,7 +131,7 @@ jobs:
     steps:
       - name: install k3s
         run: |
-          echo {{ secrets.sudo }} | sudo -S curl -sfL https://get.k3s.io | sh 
+          echo {{ secrets.vm }} | sudo -S curl -sfL https://get.k3s.io | sh 
       
       - name: kubectl
         run: sudo k3s kubectl get node
