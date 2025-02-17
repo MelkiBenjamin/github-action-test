@@ -120,7 +120,6 @@ jobs:
       - name: voir si le runner est installé
         id: runner
         run: |
-          set -x
           ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner || echo "runner not installed"'
 
       - name: install runner github action   
