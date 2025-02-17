@@ -97,12 +97,12 @@ jobs:
       - name : recuperer ip de la vm
         run: |
           sleep 80
-          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] } > $ENV
+          $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
           
       - name: ssh sur la vm
         run: |  
-          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password test --target-directory /home/test/.ssh/
-          VBoxManage guestcontrol k3s-vm run --username test --password test --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
+          VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/
+          VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
         #  ssh-keyscan -H $ip >> ~/.ssh/known_hosts
 
       - name: voir si le runner est installé
