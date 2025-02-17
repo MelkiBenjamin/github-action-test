@@ -94,7 +94,7 @@ jobs:
 #         configurer vm avec nat
 #         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
           
-      - name : recuperer ip de la vm
+      - name : recuperer ip de la vm 
         run: |
           sleep 120
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }
