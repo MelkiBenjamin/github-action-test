@@ -82,7 +82,7 @@ jobs:
         run: VBoxManage list vms | Select-String -Pattern k3s-vm
 
       - name: creer vm avec virtualbox avec image ubuntu
-        if: steps.vm.outputs.vm != 'null'
+        if: steps.vm.outputs.vm != '"k3s-vm" {}'
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64 --basefolder "C:\Users\mbenj\VirtualBox VMs" 
