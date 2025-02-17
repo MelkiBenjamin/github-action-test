@@ -102,7 +102,7 @@ jobs:
 
       - name: creer var ip
         run: |
-          echo "$IP=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })" >> $GITHUB_ENV
+          echo "IP=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })" >> $GITHUB_ENV
           echo $IP
 
       - name: voir si var reste
