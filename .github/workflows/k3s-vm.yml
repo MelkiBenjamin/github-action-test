@@ -75,7 +75,7 @@ jobs:
 
 
   infra-test:
-    runs-on: [self-hosted, vm]
+    runs-on: [self-hosted]
     steps:
       - name: run kubectl
         if: github.event_name == 'workflow_dispatch'
@@ -101,7 +101,12 @@ jobs:
           VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password test --target-directory /home/test/.ssh/
           VBoxManage guestcontrol k3s-vm run --username test --password test --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
 
-      - name: install runner github action          
+      - name: voir si le runner est installé
+        id: runner
+        run: ssh test@$ip 'ls /home/test/actions-runner' || echo "runner not installed"
+
+      - name: install runner github action  
+        if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
           ssh test@$ip 'mkdir -p /home/test/actions-runner'
           ssh test@$ip 'curl -o actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
@@ -111,6 +116,7 @@ jobs:
                   
   k3s-install:
     runs-on: [self-hosted, vm]
+    needs: infra-test
     steps:
       - name: install k3s
         run: |
