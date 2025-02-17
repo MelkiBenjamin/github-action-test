@@ -85,9 +85,9 @@ jobs:
         if: 
         #creer vm avec virtualbox avec image ubuntu
         run: | 
-          vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
+          vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64 --basefolder "C:\Users\mbenj\VirtualBox VMs" 
           #configurer vm avec bridge
-          VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260"
+          VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260" 
           VBoxManage storagectl k3s-vm --name "SATA" --add sata --bootable on
           VBoxManage storageattach k3s-vm --storagectl "SATA" --port 0 --device 0 --type hdd --medium 'C:\Users\mbenj\VirtualBox VMs\Clone de ubuntu24-server\Clone de ubuntu24-server.vdi'
           vboxmanage startvm k3s-vm --type headless
@@ -106,6 +106,9 @@ jobs:
       - name: ssh sur la vm
         run: |
           $ip=VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" |  ForEach-Object { ($_ -split "'")[1] }  
+
+      - name: test
+        run: |
           VBoxManage guestcontrol k3s-vm copyto C:\Users\mbenj\.ssh\id_rsa.pub --username test --password ${{ secrets.vm }} --target-directory /home/test/.ssh/
           VBoxManage guestcontrol k3s-vm run --username test --password ${{ secrets.vm }} --exe "/bin/sh" -- -c "cat /home/test/.ssh/id_rsa.pub >> /home/test/.ssh/authorized_keys"
        #   ssh-keyscan -H $ip >> ~/.ssh/known_hosts -o StrictHostKeyChecking=no -oke
@@ -114,7 +117,7 @@ jobs:
         id: runner
         run: ssh -o StrictHostKeyChecking=accept-new test@$ip 'ls /home/test/actions-runner | echo "runner not installed"'
 
-      - name: install runner github action  
+      - name: install runner github action   
         if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
           ssh test@$ip 'mkdir -p /home/test/actions-runner' 
@@ -126,7 +129,7 @@ jobs:
                   
   k3s-install:
     runs-on: [self-hosted, vm]
-    needs: infra-test
+    needs: config-runner
     steps:
       - name: install k3s
         run: |
