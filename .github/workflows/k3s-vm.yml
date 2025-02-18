@@ -120,8 +120,8 @@ jobs:
       - name: lance runner avec service
         if: steps.runner.outputs.runner == 'runner not installed'
         run: |          
-          ssh test@$env:IP 'echo {{ secrets.vm }} | sudo -S ./actions-runner/svc.sh install'
-          ssh test@$env:IP 'echo {{ secrets.vm }} | sudo -S ./actions-runner/svc.sh start'
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh install'
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh start'
 
   k3s-install:
     runs-on: [self-hosted, linux]
@@ -129,15 +129,15 @@ jobs:
     steps:
       - name: install k3s
         run: |
-          echo {{ secrets.vm }} | sudo -S curl -sfL https://get.k3s.io | sh 
+          echo "${{ secrets.vm }}" | sudo -S curl -sfL https://get.k3s.io | sh 
       
       - name: kubectl
-        run: sudo k3s kubectl get node
+        run: echo "${{ secrets.vm }}" | sudo -S sudo k3s kubectl get node
 
       - name: passer sans sudo
         run: |
           mkdir -p $HOME/.kube
-          sudo k3s kubectl config view --raw > $HOME/.kube/config
+          echo {{ secrets.vm }} | sudo -S sudo k3s kubectl config view --raw > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 #          sudo install -D -o $(whoami) -g $(whoami) -m 600 /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
 
