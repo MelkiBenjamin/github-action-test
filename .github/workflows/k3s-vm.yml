@@ -103,11 +103,7 @@ jobs:
       - name: creer var ip
         run: |
           echo "IP=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          echo $env:IP
-          
-      - name: voir si var reste
-        run: echo $env:IP
-
+ 
       - name: voir si le runner est installé
         id: runner
         run: |
@@ -120,10 +116,13 @@ jobs:
           ssh test@$env:IP 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$env:IP 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner' 
           ssh test@$env:IP './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --unattended' 
+          
+      - name: lance runner avec service
+        if: steps.runner.outputs.runner == 'runner not installed'
+        run: |          
+          ssh test@$env:IP 'echo {{ secrets.vm }} | sudo -S ./actions-runner/svc.sh install'
+          ssh test@$env:IP 'echo {{ secrets.vm }} | sudo -S ./actions-runner/svc.sh start'
 
-      - name: lance runner 
-        run: ssh test@$env:IP './actions-runner/run.sh & ls /home/test/actions-runner'
-                  
   k3s-install:
     runs-on: [self-hosted, linux]
     needs: creer-runner
