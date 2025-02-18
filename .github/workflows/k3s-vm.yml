@@ -95,11 +95,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner 2>/dev/null || echo "runner not installed"'
 
-
-#      - name: install runner avec script
-#        run: |
-#          export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }}
-#          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s yourorg/yourrepo
+      - name: install runner avec script
+        run: |
+          export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }}
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s yourorg/yourrepo
 
   k3s-install:
     runs-on: [self-hosted, linux]
