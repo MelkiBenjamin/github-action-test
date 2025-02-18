@@ -122,7 +122,7 @@ jobs:
           ssh test@$env:IP './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token BCKZTMCX4MTUSZF3HPWD7WTHWN5ZC --unattended' 
 
       - name: lance runner 
-        run: ssh test@$env:IP './actions-runner/run.sh &'
+        run: ssh test@$env:IP './actions-runner/run.sh & ls /home/test/actions-runner'
                   
   k3s-install:
     runs-on: [self-hosted, linux]
