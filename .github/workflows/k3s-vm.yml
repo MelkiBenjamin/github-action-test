@@ -57,23 +57,6 @@ jobs:
       - name: terraform apply
         run: terraform apply -auto-approve
 
-  configure-infra:
-    runs-on: [self-hosted, vm]
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4.1.7
-
-      - name: intsall ansible
-        run: sudo apt-get install ansible
-
-      - name: ansible-playbook
-        run: ansible-playbook -i inventory playbook.yml
-
-      - name: run kubectl
-        run: kubectl get pods
-
-
   infra-test:
     runs-on: [self-hosted]
     steps:
@@ -88,7 +71,7 @@ jobs:
           #configurer vm avec bridge
           VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260" 
           VBoxManage storagectl k3s-vm --name "SATA" --add sata --bootable on
-          VBoxManage storageattach k3s-vm --storagectl "SATA" --port 0 --device 0 --type hdd --medium 'C:\Users\mbenj\VirtualBox VMs\Clone de ubuntu24-server\Clone de ubuntu24-server.vdi'
+          VBoxManage storageattach k3s-vm --storagectl "SATA" --port 0 --device 0 --type hdd --medium 'C:\Users\mbenj\VirtualBox VMs\Clone de ubuntu24-server1\Clone de ubuntu24-server1.vdi'
           vboxmanage startvm k3s-vm --type headless
 #         configurer vm avec nat
 #         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
