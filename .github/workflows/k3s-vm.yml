@@ -103,6 +103,9 @@ jobs:
       - name: creer var ip
         run: |
           echo "IP=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: debug ip
+        run: echo $env:IP
  
       - name: voir si le runner est installé
         id: runner
@@ -122,6 +125,10 @@ jobs:
         run: |          
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh install'
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh start'
+
+      - name: install runner avec script
+        run: |
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s yourorg/yourrepo
 
   k3s-install:
     runs-on: [self-hosted, linux]
