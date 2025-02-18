@@ -126,9 +126,10 @@ jobs:
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh install'
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh start'
 
-      - name: install runner avec script
-        run: |
-          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s yourorg/yourrepo
+#      - name: install runner avec script
+#        run: |
+#          export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }}
+#          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s yourorg/yourrepo
 
   k3s-install:
     runs-on: [self-hosted, linux]
