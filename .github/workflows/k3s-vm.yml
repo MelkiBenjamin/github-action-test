@@ -116,7 +116,7 @@ jobs:
           echo "::add-mask::$token_runner"
           ssh test@$env:IP './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token $token_runner --unattended' 
           
-      - name: lance runner avec service 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
+      - name: lance runner avec service
         if: steps.runner.outputs.runner == 'runner not installed'
         run: |          
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh install'
