@@ -59,6 +59,7 @@ jobs:
 
   infra-test:
     runs-on: [self-hosted]
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: voir si la vm k3s-vm est installée
         id: vm
@@ -78,6 +79,7 @@ jobs:
   
   creer-runner:
     runs-on: [self-hosted]
+    if: github.event_name == 'workflow_dispatch'
     needs: infra-test
     steps:        
       - name: attendre que la vm soit prête
@@ -93,12 +95,37 @@ jobs:
       - name: voir si le runner est installé
         id: runner
         run: |
-          ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner 2>/dev/null || echo "runner not installed"'
+          ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner/svc.sh 2>/dev/null || echo "runner not installed"'
 
-      - name: install runner avec script
+      - name: install runner github action   
+#        if: steps.runner.outputs.runner == 'runner not installed'       
         run: |
-          export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }}
-          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s yourorg/yourrepo
+          ssh test@$env:IP 'mkdir -p ./actions-runner'
+
+      - name: verif si curl est fait
+        id: curl
+        run: ssh test@$env:IP 'ls ./actions-runner/config.sh || echo "curl pas fait"'
+
+      - name: install runner avec curl
+        if: steps.runner.outputs.curl == 'curl pas fait'
+        run: |
+          ssh test@$env:IP 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
+          ssh test@$env:IP 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner'
+          # connaitre le token pour creer le runner
+          ssh test@$env:IP 'token_runner=$(curl -L  -s -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.TOKEN_GITHUB }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/MelkiBenjamin/github-action-test/actions/runners/registration-token | grep token | awk '{print $2}' | tr -d '",')'
+          echo "::add-mask::$token_runner"
+          ssh test@$env:IP './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token $token_runner --unattended' 
+          
+      - name: lance runner avec service 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
+        if: steps.runner.outputs.runner == 'runner not installed'
+        run: |          
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh install'
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh start'
+
+#      - name: install runner avec script
+#        run: |
+#          export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }}
+#          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S curl -s https://raw.githubusercontent.com/actions/runner/main/scripts/create-latest-svc.sh | bash -s MelkiBenjamin/github-action-test
 
   k3s-install:
     runs-on: [self-hosted, linux]
@@ -106,7 +133,7 @@ jobs:
     steps:
       - name: install k3s
         run: |
-          echo "${{ secrets.vm }}" | sudo -S curl -sfL https://get.k3s.io | sh 
+          curl -sfL https://get.k3s.io | sh 
       
       - name: kubectl
         run: echo "${{ secrets.vm }}" | sudo -S sudo k3s kubectl get node
