@@ -127,7 +127,6 @@ jobs:
 
   k3s-install:
     runs-on: [self-hosted, linux]
-    needs: creer-runner
     steps:
       - name: install k3s
         run: |
