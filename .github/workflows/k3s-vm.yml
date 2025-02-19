@@ -130,7 +130,7 @@ jobs:
     steps:
       - name: install k3s
         run: |
-          curl -sfL https://get.k3s.io | sh 
+          echo "${{ secrets.vm }}" | sudo -S curl -sfL https://get.k3s.io | sh 
       
       - name: kubectl
         run: echo "${{ secrets.vm }}" | sudo -S sudo k3s kubectl get node
