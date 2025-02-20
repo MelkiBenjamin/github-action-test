@@ -1,11 +1,25 @@
 name: test g
 on:
-  workflow_dispatch:
-#  push:
+#  workflow_dispatch:
+  push:
 
 jobs:
+    test-github-action:
+      runs-on: ubuntu-latest
+      steps:
+      - name: test github action
+        run: echo "test github action"
+
+      - name: test github action2
+        run: who
+
+      - name: test github action3
+        run: apt install cowsay -y
+
+
     modif-image:
       runs-on: self-hosted
+      if: github.event_name == 'workflow_dispatch'
       env:
         test: ls
         tagcompose_grafana: $(docker compose -f ./compose/docker-compose-monitoring.yml config --quiet --images | findstr grafana)
