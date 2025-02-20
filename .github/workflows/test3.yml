@@ -14,7 +14,7 @@ jobs:
         run: who
 
       - name: test github action3
-        run: apt install cowsay -y
+        run: sudo apt install cowsay -y
 
 
     modif-image:
