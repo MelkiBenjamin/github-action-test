@@ -4,8 +4,21 @@ on:
   push:
 
 jobs:
+
+    test:
+      runs-on: ubuntu-latest
+      steps:
+      - name: test
+        run: echo "IP=$(VBoxManage guestproperty enumerate k3s-vm --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })"  | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: test
+        run: |
+          ssh test@$env:IP
+          ls
+
     test-github-action:
       runs-on: ubuntu-latest
+      if: github.event_name == 'workflow_dispatch'
       steps:
       - name: test github action
         run: echo "test github action"
@@ -15,7 +28,6 @@ jobs:
 
       - name: test github action3
         run: sudo apt install cowsay -y
-
 
     modif-image:
       runs-on: self-hosted
