@@ -112,12 +112,7 @@ jobs:
           ssh test@$env:IP 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$env:IP 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner'
 
-      - name: securité
-        run: |
-          $token_runner = ssh test@$IP $command
-          $token = ($token_runner | ConvertFrom-Json).token 
-          ssh test@$env:IP './actions-runner/config.sh --url https://github.com/MelkiBenjamin/github-action-test --token $token --unattended'
-          
+         
       - name: lance runner avec service
         if: steps.runner.outputs.runner == 'runner not installed'
         run: |          
