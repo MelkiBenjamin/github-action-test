@@ -91,33 +91,6 @@ jobs:
 
       - name: debug ip
         run: echo $env:IP
- 
-      - name: voir si le runner est installé
-        id: runner
-        run: |
-          ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner/svc.sh 2>/dev/null || echo "runner not installed"'
-
-      - name: install runner github action   
-#        if: steps.runner.outputs.runner == 'runner not installed'       
-        run: |
-          ssh test@$env:IP 'mkdir -p ./actions-runner'
-
-      - name: verif si curl est fait
-        id: curl
-        run: ssh test@$env:IP 'ls ./actions-runner/config.sh || echo "curl pas fait"'
-
-      - name: install runner avec curl
-        if: steps.runner.outputs.curl == 'curl pas fait'
-        run: |
-          ssh test@$env:IP 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
-          ssh test@$env:IP 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner'
-
-         
-      - name: lance runner avec service
-        if: steps.runner.outputs.runner == 'runner not installed'
-        run: |          
-          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh install test'
-          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -S ./actions-runner/svc.sh start'
 
 #      - name: install runner avec script
 #        run: |
