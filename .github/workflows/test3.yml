@@ -7,7 +7,6 @@ jobs:
 
     k3s:
       runs-on: ubuntu-latest
-      if: github.event_name == 'workflow_dispatch'
       steps:
       - name: install k3s
         uses: jupyterhub/action-k3s-helm@v4.0.1
