@@ -63,16 +63,16 @@ jobs:
     steps:
       - name: voir si la vm k3s-vm est installée
         id: vm
-        run: VBoxManage list vms | Select-String -Pattern k3s-vm
+        run: VBoxManage list vms | sls -Pattern k3s-vm
 
       - name: creer vm avec virtualbox avec image ubuntu
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
           #configurer vm avec bridge
-          VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260 --utc-time on
+          VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260"
           VBoxManage storagectl k3s-vm --name "SATA" --add sata --bootable on
-          VBoxManage storageattach k3s-vm --storagectl "SATA" --port 0 --device 0 --type hdd --medium "C:\Users\mbenj\VirtualBox VMs\Clone de ubuntu24-server1\Clone de ubuntu24-server1.vdi"
+          VBoxManage storageattach k3s-vm --storagectl "SATA" --port 0 --device 0 --type hdd --medium 'C:\Users\mbenj\VirtualBox VMs\Clone de ubuntu24-server1\Clone de ubuntu24-server1.vdi'
           vboxmanage startvm k3s-vm --type headless
 #         configurer vm avec nat
 #         VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --nic1 nat --vram 16
