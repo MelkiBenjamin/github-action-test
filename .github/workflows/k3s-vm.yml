@@ -107,7 +107,7 @@ jobs:
         run: ssh test@$env:IP 'ls ./actions-runner/config.sh 2>/dev/null || echo "curl pas fait"'
 
       - name: install runner avec curl
-        if: steps.runner.outputs.curl == 'curl pas fait'
+        if: steps.curl.outputs.curl == 'curl pas fait'
         run: |
           ssh test@$env:IP 'curl -o ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -L https://github.com/actions/runner/releases/download/v2.322.0/actions-runner-linux-x64-2.322.0.tar.gz'
           ssh test@$env:IP 'tar xzf ./actions-runner/actions-runner-linux-x64-2.322.0.tar.gz -C ./actions-runner'
