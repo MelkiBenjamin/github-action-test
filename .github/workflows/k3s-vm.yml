@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: voir si la vm k3s-vm est installée
         id: vm
-        run: VBoxManage list vms | sls -Pattern k3s-vm
+        run: VBoxManage list vms | sls -Pattern k3s-vm || sls -Pattern "k3s-vm not found"
 
       - name: creer vm avec virtualbox avec image ubuntu
         #creer vm avec virtualbox avec image ubuntu
@@ -104,7 +104,7 @@ jobs:
 
       - name: verif si curl est fait
         id: curl
-        run: ssh test@$env:IP 'ls ./actions-runner/config.sh || echo "curl pas fait"'
+        run: ssh test@$env:IP 'ls ./actions-runner/config.sh 2>/dev/null || echo "curl pas fait"'
 
       - name: install runner avec curl
         if: steps.runner.outputs.curl == 'curl pas fait'
