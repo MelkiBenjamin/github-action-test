@@ -59,7 +59,7 @@ jobs:
 
   infra-test:
     runs-on: [self-hosted]
-    if: github.event_name == 'workflow_dispatch'
+#    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: voir si la vm k3s-vm est installée
         id: vm
@@ -79,7 +79,7 @@ jobs:
   
   creer-runner:
     runs-on: [self-hosted]
-    if: github.event_name == 'workflow_dispatch'
+#    if: github.event_name == 'workflow_dispatch'
     needs: infra-test
     steps:        
       - name: attendre que la vm soit prête
