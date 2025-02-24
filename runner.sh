@@ -99,9 +99,12 @@ if [ -z "${runner_scope}" ]; then fatal "supply scope as argument 1"; fi
 if [ -z "${RUNNER_CFG_PAT}" ]; then fatal "RUNNER_CFG_PAT must be set before calling"; fi
 
 which curl || fatal "curl required.  Please install in PATH with apt-get, brew, etc"
-which jq || echo "jq required. install en cours ..." && curl https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && chmod +x /usr/local/bin/jq
+which jq || echo "jq required. install en cours ..." && sudo curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
+#install ./your-app ~/.local/bin/
 
+echo "Configuration validated."
 
+#---------------------------------------
 # Creer le dossier runner
 mkdir -p runner
 
@@ -127,7 +130,7 @@ fi
 
 export RUNNER_TOKEN=$(curl -s -X POST ${base_api_url}/${orgs_or_repos}/${runner_scope}/actions/runners/registration-token -H "accept: application/vnd.github.everest-preview+json" -H "authorization: token ${RUNNER_CFG_PAT}" | jq -r '.token')
 
-if [ "null" == "$RUNNER_TOKEN" -o -z "$RUNNER_TOKEN" ]; then fatal "Failed to get a token"; fi
+if [ "null" == "$RUNNER_TOKEN" -o -z "$RUNNER_TOKEN" ]; then fatal "Failed to get a token"; else echo "Token generated."; fi
 
 #---------------------------------------
 # Download latest released and extract
@@ -140,7 +143,7 @@ latest_version_label=$(curl -s -X GET 'https://api.github.com/repos/actions/runn
 latest_version=$(echo ${latest_version_label:1})
 runner_file="actions-runner-${runner_plat}-${runner_arch}-${latest_version}.tar.gz"
 
-if [ -f "${runner_file}" ]; then
+if [ -f "svc.sh" ]; then
     echo "${runner_file} exists. skipping download."
 else
     runner_url="https://github.com/actions/runner/releases/download/${latest_version_label}/${runner_file}"
@@ -149,7 +152,7 @@ else
     echo $runner_url
 
     curl -O -L ${runner_url}
-    echo "telechargement de ${runner_file} complete."
+    echo "telechargement de ${runner_file} complet."
 fi
 
 ls -la *.tar.gz
@@ -170,11 +173,6 @@ fi
 
 # export of pass
 chown -R $svc_user ./runner
-
-# suprime le fichier tar si il existe
-if [ -f "./${runner_file}" ]; then
-    rm -f "./${runner_file}"
-fi
 
 pushd ./runner
 
@@ -209,14 +207,25 @@ if [ "${runner_plat}" == "linux" ]; then
     prefix="sudo "
 fi
 
-# si le service existe on le refait pas
-if [ "./svc.sh start" == "action*" ]; then
-    echo "Service already configured. skipping service configuration."
+first_word=$(echo "$runner_scope" | cut -d'/' -f1)
+second_word=$(echo "$runner_scope" | cut -d'/' -f2)
+
+nom_service="actions.runner.${first_word}-${second_word}.${svc_user}.service"
+ 
+# si le service existe peu importe le fichier on le refait pas
+if [ -f "/etc/systemd/system/${nom_service}" ]; then
+    echo "Service already exists. skipping service creation."
 else
-    echo "Configuring service ..."
+    echo "Creating service ..."
     ${prefix}./svc.sh install ${svc_user}
-    ${prefix}./svc.sh start
-    echo "Service configured."
+    echo "Service created."
 fi
+
+# suprime le fichier tar si il existe
+echo "Cleaning up ..."
+if [ -f "./${runner_file}" ]; then
+    rm -f "./${runner_file}"
+fi
+echo "Cleanup complete."
 
 echo "Runner service installed and started."

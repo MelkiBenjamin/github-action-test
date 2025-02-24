@@ -1,7 +1,7 @@
 name: test g
 on:
-#  workflow_dispatch:
-  push:
+  workflow_dispatch:
+#  push:
 
 jobs:
 
@@ -9,8 +9,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
       - name: install k3s
-        uses: jupyterhub/action-k3s-helm@v4.0.1
-        continue-on-error: true
+        uses: jupyterhub/action-k3s-helm@v4.0.1          
 
       - name: ls
         run: ls -alh /home
@@ -23,8 +22,6 @@ jobs:
       - name: helm version
         run: helm version
         continue-on-error: true
-
-
 
     test:
       runs-on: self-hosted
