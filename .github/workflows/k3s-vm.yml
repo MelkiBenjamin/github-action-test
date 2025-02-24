@@ -68,7 +68,7 @@ jobs:
       - name: creer vm avec virtualbox avec image ubuntu
         #creer vm avec virtualbox avec image ubuntu
         run: | 
-          vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64 --basefolder "C:\Users\mbenj\VirtualBox VMs" 
+          vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
           #configurer vm avec bridge
           VBoxManage modifyvm k3s-vm --memory 2048 --cpus 2 --vram 16 --nic1 bridged --bridgeadapter1 "Intel(R) Dual Band Wireless-AC 7260 --utc-time on
           VBoxManage storagectl k3s-vm --name "SATA" --add sata --bootable on
