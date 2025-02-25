@@ -98,7 +98,7 @@ jobs:
 
       - name: install runner avec script
         run: |
-          curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o /home/test/runner.sh
+          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o /home/test/runner.sh'
           ssh test@$env:IP 'export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} && echo "${{ secrets.vm }}" | sudo -SE bash ./runner.sh -s MelkiBenjamin/github-action-test -f'
 
   k3s-install:
