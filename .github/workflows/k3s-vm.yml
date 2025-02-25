@@ -79,7 +79,6 @@ jobs:
   
   creer-runner:
     runs-on: [self-hosted]
-#    if: github.event_name == 'workflow_dispatch'
     needs: infra-test
     steps:        
       - name: attendre que la vm soit prête
@@ -97,10 +96,10 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner/svc.sh 2>/dev/null || echo "runner not installed"'
 
-#      - name: install runner avec script
-#        run: |
-#          curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o /home/test/runner.sh
-#          ssh test@$env:IP 'export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} && echo "${{ secrets.vm }}" | sudo -SE bash ./runner.sh -s MelkiBenjamin/github-action-test -f'
+      - name: install runner avec script
+        run: |
+          curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o /home/test/runner.sh
+          ssh test@$env:IP 'export RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} && echo "${{ secrets.vm }}" | sudo -SE bash ./runner.sh -s MelkiBenjamin/github-action-test -f'
 
   k3s-install:
     runs-on: [self-hosted, linux]
