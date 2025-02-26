@@ -102,7 +102,9 @@ jobs:
 
       - name: install jq
         run: |
+          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S apt update 
           ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S apt install jq -y'
+#          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
 
       - name: install runner avec script
         run: |
