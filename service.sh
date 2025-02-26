@@ -1,4 +1,12 @@
-#bin/bash
+#/bin/bash
+
+set -e
+
+function fatal()
+{
+   echo "error: $1" >&2
+   exit 1
+}
 
 flags_found=false
 
@@ -52,10 +60,10 @@ if [ -f "/etc/systemd/system/${nom_service}" ]; then
 else
     echo "Creating service ..."
     cd ./runner 
-    ./svc.sh install
+    ./svc.sh install $svc_user 
     echo "Service created."
     echo "Starting service ..."
-    ./svc.sh start
+    ./svc.sh start $svc_user 
     echo "Service started."
 fi
 
