@@ -60,10 +60,10 @@ if [ -f "/etc/systemd/system/${nom_service}" ]; then
 else
     echo "Creating service ..."
     cd ./runner 
-    ./svc.sh install $svc_user 
+    ./svc.sh install 
     echo "Service created."
     echo "Starting service ..."
-    ./svc.sh start $svc_user 
+    ./svc.sh start 
     echo "Service started."
 fi
 

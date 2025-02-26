@@ -82,7 +82,7 @@ jobs:
     needs: infra-test
     steps:        
       - name: attendre que la vm soit prête
-        run: sleep 110
+        run: sleep 120
 
       - name: creer var ip
         run: |
