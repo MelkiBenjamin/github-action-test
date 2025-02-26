@@ -109,13 +109,20 @@ jobs:
           ssh test@$env:IP 'RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} ./runner.sh -s MelkiBenjamin/github-action-test -f'          
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -SE ./service.sh'
           ssh test@$env:IP 'ls ./runner/runsvc.sh'
+      
+      - name: netoyage
+        run: ssh test@$env:IP 'rm -rf ./runner.sh ./service.sh ./actions-runner-linux-x64-2.322.0.tar.gz'
 
   k3s-install:
     runs-on: [self-hosted, linux]
     needs: creer-runner
     steps:
       - name: install k3s
-        run: echo "${{ secrets.vm }}" | sudo -S curl -sfL https://get.k3s.io | sh 
+        run: |
+          curl -O https://get.k3s.io/k3s
+          chmod u+x ./k3s
+          echo "${{ secrets.vm }}" | sudo -S ./k3s
+          rm -rf ./k3s
 
       - name: test avec sudo
         run: echo "${{ secrets.vm }}" | sudo -S k3s kubectl get node
@@ -124,7 +131,7 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.vm }}" | sudo -S cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-          sudo chown test:test ~/.kube/config
+          sudo "${{ secrets.vm }}" | sudo -S chown test:test ~/.kube/config
           export KUBECONFIG=~/.kube/config
       
       - name: test sans sudo

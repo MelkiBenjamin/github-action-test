@@ -199,14 +199,5 @@ else
 fi
 
 #---------------------------------------
-# Install as a service
-# suprime le fichier tar si il existe
-echo "Cleaning up ..."
-if [ -f "./${runner_file}" ]; then
-    echo "${runner_file} exists."
-    echo "Removing ${runner_file} ..."
-    rm -f "./${runner_file}"
-    echo "Cleanup complete."
-fi
 
 echo "Runner installed."
