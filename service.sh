@@ -1,8 +1,8 @@
-#/bin/bash
+#!/bin/bash
 
 set -e
 
-function fatal()
+fatal()
 {
    echo "error: $1" >&2
    exit 1
