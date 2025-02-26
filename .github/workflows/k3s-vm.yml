@@ -81,8 +81,8 @@ jobs:
     runs-on: [self-hosted]
     needs: infra-test
     steps:        
-      - name: attendre que la vm soit prête
-        run: sleep 120
+#      - name: attendre que la vm soit prête
+#        run: sleep 120
 
       - name: creer var ip
         run: |
