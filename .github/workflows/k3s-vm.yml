@@ -81,9 +81,6 @@ jobs:
     runs-on: [self-hosted]
     needs: infra-test
     steps:        
-#      - name: attendre que la vm soit prête
-#        run: sleep 120
-
       - name: creer var ip 
         run: |
           while (-not ($IP = VBoxManage guestproperty enumerate "k3s-vm" --patterns "/VirtualBox/GuestInfo/Net/0/V4/IP" | ForEach-Object { ($_ -split "'")[1] })) { sleep 5 }
@@ -131,10 +128,13 @@ jobs:
 
       - name: passer sans sudo
         run: |
-          mkdir -p ~/.kube
           echo "${{ secrets.vm }}" | sudo -S cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
           sudo "${{ secrets.vm }}" | sudo -S chown test:test ~/.kube/config
           export KUBECONFIG=~/.kube/config
+
+          mkdir -p $HOME/.kube
+           echo "${{ secrets.vm }}" | sudo -S k3s kubectl config view --raw > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
       
       - name: test sans sudo
         run: k3s kubectl get node
