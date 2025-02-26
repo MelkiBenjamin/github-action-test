@@ -98,14 +98,13 @@ jobs:
 
       - name: install jq
         run: |
-          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S apt update 
+          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S apt update'
           ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S apt install jq -y'
 #          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
 
       - name: install runner avec script
         run: |
-          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o ./runner.sh'
-          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -o ./service.sh'
+          ssh test@$env:IP 'curl -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh'
           ssh test@$env:IP 'chmod u+x ./runner.sh ./service.sh' 
           ssh test@$env:IP 'RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} ./runner.sh -s MelkiBenjamin/github-action-test -f'          
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -SE ./runner/service.sh MelkiBenjamin/github-action-test'
