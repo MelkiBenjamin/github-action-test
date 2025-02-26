@@ -99,7 +99,8 @@ if [ -z "${runner_scope}" ]; then fatal "supply scope as argument 1"; fi
 if [ -z "${RUNNER_CFG_PAT}" ]; then fatal "RUNNER_CFG_PAT must be set before calling"; fi
 
 which curl || fatal "curl required.  Please install in PATH with apt-get, brew, etc"
-which jq || echo "jq required. install en cours ..." && sudo curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
+which jq || fatal "jq required." 
+#|| sudo curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
 #install ./your-app ~/.local/bin/
 
 echo "Configuration validated."
@@ -198,29 +199,7 @@ else
 fi
 
 #---------------------------------------
-# Configuring as a service
-#---------------------------------------
-echo
-echo "Configuring as a service ..."
-prefix=""
-if [ "${runner_plat}" == "linux" ]; then
-    prefix="sudo "
-fi
-
-first_word=$(echo "$runner_scope" | cut -d'/' -f1)
-second_word=$(echo "$runner_scope" | cut -d'/' -f2)
-
-nom_service="actions.runner.${first_word}-${second_word}.${svc_user}.service"
- 
-# si le service existe peu importe le fichier on le refait pas
-if [ -f "/etc/systemd/system/${nom_service}" ]; then
-    echo "Service already exists. skipping service creation."
-else
-    echo "Creating service ..."
-    ${prefix}./svc.sh install ${svc_user}
-    echo "Service created."
-fi
-
+# Install as a service
 # suprime le fichier tar si il existe
 echo "Cleaning up ..."
 if [ -f "./${runner_file}" ]; then
@@ -228,4 +207,4 @@ if [ -f "./${runner_file}" ]; then
 fi
 echo "Cleanup complete."
 
-echo "Runner service installed and started."
+echo "Runner installed."
