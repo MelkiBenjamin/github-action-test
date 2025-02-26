@@ -107,7 +107,7 @@ jobs:
           ssh test@$env:IP 'curl -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh'
           ssh test@$env:IP 'chmod u+x ./runner.sh ./service.sh' 
           ssh test@$env:IP 'RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} ./runner.sh -s MelkiBenjamin/github-action-test -f'          
-          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -SE ./runner/service.sh MelkiBenjamin/github-action-test'
+          ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -SE ./service.sh MelkiBenjamin/github-action-test'
 
   k3s-install:
     runs-on: [self-hosted, linux]
