@@ -115,7 +115,17 @@ jobs:
     needs: creer-runner
     steps:
       - name: install k3s
-        uses: jupyterhub/action-k3s-helm@v4.0.1
+        run: echo "${{ secrets.vm }}" | sudo -S curl -sfL https://get.k3s.io | sh 
+
+      - name: test avec sudo
+        run: echo "${{ secrets.vm }}" | sudo -S k3s kubectl get node
+
+      - name: passer sans sudo
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.vm }}" | sudo -S cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+          sudo chown test:test ~/.kube/config
+          export KUBECONFIG=~/.kube/config
       
       - name: test sans sudo
         run: k3s kubectl get node
