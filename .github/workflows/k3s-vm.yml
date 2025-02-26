@@ -96,10 +96,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner/svc.sh 2>/dev/null || echo "runner not installed"'
 
-      - name: sudo
-        run: |
-          ssh test@$env:IP 'echo "test" | sudo -S echo "test ALL=NOPASSWD: /bin/systemctl start action.runner.MelkiBenjamin-github-action-test.$USER.service" | sudo tee /etc/sudoers.d/test'
-
       - name: install jq
         run: |
           ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S apt update 
@@ -108,10 +104,9 @@ jobs:
 
       - name: install runner avec script
         run: |
-          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o /home/test/runner.sh'
-          ssh test@$env:IP 'chmod u+x /home/test/runner.sh'
-          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -o /home/test/service.sh'
-          ssh test@$env:IP 'chmod u+x /home/test/service.sh'
+          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh -o ./runner.sh'
+          ssh test@$env:IP 'curl -L https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -o ./service.sh'
+          ssh test@$env:IP 'chmod u+x ./runner.sh ./service.sh' 
           ssh test@$env:IP 'RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} ./runner.sh -s MelkiBenjamin/github-action-test -f'          
           ssh test@$env:IP 'echo "${{ secrets.vm }}" | sudo -SE ./runner/service.sh MelkiBenjamin/github-action-test'
 
