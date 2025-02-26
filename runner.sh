@@ -203,8 +203,9 @@ fi
 # suprime le fichier tar si il existe
 echo "Cleaning up ..."
 if [ -f "./${runner_file}" ]; then
+    echo "Removing ${runner_file} ..."
     rm -f "./${runner_file}"
+    echo "Cleanup complete."
 fi
-echo "Cleanup complete."
 
 echo "Runner installed."

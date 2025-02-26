@@ -54,6 +54,8 @@ else
     cd ./runner 
     ./svc.sh install 
     echo "Service created."
+    echo "Starting service ..."
+    ./svc.sh start
+    echo "Service started."
 fi
 
-echo "Service started."
