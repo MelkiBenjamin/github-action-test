@@ -120,19 +120,24 @@ jobs:
         run: |
           curl -O https://get.k3s.io/k3s
           chmod u+x ./k3s
-          echo "${{ secrets.vm }}" | sudo -S ./k3s
+          echo "${{ secrets.vm }}" | sudo -S ./k3s --write-kubeconfig-mode 644
           rm -rf ./k3s
 
-      - name: test avec sudo
-        run: echo "${{ secrets.vm }}" | sudo -S k3s kubectl get node
+#      - name: test avec sudo
+#        run: echo "${{ secrets.vm }}" | sudo -S k3s kubectl get node
 
-      - name: passer sans sudo
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.vm }}" | sudo -S cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-          sudo "${{ secrets.vm }}" | sudo -S chown test:test ~/.kube/config
-          export KUBECONFIG=~/.kube/config
-          chmod 600 $HOME/.kube/config
+#      - name: passer sans sudo
+#        run: |
+#          mkdir -p $HOME/.kube
+#          echo "${{ secrets.vm }}" | sudo -S cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+#          sudo "${{ secrets.vm }}" | sudo -S chown test:test ~/.kube/config
+#          export KUBECONFIG=~/.kube/config
+#          chmod 600 $HOME/.kube/config
+
+#          mkdir -p $HOME/.kube
+#          echo {{ secrets.vm }} | sudo -S sudo k3s kubectl config view --raw > $HOME/.kube/config
+#          chmod 600 $HOME/.kube/config
+#          sudo chown test:test $HOME/.kube/config
       
       - name: test sans sudo
         run: k3s kubectl get node
