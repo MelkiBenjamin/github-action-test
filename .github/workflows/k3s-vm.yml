@@ -103,7 +103,7 @@ jobs:
 #          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
 
       - name: install runner avec script
-        if: steps.runner.outputs.stdout == 'runner not installed'
+#        if: steps.runner.outputs.stdout == 'runner not installed'
         run: |
           ssh test@$env:IP 'curl -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh'
           ssh test@$env:IP 'chmod u+x ./runner.sh ./service.sh' 
@@ -112,7 +112,7 @@ jobs:
           ssh test@$env:IP 'ls ./runner/runsvc.sh'
       
       - name: netoyage
-        if: steps.runner.outputs.stdout == 'runner not installed'
+#        if: steps.runner.outputs.stdout == 'runner not installed'
         run: ssh test@$env:IP 'rm -rf ./runner.sh ./service.sh ./actions-runner-linux-x64-2.322.0.tar.gz'
 
   k3s-install:
