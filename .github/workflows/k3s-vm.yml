@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: voir si la vm k3s-vm est installée
         id: vm
-        run: VBoxManage list vms | findstr k3s-vm 
+        run: VBoxManage list vms | select-string -pattern "k3s-vm"
 
       - name: creer vm avec virtualbox avec image ubuntu
         if: steps.vm.outputs.stdout == ''
