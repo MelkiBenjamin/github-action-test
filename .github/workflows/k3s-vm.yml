@@ -94,7 +94,7 @@ jobs:
       - name: voir si le runner est installé
         id: runner
         run: |
-          ssh -o StrictHostKeyChecking=accept-new test@$env:IP 'ls ./actions-runner/svc.sh 2>/dev/null || echo "runner not installed"'
+          ssh -o StrictHostKeyChecking=accept-new -q test@$env:IP 'ls ./actions-runner/svc.sh 2>/dev/null || echo "runner not installed" 2>/dev/null'
 
       - name: install jq
         run: |
