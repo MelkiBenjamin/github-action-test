@@ -63,9 +63,10 @@ jobs:
     steps:
       - name: voir si la vm k3s-vm est installée
         id: vm
-        run: VBoxManage list vms | sls -Pattern k3s-vm
+        run: VBoxManage list vms | findstr k3s-vm 
 
       - name: creer vm avec virtualbox avec image ubuntu
+        if: steps.vm.outputs.stdout == ''
         #creer vm avec virtualbox avec image ubuntu
         run: | 
           vboxmanage createvm --name k3s-vm --register --ostype Ubuntu_64
@@ -102,6 +103,7 @@ jobs:
 #          ssh test@$env:IP 'echo "${{ secrets.vm }}"| sudo -S curl -L https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 -o /usr/local/bin/jq && sudo chmod +x /usr/local/bin/jq
 
       - name: install runner avec script
+        if: steps.runner.outputs.stdout == 'runner not installed'
         run: |
           ssh test@$env:IP 'curl -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh'
           ssh test@$env:IP 'chmod u+x ./runner.sh ./service.sh' 
@@ -110,6 +112,7 @@ jobs:
           ssh test@$env:IP 'ls ./runner/runsvc.sh'
       
       - name: netoyage
+        if: steps.runner.outputs.stdout == 'runner not installed'
         run: ssh test@$env:IP 'rm -rf ./runner.sh ./service.sh ./actions-runner-linux-x64-2.322.0.tar.gz'
 
   k3s-install:
@@ -120,21 +123,8 @@ jobs:
         run: |
           curl -O https://get.k3s.io/k3s
           chmod u+x ./k3s
-          echo "${{ secrets.vm }}" | sudo -S ./k3s
+          echo "${{ secrets.vm }}" | sudo -S ./k3s --write-kubeconfig-mode 644
           rm -rf ./k3s
-
-      - name: test avec sudo
-        run: echo "${{ secrets.vm }}" | sudo -S k3s kubectl get node
-
-      - name: passer sans sudo
-        run: |
-          echo "${{ secrets.vm }}" | sudo -S cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-          sudo "${{ secrets.vm }}" | sudo -S chown test:test ~/.kube/config
-          export KUBECONFIG=~/.kube/config
-
-          mkdir -p $HOME/.kube
-           echo "${{ secrets.vm }}" | sudo -S k3s kubectl config view --raw > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
       
       - name: test sans sudo
         run: k3s kubectl get node
@@ -186,4 +176,4 @@ jobs:
 
       - name: Create Application Contoso with Argocd avec namespace 
         run: |
-          kubectl apply -f contoso.yml
+          kubectl apply -f argocd/contoso.yml
