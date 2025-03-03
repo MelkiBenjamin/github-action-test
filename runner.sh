@@ -107,6 +107,7 @@ echo "Configuration validated."
 
 #---------------------------------------
 # Creer le dossier runner
+#---------------------------------------
 mkdir -p runner
 
 # TODO: validate not in a container
@@ -152,7 +153,7 @@ else
     echo "Downloading ${latest_version_label} for ${runner_plat} ..."
     echo $runner_url
 
-    curl -O -L ${runner_url}
+    time curl -O -L ${runner_url}
     echo "telechargement de ${runner_file} complet."
 fi
 
@@ -168,7 +169,7 @@ echo "Extracting ${runner_file} to ./runner"
 if [ -d "./runner/config.sh" ]; then
     echo "Runner already extracted. skipping extraction."
 else
-   tar xzf "./${runner_file}" -C runner
+   time tar xzf "./${runner_file}" -C runner
    echo "Extraction complete."
 fi
 
@@ -194,7 +195,7 @@ if [ -f "./svc.sh" ]; then
 else
     echo "Configuring runner ..."
     echo "./config.sh --unattended --url $runner_url --token *** --name $runner_name ${labels:+--labels $labels} ${runner_group:+--runnergroup \"$runner_group\"} ${disableupdate:+--disableupdate}"
-    ./config.sh --unattended --url $runner_url --token $RUNNER_TOKEN ${replace:+--replace} --name $runner_name ${labels:+--labels $labels} ${runner_group:+--runnergroup "$runner_group"} ${disableupdate:+--disableupdate}
+    time ./config.sh --unattended --url $runner_url --token $RUNNER_TOKEN ${replace:+--replace} --name $runner_name ${labels:+--labels $labels} ${runner_group:+--runnergroup "$runner_group"} ${disableupdate:+--disableupdate}
     echo "Configuration complete."
 fi
 

@@ -106,9 +106,14 @@ jobs:
         run: |
           ssh test@$env:IP 'curl -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/service.sh -O https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/refs/heads/main/runner.sh && \
            chmod u+x ./runner.sh ./service.sh && \
-           RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} ./runner.sh -s MelkiBenjamin/github-action-test -f && \     
+           time RUNNER_CFG_PAT=${{ secrets.TOKEN_GITHUB }} ./runner.sh -s MelkiBenjamin/github-action-test -f && \     
            echo "${{ secrets.vm }}" | sudo -SE ./service.sh && \
            ls ./runner/runsvc.sh'
+
+#           ssh test@$env:IP 'curl -sS https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/main/runner.sh 
+#           | RUNNER_CFG_PAT="${{ secrets.TOKEN_GITHUB }}" -s MelkiBenjamin/github-action-test -f  && \
+#            curl -sS https://raw.githubusercontent.com/MelkiBenjamin/github-action-test/main/service.sh 
+#           | echo "${{ secrets.vm }}" | sudo -S'
       
       - name: netoyage
 #        if: steps.runner.outputs.stdout == 'runner not installed'
