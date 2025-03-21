@@ -15,7 +15,9 @@ jobs:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
-      - run: sudo bash spilot_install.sh
+      - run: |
+          OLLAMA_SERVER_IP=127.0.0.1
+          sudo bash spilot_install.sh
       - run: écho 'ça marche? ' | s-pilot
       - name: Greet
         id: greet
