@@ -19,6 +19,7 @@ jobs:
         run: | # Commenter la ligne de validation de l'adresse IP dans la fonction add_server_ip 
            sudo sed -i 's/^if \[\[ \$ip_address =~/# if \[\[ \$ip_address =~/' spilot_install.sh
       - run: |
+          sudo sed -i 's/^USE_API=ollama/USE_API=localai/' /usr/local/bin/spilot_common.sh
           (echo "127.0.0.1" && echo "127.0.0.1") | sudo bash spilot_install.sh
       - run: écho 'ça marche? ' | s-pilot
       - name: Greet
