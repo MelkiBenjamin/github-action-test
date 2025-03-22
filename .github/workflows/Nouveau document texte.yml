@@ -17,7 +17,7 @@ jobs:
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
       - run: |
           - run: |
-             export LOCALAI_SERVER_IP=127.0.0.1 sudo bash spilot_install.sh
+             echo "127.0.0.1" | sudo bash spilot_install.sh
       - run: écho 'ça marche? ' | s-pilot
       - name: Greet
         id: greet
