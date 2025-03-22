@@ -17,7 +17,7 @@ jobs:
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
       - name: Modifier spilot_install.sh pour contourner la validation IP 
         run: | # Commenter la ligne de validation de l'adresse IP dans la fonction add_server_ip 
-          sudo sed -i 's/if \[\[ \$ip_address =~ ^+\\.+\\.+\\.+$\ \]\]; then/# if \[\[ \$ip_address =~ ^+\\.+\\.+\\.+$\ \]\]; then/' spilot_install.sh 
+           sudo sed -i 's/if \[\[ \$ip_address =~ ^+\\\.+\\\.+\\\.+\$ \]\]; then/# if \[\[ \$ip_address =~ ^+\\\.+\\\.+\$ \]\]; then/' spilot_install.sh
       - run: |
           export LOCALAI_SERVER_IP=127.0.0.1 && sudo bash spilot_install.sh
       - run: écho 'ça marche? ' | s-pilot
