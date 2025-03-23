@@ -33,7 +33,16 @@ jobs:
       - run: export TERM=dumb && s-pilot lm
       - run: export TERM=dumb && s-pilot lc
       - run: ls -alh
-      - run: ls -alh /usr/bin/
+      - run: ls -alh /usr/local/bin/
+      
+      - name: Modifier s-pilot pour contourner la confirmation (non dangereux)
+        run: |
+          sudo sed -i '/elif [[ "$DANGER_CMD_FOUND" == false ]]; then/,/fi/ {
+          /echo -e "\\\\033\[36mWould you like to execute it? (Yes\/No)\\\\033\[0m"/d
+          /read run_answer/d
+          /if \[\[ "\$run_answer" == "Yes" \]\] \|\| \[\[ "\$run_answer" == "yes" \]\] \|\| \[\[ "\$run_answer" == "y" \]\] \|\| \[\[ "\$run_answer" == "Y" \]\]; then/d
+          s/echo -e "\\\\nExecuting command: \$execute_cmd\\\\n"/echo -e "\\\\nExecuting command: \$execute_cmd (non-dangerous)\\\\n"/
+          }' /usr/local/bin/s-pilot
       - name: test shell-pilot 
         run: |
           export TERM=dumb
