@@ -1,4 +1,4 @@
-qname: build test
+name: build test
 on: 
   push:
   workflow_dispatch:
@@ -21,8 +21,9 @@ jobs:
       - run: |
           (echo "127.0.0.1" && echo "127.0.0.1") | sudo bash spilot_install.sh
       - run: |
-          sudo s-pilot cmp localai  
-          echo "ça marche?" | s-pilot
+          sudo s-pilot cmp localai 
+          export TERM=dumb
+          echo "bonjour" | s-pilot
       - run: (echo "cmd:fais ls" && echo "Yes") |  s-pilot
       - name: Greet
         id: greet
