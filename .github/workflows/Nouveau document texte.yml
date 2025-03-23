@@ -34,7 +34,7 @@ jobs:
           s-pilot p "bonjour si j'utilise localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec commande avec github action ? repond en français." 
       - run: |
           export TERM=dumb
-          (echo "cmd:fais ls" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
+          (echo "fais ls" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot cc
       - run: |
           export TERM=dumb
           echo "ls" | s-pilot
