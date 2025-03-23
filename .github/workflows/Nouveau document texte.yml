@@ -32,7 +32,7 @@ jobs:
       - run: export TERM=dumb && s-pilot lc
       - run: |
           export TERM=dumb
-          echo "bonjour si j'utilise localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec cmd: avec ci/cd? repond en français.m" | s-pilot
+          s-pilot p "bonjour si j'utilise localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec cmd: avec ci/cd? repond en français.m" 
       - run: |
           export TERM=dumb
           (echo "cmd:fais ls" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
