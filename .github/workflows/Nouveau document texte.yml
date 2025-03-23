@@ -23,6 +23,7 @@ jobs:
       - run: |
           export TERM=dumb
           sudo s-pilot cmp localai
+          s-pilot h
       - run: |
           export TERM=dumb
           sudo s-pilot m hermes-2-theta-llama-3-8b
