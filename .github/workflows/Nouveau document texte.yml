@@ -36,13 +36,15 @@ jobs:
       - run: ls -alh /usr/local/bin/
       
       - name: Modifier s-pilot pour contourner la confirmation (non dangereux)
+        
+      - name: Modifier s-pilot pour contourner la confirmation (non dangereux) - Supprimer les lignes
         run: |
-         sudo sed -i '/elif [[ "$DANGER_CMD_FOUND" == false ]]; then/{
-         /echo -e "\\\\033\[36mWould you like to execute it? (Yes\/No)\\\\033\[0m"/d
-         /read run_answer/d
-         /if [[ "$run_answer" =~ ^[Yy](es)?$ ]]; then/d
-         s/echo -e "\\\\nExecuting command: \$execute_cmd\\\\n"/echo -e "\\\\nExecuting command: \$execute_cmd (non-dangerous)\\\\n"/
-         }' /usr/local/bin/s-pilot
+          sudo sed -i '/elif [[ "$DANGER_CMD_FOUND" == false ]]; then/,/fi/ {
+           /echo -e "\\\\033\[36mWould you like to execute it? (Yes\/No)\\\\033\[0m"/d
+           /read run_answer/d
+           /if [[ "$run_answer" =~ ^[Yy](es)?$ ]]; then/d
+           /fi/d
+          }' /usr/local/bin/s-pilot
       - run: cat /usr/local/bin/s-pilot
       - name: test shell-pilot 
         run: |
