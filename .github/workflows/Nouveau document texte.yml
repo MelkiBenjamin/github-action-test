@@ -23,7 +23,7 @@ jobs:
       - run: |
           sudo s-pilot cmp localai  
           echo "ça marche?" | s-pilot
-      - run: (echo "cmd:fais ls" && echo "yes") |  s-pilot
+      - run: (echo "cmd:fais ls" && echo "Yes") |  s-pilot
       - name: Greet
         id: greet
         run: |
