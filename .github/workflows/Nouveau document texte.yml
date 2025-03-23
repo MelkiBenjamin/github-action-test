@@ -26,7 +26,7 @@ jobs:
           s-pilot h
       - run: |
           export TERM=dumb
-          sudo s-pilot m hermes-2-theta-llama-3-8bm
+          sudo s-pilot m hermes-2-theta-llama-3-8b
       - run: export TERM=dumb && s-pilot lm
       - run: export TERM=dumb && s-pilot lc
       - run: |
