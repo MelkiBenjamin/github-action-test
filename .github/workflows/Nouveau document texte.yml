@@ -22,8 +22,8 @@ jobs:
           (echo "127.0.0.1" && echo "127.0.0.1") | sudo bash spilot_install.sh
       - run: |
           sudo s-pilot cmp localai  
-          (echo "ça marche?" && echo "yes") | s-pilot
-      - run: echo "cmd:fais ls" | s-pilot
+          echo "ça marche?" | s-pilot
+      - run: (echo "cmd:fais ls" && echo "yes") |  s-pilot
       - name: Greet
         id: greet
         run: |
