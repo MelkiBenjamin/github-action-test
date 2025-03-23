@@ -23,8 +23,7 @@ jobs:
       - run: |
           sudo s-pilot cmp localai 
       - run: |
-          export TERM=dumb
-          echo "bonjour" | s-pilot
+          export TERM=dump && echo "bonjour" | s-pilot
       - run: (echo "cmd:fais ls" && echo "Yes") |  s-pilot
       - name: Greet
         id: greet
