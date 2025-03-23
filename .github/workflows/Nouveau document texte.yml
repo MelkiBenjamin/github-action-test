@@ -34,9 +34,6 @@ jobs:
       - run: export TERM=dumb && s-pilot lc
       - run: ls -alh
       - run: ls -alh /usr/local/bin/
-      
-      - name: Modifier s-pilot pour contourner la confirmation (non dangereux)
-        
       - name: Modifier s-pilot pour contourner la confirmation (non dangereux) - Supprimer les lignes
         run: |
           sudo sed -i '/elif [[ "$DANGER_CMD_FOUND" == false ]]; then/,/fi/ {
@@ -52,7 +49,7 @@ jobs:
           s-pilot p "bonjour je souhaite utiliser localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec commande avec une action localai dans workflows github action ? repond en français." 
       - run: |
           export TERM=dumb
-          (echo "cmd:fais ls" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
+          (echo "cmd:fais ls\ny" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
       - run: |
           export TERM=dumb
           echo "ls" | s-pilot
