@@ -1,4 +1,4 @@
-name: build test
+qname: build test
 on: 
   push:
   workflow_dispatch:
