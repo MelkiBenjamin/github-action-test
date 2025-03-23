@@ -21,13 +21,13 @@ jobs:
       - run: |
           (echo "127.0.0.1" && echo "127.0.0.1") | sudo bash spilot_install.sh
       - run: |
-          export TERM=dump
+          export TERM=dumb
           sudo s-pilot cmp localai 
       - run: |
-          export TERM=dump 
+          export TERM=dumb
           echo "bonjour" | s-pilot
       - run: |
-          export TERM=dump
+          export TERM=dumb
           (echo "cmd:fais ls" && echo "Yes") |  s-pilot
       - name: Greet
         id: greet
