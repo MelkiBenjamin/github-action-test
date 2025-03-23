@@ -27,14 +27,15 @@ jobs:
       - run: |
           export TERM=dumb
           sudo s-pilot m hermes-2-theta-llama-3-8b
+          
       - run: export TERM=dumb && s-pilot lm
       - run: export TERM=dumb && s-pilot lc
       - run: |
           export TERM=dumb
-          echo "bonjour" | s-pilot
+          echo "bonjour si j'utilise localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec cmd: avec ci/cd? repond en français.m" | s-pilot
       - run: |
           export TERM=dumb
-          (echo "cmd:fais ls" && echo "Yes") |  s-pilot
+          (echo "cmd:fais ls" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
       - run: |
           export TERM=dumb
           echo "ls" | s-pilot
