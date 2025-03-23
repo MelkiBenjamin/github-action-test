@@ -18,20 +18,26 @@ jobs:
       - name: Modifier spilot_install.sh pour contourner la validation IP 
         run: | # Commenter la ligne de validation de l'adresse IP dans la fonction add_server_ip 
            sudo sed -i 's/^if \[\[ \$ip_address =~/# if \[\[ \$ip_address =~/' spilot_install.sh
-      - run: |
+      - name: install Shell pilot 
+        run: |
           (echo "127.0.0.1" && echo "127.0.0.1") | sudo bash spilot_install.sh
-      - run: |
+      - name: config avec localai 
+        run: |
           export TERM=dumb
           sudo s-pilot cmp localai
           s-pilot h
-      - run: |
+      - name: config avec llama 3 8b
+        run: |
           export TERM=dumb
           sudo s-pilot m hermes-2-theta-llama-3-8b
       - run: export TERM=dumb && s-pilot lm
       - run: export TERM=dumb && s-pilot lc
-      - run: |
+      - run: ls -alh
+      - run: ls -alh /usr/bin/
+      - name: test shell-pilot 
+        run: |
           export TERM=dumb
-          s-pilot p "bonjour si j'utilise localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec commande avec action localai github action ? repond en français." 
+          s-pilot p "bonjour je souhaite utiliser localai avec modèle llama et shell-pilot avec cmd:. Comment utiliser Shell-pilot avec commande avec une action localai dans workflows github action ? repond en français." 
       - run: |
           export TERM=dumb
           (echo "cmd:fais ls" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
