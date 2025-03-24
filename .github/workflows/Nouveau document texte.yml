@@ -13,6 +13,7 @@ jobs:
         uses: mudler/localai-github-action@v1
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
+      - run: i="Génère une cmd bash simple qui affiche 'Test réussi' et quitte avec code 0. Formate entre \`\`\`bash et \`\`\`." u="http://localhost:8080/chat/completions" m="gpt-3.5-turbo" r=5;for a in $(seq "$r");do j=$(jq -n --arg i "$i" '{model:"'"$m"'",messages:[{role:"system",content:"Dev sans explication. Bash cmd entre \`\`\`bash et \`\`\`."},{role:"user",content:$i}]}') res=$(curl -s -X POST "$u" -H "Content-Type: application/json" -d "$j") cmd=$(echo "$res"|jq -r '.choices[0].message.content'|sed -n '/```bash/,/```/p'|sed '1d;$d');if [ -n "$cmd" ];then eval "$cmd";[ "$?" -eq 0 ]&&echo "OK $a"&&exit||[ "$a" -lt "$r" ]&&i="Cmd '$cmd' err ($?). Corrige en \`\`\`bash\`\`\`.";elif [ "$a" -lt "$r" ];then i="Pas de cmd. Réessaie.";fi;done;echo "KO"
       - run: |
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
       - name: Modifier spilot_install.sh pour contourner la validation IP 
