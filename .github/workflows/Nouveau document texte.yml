@@ -25,14 +25,12 @@ jobs:
         run: |
           export TERM=dumb
           sudo s-pilot cmp localai
-          s-pilot h
       - name: config avec llama 3 8b
         run: |
           export TERM=dumb
           sudo s-pilot m hermes-2-theta-llama-3-8b
       - run: export TERM=dumb && s-pilot lm
       - run: export TERM=dumb && s-pilot lc
-      - run: ls -alh
       - run: ls -alh /usr/local/bin/
       - name: Modifier s-pilot pour contourner la confirmation (non dangereux) - Supprimer les lignes
         run: |
@@ -53,7 +51,7 @@ jobs:
       - run: |
           pipx install shelloracle
       - run: |
-          shor config init
+          echo "LocalAI" | shor config init
       - name: Greet
         id: greet
         run: |
