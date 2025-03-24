@@ -51,11 +51,9 @@ jobs:
           export TERM=dumb
           (echo "cmd:fais ls\ny" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
       - run: |
-          export TERM=dumb
-          echo "ls" | s-pilot
+          pipx install shelloracle
       - run: |
-          export TERM=dumb
-          echo "Affiche ce qu'il y a dans les fichiers avec les infos dans le répertoire ou je suis" | s-pilot  
+          shor config init
       - name: Greet
         id: greet
         run: |
