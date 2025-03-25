@@ -23,7 +23,7 @@ jobs:
           pip install litellm
           echo 'install litelm fait'
           export LITELLM_MODEL="hermes-2-theta-llama-3-8b"
-          python main.py
+          echo 'creer un script bash que tu va mettre dans un fichier appeler script-b.sh qui va installer k3s le tester en le lancant et si erreur modifier jusqu'a ce que ca marche ' | python main.py
       - run: |
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
       - name: Modifier spilot_install.sh pour contourner la validation IP 
