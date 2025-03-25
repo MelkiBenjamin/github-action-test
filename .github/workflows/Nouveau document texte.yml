@@ -22,7 +22,7 @@ jobs:
           echo 'env virtuel fait'
           pip install litellm
           echo 'install litelm fait'
-          export LITELLM_MODEL="hermes-2-theta-llama-3-8b"
+          export LITELLM_MODEL="localai/hermes-2-theta-llama-3-8b"
           echo "creer un script bash que tu va mettre dans un fichier appeler script-b.sh qui va installer k3s" | python main.py
       - run: |
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
