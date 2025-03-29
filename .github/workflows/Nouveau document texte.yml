@@ -23,7 +23,9 @@ jobs:
       - run: |
           crewai --help
           echo "q" | crewai create crew test55
-          ls
+          ls -alh
+          ls test55
+          crewai create crew --help
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
