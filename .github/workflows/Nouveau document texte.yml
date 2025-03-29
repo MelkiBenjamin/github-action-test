@@ -21,8 +21,9 @@ jobs:
           uv tool list
           crewai version
       - run: |
-          echo "12" | crewai create crew test55
-          
+          crewai --help
+          echo "q" | crewai create crew test55
+          ls
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
