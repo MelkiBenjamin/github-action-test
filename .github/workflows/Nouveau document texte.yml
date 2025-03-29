@@ -22,7 +22,7 @@ jobs:
           crewai version
       - run: |
           crewai --help
-          crewai create crew test55 --provider ollama 3.1
+          crewai create crew test55 --provider ollama/llama3.1
           ls -alh
           ls test55
           crewai create crew --help
