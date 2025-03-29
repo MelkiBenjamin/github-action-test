@@ -13,6 +13,16 @@ jobs:
         uses: mudler/localai-github-action@v1
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
+
+      - name: crewai install 
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv tool install crewai
+          uv tool list
+          crewai version
+      - run: |
+          crewai create crew test
+          
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
@@ -23,7 +33,7 @@ jobs:
           pip install litellm
           echo 'install litelm fait'
           export LITELLM_MODEL="localai/hermes-2-theta-llama-3-8b"
-          echo "creer un script bash que tu va mettre dans un fichier appeler script-b.sh qui va installer k3s" | python main.py
+    #      echo "creer un script bash que tu va mettre dans un fichier appeler script-b.sh qui va installer k3s" | python main.py
       - run: |
          sudo curl -sS -o spilot_install.sh https://raw.githubusercontent.com/reid41/shell-pilot/main/spilot_install.sh
       - name: Modifier spilot_install.sh pour contourner la validation IP 
