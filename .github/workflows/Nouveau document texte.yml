@@ -56,7 +56,8 @@ jobs:
       - run: sudo cat ./test55/src/test55/crew.py
       - run: sudo cat ./test55/src/test55/config/agents.yaml
       - run: sudo cat ./test55/src/test55/config/tasks.yaml
-
+      - run: crewai install
+      - run: crewai run
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
