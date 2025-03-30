@@ -23,8 +23,8 @@ jobs:
       - run: |
           crewai --help
           crewai create crew test55 --skip_provider
-          OPENAI_API_BASE="127.0.0.1:8080"
-          OPENAI_API_KEY="test"
+          export OPENAI_API_BASE="http://127.0.0.1:8080"
+          export OPENAI_API_KEY="test"
           ls -alh
           ls test55
           crewai create crew --help
@@ -34,7 +34,10 @@ jobs:
       - run: sudo cat ./test55/src/test55/config/agents.yaml
       - run: sudo cat ./test55/src/test55/config/tasks.yaml
       - run: cd test55 && crewai install
-      - run: cd test55 && crewai run
+      - run: |
+          export OPENAI_API_BASE="http://127.0.0.1:8080"
+          export OPENAI_API_KEY="test"
+          cd test55 && crewai run
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
