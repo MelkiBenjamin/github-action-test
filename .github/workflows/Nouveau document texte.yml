@@ -26,11 +26,11 @@ jobs:
           ls -alh
           ls test55
           crewai create crew --help
-      - run: ./test55/README.md
-      - run: ./test55/src/test55/main.py
-      - run: ./test55/src/test55/crew.py
-      - run: ./test55/src/test55/config/agents.yaml
-      - run: ./test55/src/test55/config/task.yaml
+      - run: sudo ./test55/README.md
+      - run: sudo ./test55/src/test55/main.py
+      - run: sudo ./test55/src/test55/crew.py
+      - run: sudo ./test55/src/test55/config/agents.yaml
+      - run: sudo ./test55/src/test55/config/task.yaml
 
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
