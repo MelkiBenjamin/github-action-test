@@ -26,6 +26,12 @@ jobs:
           ls -alh
           ls test55
           crewai create crew --help
+      - run: ./test55/README.md
+      - run: ./test55/src/test55/main.py
+      - run: ./test55/src/test55/crew.py
+      - run: ./test55/src/test55/config/agents.yaml
+      - run: ./test55/src/test55/config/task.yaml
+
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
@@ -74,8 +80,8 @@ jobs:
           (echo "cmd:fais ls\ny" && echo "Yes" && echo "Yes" && echo "Yes" ) |  s-pilot
       - run: |
           pipx install shelloracle
-      - run: |
-          echo "LocalAI" | shor config init
+  #    - run: |
+    #      echo "LocalAI" | shor config init
       - name: Greet
         id: greet
         run: |
