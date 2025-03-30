@@ -47,10 +47,10 @@ jobs:
           sed -i '/reporting_analyst:/a \  config:' ./test55/src/test55/config/agents.yaml
 
           # Ajouter les détails de LocalAI sous config pour reporting_analyst
-          sed -i '/reporting_analyst:/a \    model: "llama"' ./test55/src/test55/config/agents.yaml
-          sed -i '/reporting_analyst:/a \    api_base: "http://localhost:8080/v1"' ./test55/src/test55/config/agents.yaml
+          sed -i '/reporting_analyst:/,/config:/a \    model: "llama"' ./test55/src/test55/config/agents.yaml
+          sed -i '/reporting_analyst:/,/config:/a \   api_base: "http://localhost:8080/v1"' ./test55/src/test55/config/agents.yaml
           # Ajouter la clé API si nécessaire (sinon, vous pouvez omettre cette ligne)
-          sed -i '/reporting_analyst:/a \    api_key: "votre-clé-api"' ./test55/src/test55/config/agents.yaml
+          sed -i '/reporting_analyst:/,/config:/a \    api_key: "votre-clé-api"' ./test55/src/test55/config/agents.yaml
       - run: sudo cat ./test55/README.md
       - run: sudo cat ./test55/src/test55/main.py
       - run: sudo cat ./test55/src/test55/crew.py
