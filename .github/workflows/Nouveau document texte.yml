@@ -22,7 +22,7 @@ jobs:
           crewai version
       - run: |
           crewai --help
-          crewai create crew test55 --skip_provider
+          echo "1" | crewai create crew test55 
           ls -alh
           ls test55
           crewai create crew --help
