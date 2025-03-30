@@ -23,7 +23,7 @@ jobs:
       - run: |
           crewai --help
           crewai create crew test55 --skip_provider
-          export OPENAI_API_BASE="http://127.0.0.1:8080"
+          export OPENAI_API_BASE="http://127.0.0.1"
           export OPENAI_API_KEY="test"
           ls -alh
           ls test55
