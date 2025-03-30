@@ -35,7 +35,7 @@ jobs:
       - run: sudo cat ./test55/src/test55/config/tasks.yaml
       - run: cd test55 && crewai install
       - run: |
-          export OPENAI_API_BASE="http://127.0.0.1:8080"
+          export OPENAI_API_BASE="http://127.0.0.1"
           export OPENAI_API_KEY="test"
           cd test55 && crewai run
       - run: |
