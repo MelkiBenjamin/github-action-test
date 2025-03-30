@@ -22,35 +22,13 @@ jobs:
           crewai version
       - run: |
           crewai --help
-          echo "1" | crewai create crew test55 
+          crewai create crew test55 --skip_provider
+          OPENAI_API_BASE="127.0.0.1:8080"
+          OPENAI_API_key="test"
           ls -alh
           ls test55
           crewai create crew --help
-      - run: |
-          # Définir llm sur custom (ou openai)
-          sed -i '/researcher:/a \  llm: openai' ./test55/src/test55/config/agents.yaml
-
-          # Ajouter la section config après la ligne 'llm: custom'
-          sed -i '/llm: openai/a \  config:' ./test55/src/test55/config/agents.yaml
-
-          # Ajouter les détails de LocalAI sous config
-          sed -i '/config:/a \    model: "hermes-2-theta-llama-3-8b"' ./test55/src/test55/config/agents.yaml
-          sed -i '/model: "hermes-2-theta-llama-3-8b"/a \    api_base: "http://localhost:8080/v1"' ./test55/src/test55/config/agents.yaml
-          # Ajouter la clé API si nécessaire (sinon, vous pouvez omettre cette ligne)
-          sed -i '/api_base: "http:\/\/localhost:8080\/v1"/a \    api_key: "votre-clé-api"' ./test55/src/test55/config/agents.yaml
-          sed -i 's/{current_year}/2025/g' ./test55/src/test55/config/tasks.yaml
-          sed -i 's/{current_year}/2025/g' ./test55/src/test55/config/agents.yaml
-          # Définir llm sur custom (ou openai) pour reporting_analyst
-          sed -i '/reporting_analyst:/a \  llm: openai' ./test55/src/test55/config/agents.yaml
-
-          # Ajouter la section config après la ligne 'llm: custom' pour reporting_analyst
-          sed -i '/reporting_analyst:/a \  config:' ./test55/src/test55/config/agents.yaml
-
-          # Ajouter les détails de LocalAI sous config pour reporting_analyst
-          # Ajouter les détails de LocalAI sous config pour 
-          sed -i '/reporting_analyst:/,/config:/a \    api_key: "votre-clé-api"' ./test55/src/test55/config/agents.yaml 
-          sed -i '/reporting_analyst:/,/config:/a \    api_base: "http://localhost:8080/v1"' ./test55/src/test55/config/agents.yaml 
-          sed -i '/reporting_analyst:/,/config:/a \    model: "hermes-2-theta-llama-3-8b"' ./test55/src/test55/config/agents.yaml
+      - run: écho test
       - run: sudo cat ./test55/README.md
       - run: sudo cat ./test55/src/test55/main.py
       - run: sudo cat ./test55/src/test55/crew.py
