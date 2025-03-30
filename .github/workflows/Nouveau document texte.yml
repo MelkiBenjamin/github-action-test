@@ -30,7 +30,7 @@ jobs:
       - run: sudo cat ./test55/src/test55/main.py
       - run: sudo cat ./test55/src/test55/crew.py
       - run: sudo cat ./test55/src/test55/config/agents.yaml
-      - run: sudo cat ./test55/src/test55/config/task.yaml
+      - run: sudo cat ./test55/src/test55/config/tasks.yaml
 
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
