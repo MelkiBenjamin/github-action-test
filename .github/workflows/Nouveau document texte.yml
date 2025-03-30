@@ -24,7 +24,7 @@ jobs:
           crewai --help
           crewai create crew test55 --skip_provider
           OPENAI_API_BASE="127.0.0.1:8080"
-          OPENAI_API_key="test"
+          OPENAI_API_KEY="test"
           ls -alh
           ls test55
           crewai create crew --help
