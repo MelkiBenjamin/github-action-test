@@ -23,7 +23,7 @@ jobs:
       - run: |
           crewai --help
           crewai create crew test55 --skip_provider
-          export OPENAI_API_BASE="http://127.0.0.1"
+          export OPENAI_API_BASE="http://127.0.0.1:8080"
           export OPENAI_API_KEY="test"
           ls -alh
           ls test55
@@ -37,6 +37,7 @@ jobs:
       - run: |
           export OPENAI_API_BASE="http://127.0.0.1"
           export OPENAI_API_KEY="test"
+          export OPENAI_MODEL_NAME="hermes-2-theta-llama-3-8b"
           cd test55 && crewai run
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
