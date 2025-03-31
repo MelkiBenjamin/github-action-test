@@ -40,6 +40,7 @@ jobs:
           export OPENAI_MODEL_NAME="openai/hermes-2-theta-llama-3-8b"
           cd test55 && crewai run
       - run: ls -alh
+      - run: ls -alh test55
       - run: |
           git clone https://github.com/yoheinakajima/babyagi-2o.git
           echo 'clone fait'
