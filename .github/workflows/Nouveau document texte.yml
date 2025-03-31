@@ -28,7 +28,7 @@ jobs:
           ls -alh
           ls test55
           crewai create crew --help
-          sed -i '/\(researcher:\)\|\(reporting_analyst:\)/a \  llm: openai' ./test55/src/test55/config/agents.yaml
+       #   sed -i '/\(researcher:\)\|\(reporting_analyst:\)/a \  llm: openai' ./test55/src/test55/config/agents.yaml
       - run: sudo cat ./test55/README.md
       - run: sudo cat ./test55/src/test55/main.py
       - run: sudo cat ./test55/src/test55/crew.py
