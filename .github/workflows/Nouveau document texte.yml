@@ -28,7 +28,7 @@ jobs:
           ls -alh
           ls test55
           crewai create crew --help
-          sed -i '/\(researcher:\)\|\(reporting_analyst:\)/a \  llm: llm' ./test55/src/test55/config/agents.yaml
+          sed -i '/\(researcher:\)\|\(reporting_analyst:\)/a \  llm: openai' ./test55/src/test55/config/agents.yaml
       - run: sudo cat ./test55/README.md
       - run: sudo cat ./test55/src/test55/main.py
       - run: sudo cat ./test55/src/test55/crew.py
@@ -36,7 +36,7 @@ jobs:
       - run: sudo cat ./test55/src/test55/config/tasks.yaml
       - run: cd test55 && crewai install
       - run: |
-          export OPENAI_API_BASE="http://127.0.0.1"
+          export OPENAI_API_BASE="http://127.0.0.1:8080"
           export OPENAI_API_KEY="test"
           export OPENAI_MODEL_NAME="hermes-2-theta-llama-3-8b"
           cd test55 && crewai run
