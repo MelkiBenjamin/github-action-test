@@ -68,7 +68,7 @@ jobs:
           cat > ./test55/src/test55/crew.py <<'EOF'
           from crewai import Crew
 
-          crew = Crew(config_path='config/')
+          crew = Crew()
           crew.load_agents('config/agents.yaml')
           crew.load_tasks('config/tasks.yaml')
           crew.start()
