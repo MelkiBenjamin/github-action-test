@@ -44,7 +44,7 @@ jobs:
            backstory: >
              You're a meticulous analyst with a keen eye for detail. You're known for your ability to turn complex data into
              clear and concise reports, making it easy for others to understand and act on the information you provide.
-          EOF
+         EOF
       - run: |
           cat > test55/src/test55/config/tasks.yaml <<'EOF'
           - name: research_task
@@ -61,15 +61,15 @@ jobs:
             expected_output: >
               A well-structured report summarizing the data analysis on {topic}
             agent: reporting_analyst
-           EOF
+          EOF
       - run: |
           cat > test55/src/test55/crew.py <<'EOF'
           import yaml
           from crewai import Crew, Process
 
           Crew(
-            agents=yaml.safe_load(open("config/agents.yaml")),
-            tasks=yaml.safe_load(open("config/tasks.yaml")),
+            agents=yaml.safe_load(open("test55/src/test55/config/agents.yaml")),
+            tasks=yaml.safe_load(open("test55/src/test55/config/tasks.yaml")),
             process=Process.sequential,
             verbose=True
           ).kickoff()
