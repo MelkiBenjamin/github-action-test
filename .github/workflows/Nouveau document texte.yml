@@ -65,15 +65,15 @@ jobs:
               agent: reporting_analyst
               output_file: report.md
           EOF
-      - run: |
-          cat > ./test55/src/test55/crew.py <<'EOF'
-          from crewai import Crew
+    #  - run: |
+     #     cat > ./test55/src/test55/crew.py <<'EOF'
+       #   from crewai import Crew
 
-          crew = Crew()
-          crew.load_agents('config/agents.yaml')
-          crew.load_tasks('config/tasks.yaml')
-          crew.start()
-          EOF
+          #crew = Crew()
+       #   crew.load_agents('config/agents.yaml')
+        #  crew.load_tasks('config/tasks.yaml')
+        #  crew.start()
+       #   EOF
 
       - run: sudo cat ./test55/README.md
       - run: sudo cat ./test55/src/test55/main.py
