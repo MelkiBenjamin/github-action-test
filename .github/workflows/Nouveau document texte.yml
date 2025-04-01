@@ -69,8 +69,8 @@ jobs:
           from crewai import Crew
 
           crew = Crew(config_path='config/')
-          crew.load_agents('agents.yaml')
-          crew.load_tasks('tasks.yaml')
+          crew.load_agents('config/agents.yaml')
+          crew.load_tasks('config/tasks.yaml')
           crew.start()
           EOF
 
