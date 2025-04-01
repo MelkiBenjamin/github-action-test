@@ -63,6 +63,7 @@ jobs:
               expected_output: >
                 A well-structured report summarizing the data analysis on {topic}
               agent: reporting_analyst
+              output_file: report.md
           EOF
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
