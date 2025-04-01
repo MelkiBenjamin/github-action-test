@@ -30,7 +30,7 @@ jobs:
           crewai create crew --help
       - name: modifier config pour modulaire
         run: |
-         cat > test55/config/agents.yaml <<'EOF'
+         cat > test55/src/test55/config/agents.yaml <<'EOF'
          - name: researcher
            role: "{topic} Senior Data Researcher"
            goal: "Uncover cutting-edge developments in {topic}"
@@ -46,7 +46,7 @@ jobs:
              clear and concise reports, making it easy for others to understand and act on the information you provide.
           EOF
       - run: |
-          cat > test55/config/tasks.yaml <<'EOF'
+          cat > test55/src/test55/config/tasks.yaml <<'EOF'
           - name: research_task
             description: >
               Conduct a thorough research about {topic}.
@@ -63,7 +63,7 @@ jobs:
             agent: reporting_analyst
            EOF
       - run: |
-          cat > test55/crew_test.py <<'EOF'
+          cat > test55/src/test55/crew.py <<'EOF'
           import yaml
           from crewai import Crew, Process
 
