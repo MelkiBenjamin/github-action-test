@@ -64,15 +64,12 @@ jobs:
           EOF
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
-          import yaml
-          from crewai import Crew, Process
+          from crewai import Crew
 
-          Crew(
-            agents=yaml.safe_load(open("./src/test55/config/agents.yaml")),
-            tasks=yaml.safe_load(open("./src/test55/config/tasks.yaml")),
-            process=Process.sequential,
-            verbose=True
-          ).kickoff()
+          crew = Crew(config_path='config/')
+          crew.load_agents('agents.yaml')
+          crew.load_tasks('tasks.yaml')
+          crew.start()
           EOF
 
       - run: sudo cat ./test55/README.md
