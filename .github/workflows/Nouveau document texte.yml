@@ -77,7 +77,7 @@ jobs:
           agents_config = "config/agents.yaml"
           tasks_config = "config/tasks.yaml"
 
-          @crew
+          
           def crew(self) -> Crew:
             """Creates the Test55 crew"""
 
