@@ -86,11 +86,6 @@ jobs:
               process=Process.sequential,
               verbose=True,
             )
-          if __name__ == "__main__":
-           test_crew = Test55()
-           results = test_crew.crew().start()
-           print("Résultats obtenus :", results)
-
           EOF
 
       - run: sudo cat ./test55/README.md
