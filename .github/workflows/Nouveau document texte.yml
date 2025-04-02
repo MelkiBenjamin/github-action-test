@@ -67,6 +67,7 @@ jobs:
           EOF
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
+          import yaml
           from crewai import Crew
 
           with open("./src/test55/config/agents.yaml", "r") as f:
