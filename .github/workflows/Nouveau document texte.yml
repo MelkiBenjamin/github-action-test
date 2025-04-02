@@ -77,11 +77,9 @@ jobs:
           agents_config = "config/agents.yaml"
           tasks_config = "config/tasks.yaml"
 
-          
+          @crew
           def crew(self) -> Crew:
             """Creates the Test55 crew"""
-
-            @crew
             return Crew(
               agents=self.agents,  # Chargé automatiquement depuis le YAML
               tasks=self.tasks,    # Chargé automatiquement depuis le YAML
