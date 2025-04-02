@@ -71,13 +71,13 @@ jobs:
           from crewai import Crew
 
           with open("./src/test55/config/agents.yaml", "r") as f:
-            agents = yaml.safe_load(f)["agents"]
+            agents_list = yaml.safe_load(f)["agents"]
 
           # Transformer la liste en dictionnaire indexé par le nom de l'agent
           agents = {agent["name"]: agent for agent in agents_list}
 
           with open("./src/test55/config/tasks.yaml", "r") as f:
-            tasks = yaml.safe_load(f)["tasks"]
+            tasks_list = yaml.safe_load(f)["tasks"]
 
           # Transformer la liste en dictionnaire indexé par le nom de la tâche
           tasks = {task["name"]: task for task in tasks_list}
