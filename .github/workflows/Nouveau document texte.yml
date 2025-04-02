@@ -67,8 +67,8 @@ jobs:
           EOF
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
-          from crewai import Crew, Process
-          from crewai.project import CrewBase
+          from crewai import Crew, Process, task
+          from crewai.project import CrewBase, crew
 
           @CrewBase
           class Test55:
@@ -81,6 +81,7 @@ jobs:
           def crew(self) -> Crew:
             """Creates the Test55 crew"""
 
+            @crew
             return Crew(
               agents=self.agents,  # Chargé automatiquement depuis le YAML
               tasks=self.tasks,    # Chargé automatiquement depuis le YAML
