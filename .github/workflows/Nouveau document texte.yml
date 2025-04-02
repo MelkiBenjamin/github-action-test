@@ -81,12 +81,12 @@ jobs:
           def crew(self) -> Crew:
             """Creates the Test55 crew"""
 
-          return Crew(
-            agents=self.agents,  # Chargé automatiquement depuis le YAML
-            tasks=self.tasks,    # Chargé automatiquement depuis le YAML
-            process=Process.sequential,
-            verbose=True,
-          )
+            return Crew(
+              agents=self.agents,  # Chargé automatiquement depuis le YAML
+              tasks=self.tasks,    # Chargé automatiquement depuis le YAML
+              process=Process.sequential,
+              verbose=True,
+            )
           if __name__ == "__main__":
            test_crew = Test55()
            results = test_crew.crew().start()
