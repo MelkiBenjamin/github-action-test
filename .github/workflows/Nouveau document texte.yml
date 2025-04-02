@@ -74,20 +74,20 @@ jobs:
           class Test55:
             """Test55 crew"""
 
-         agents_config = "config/agents.yaml"
-         tasks_config = "config/tasks.yaml"
+          agents_config = "config/agents.yaml"
+          tasks_config = "config/tasks.yaml"
 
-         @crew
-         def crew(self) -> Crew:
+          @crew
+          def crew(self) -> Crew:
             """Creates the Test55 crew"""
 
-         return Crew(
+          return Crew(
             agents=self.agents,  # Chargé automatiquement depuis le YAML
             tasks=self.tasks,    # Chargé automatiquement depuis le YAML
             process=Process.sequential,
             verbose=True,
-         )
-         if __name__ == "__main__":
+          )
+          if __name__ == "__main__":
            test_crew = Test55()
            results = test_crew.crew().start()
            print("Résultats obtenus :", results)
