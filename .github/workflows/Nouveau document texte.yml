@@ -69,10 +69,10 @@ jobs:
           cat > ./test55/src/test55/crew.py <<'EOF'
           from crewai import Crew
 
-          with open("./config/agents.yaml", "r") as f:
+          with open("./src/test55/config/agents.yaml", "r") as f:
             agents = yaml.safe_load(f)["agents"]
 
-          with open("./config/tasks.yaml", "r") as f:
+          with open("./src/test55/config/tasks.yaml", "r") as f:
             tasks = yaml.safe_load(f)["tasks"]
 
           crew = Crew(agents=agents, tasks=tasks)
