@@ -35,8 +35,8 @@ jobs:
           from crewai.project import CrewBase, agent, crew, task 
           
           @CrewBase
-            class Test55():
-              """Test55 crew"""
+          class Test55():
+            """Test55 crew"""
 
             agents_config = "config/agents.yaml"
             tasks_config = "config/tasks.yaml"
