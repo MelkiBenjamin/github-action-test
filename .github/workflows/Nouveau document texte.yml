@@ -50,7 +50,7 @@ jobs:
 
           @agent
           def reporting_analyst(self) -> Agent:
-         .. return Agent(
+            return Agent(
               config=self.agents_config['reporting_analyst'],
               verbose=True
             )
