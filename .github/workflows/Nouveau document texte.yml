@@ -29,7 +29,8 @@ jobs:
           ls test55
           crewai create crew --help
       - run: |
-          sed -i '/Formatted as markdown without '```'/s/$/ write in french/' ./test55/src/test55/config/tasks.yaml
+          sed -i "/Formatted as markdown without \`/s/$/ write in french/" ./test55/src/test55/config/tasks.yaml
+
 
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
