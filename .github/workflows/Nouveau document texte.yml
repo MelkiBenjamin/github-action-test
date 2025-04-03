@@ -31,8 +31,8 @@ jobs:
       
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
-          from crewai import Crew, Process, task
-          from crewai.project import CrewBase, crew
+          from crewai import Crew, Process, task, agent
+          from crewai.project import CrewBase, crew, task, agent
 
           @CrewBase
           class Test55():
@@ -40,6 +40,36 @@ jobs:
 
           agents_config = "config/agents.yaml"
           tasks_config = "config/tasks.yaml"
+
+          @agent
+          def researcher(self) -> Agent:
+            return Agent(
+              config=self.agents_config['researcher'],
+              verbose=True
+           )
+
+          @agent
+          def reporting_analyst(self) -> Agent:
+         .. return Agent(
+              config=self.agents_config['reporting_analyst'],
+              verbose=True
+            )
+
+          # To learn more about structured task outputs,
+          # task dependencies, and task callbacks, check out the documentation:
+          # https://docs.crewai.com/concepts/tasks#overview-of-a-task
+          @task
+          def research_task(self) -> Task:
+            return Task(
+              config=self.tasks_config['research_task'],
+            )
+
+          @task
+          def reporting_task(self) -> Task:
+            return Task(
+              config=self.tasks_config['reporting_task'],
+              output_file='report.md'
+           )
 
           @crew
           def crew(self) -> Crew:
