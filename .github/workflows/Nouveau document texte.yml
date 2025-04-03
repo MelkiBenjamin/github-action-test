@@ -28,7 +28,8 @@ jobs:
           ls -alh
           ls test55
           crewai create crew --help
-      
+      - run: sed -i 's/'```'/'```'write in french./' test55/src/test55/config/tasks.yaml
+
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
           from crewai import Agent, Crew, Process, Task 
