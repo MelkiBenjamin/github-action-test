@@ -31,9 +31,9 @@ jobs:
       
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
-          from crewai import Crew, Process, task, agent
-          from crewai.project import CrewBase, crew, task, agent
-
+          from crewai import Agent, Crew, Process, Task 
+          from crewai.project import CrewBase, agent, crew, task 
+          
           @CrewBase
           class Test55():
             """Test55 crew"""
