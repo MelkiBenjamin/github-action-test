@@ -44,14 +44,14 @@ jobs:
          EOF
       - run: |
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
-          research_task: 
+          equipe_task: 
             description: > 
               Créer une équipe d'agents IA adaptés au projet : développeur frontend, backend.
               Leur assigner des tâches pour livrer une application web To-Do List complète en Python avec une interface simple.
               Orchestrer leur collaboration et vérifier que l’application est livrée et exécutable.
             expected_output: > 
               Un dossier contenant tous les fichiers nécessaires : index.html, app.py, README en français, etc. 
-            agent: agent_créateur 
+            agent: agent_createur 
           EOF
 
       - run: |
