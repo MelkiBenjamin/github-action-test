@@ -50,7 +50,7 @@ jobs:
              your ability to turn complex data into clear and concise reports, making 
              it easy for others to understand and act on the information you provide. 
              write in french.
-         EOF 
+          EOF 
         
       - run: |
           cat > ./test55/src/test55/crew.py <<'EOF'
