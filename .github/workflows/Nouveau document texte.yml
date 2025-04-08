@@ -53,10 +53,14 @@ jobs:
             description: > 
               Créer une équipe d'agents IA crewai adaptés au projet : développeur frontend, 
               backend.
+              
               Leur assigner des tâches pour livrer une application web To-Do List
               complète en Python avec une interface simple.
               Orchestrer leur collaboration et vérifier que l’application est livrée 
               et exécutable.
+              Crewai Avec sont cli sont déjà installer avec uv, donc il faut en utilisant le cli crewai 
+              créer le nouvel équipage d'agent crewai nommé todo le configurer et le lancer 
+              afin de réaliser le projet.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
