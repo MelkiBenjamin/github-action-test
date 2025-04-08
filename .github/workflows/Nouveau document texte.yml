@@ -58,9 +58,10 @@ jobs:
               complète en Python avec une interface simple.
               Orchestrer leur collaboration et vérifier que l’application est livrée 
               et exécutable.
-              Crewai Avec sont cli sont déjà installer avec uv, donc il faut en utilisant le cli crewai 
+              installe crewai avec uv tools, et en utilisant le cli crewai 
               créer le nouvel équipage d'agent crewai nommé todo le configurer et le lancer 
               afin de réaliser le projet.
+              tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
