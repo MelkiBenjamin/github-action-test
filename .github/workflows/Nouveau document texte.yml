@@ -46,7 +46,7 @@ jobs:
              application web To-Do List fonctionnelle.
              Toutes les sorties doivent être en français.
            allow_code_execution: True
-           tools=[CodeInterpreterTool()]
+           tools: [CodeInterpreterTool()]
          EOF
       - run: |
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
