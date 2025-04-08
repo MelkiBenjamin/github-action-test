@@ -73,7 +73,7 @@ jobs:
             tasks_config = "config/tasks.yaml"
 
             @agent
-            def researcher(self) -> Agent:
+            def agent_createur(self) -> Agent:
               return Agent(
                 config=self.agents_config['agent_createur'],
                 verbose=True
