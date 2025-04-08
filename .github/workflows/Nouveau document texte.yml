@@ -49,7 +49,7 @@ jobs:
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
           equipe_task: 
             description: > 
-              Créer une équipe d'agents IA adaptés au projet : développeur frontend, 
+              Créer une équipe d'agents IA crewai adaptés au projet : développeur frontend, 
               backend.
               Leur assigner des tâches pour livrer une application web To-Do List
               complète en Python avec une interface simple.
