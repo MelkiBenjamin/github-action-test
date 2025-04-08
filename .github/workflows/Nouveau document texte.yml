@@ -32,7 +32,7 @@ jobs:
          cat > ./test55/src/test55/config/agents.yaml <<'EOF'
          agent_createur: 
            role: > 
-             {topic} Senior Data Researcher 
+             chef de projet ia
            goal: > 
              Créer automatiquement une équipe d’agents IA (développeur frontend, backend) 
              pour concevoir et livrer une application web To-Do List complète en Python.
