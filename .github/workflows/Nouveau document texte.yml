@@ -20,6 +20,7 @@ jobs:
           uv tool install crewai
           uv tool list
           crewai version
+          uv pip install "crewai[tools]"
       - run: |
           crewai --help
           crewai create crew test55 --skip_provider
