@@ -20,6 +20,7 @@ jobs:
           uv tool install crewai
           uv tool list
           crewai version
+          uv venv
           uv pip install "crewai[tools]"
       - run: |
           crewai --help
