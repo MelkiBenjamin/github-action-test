@@ -42,7 +42,7 @@ jobs:
              nécessaires à chaque projet.
              Votre mission : créer et orchestrer une équipe pour produire une 
              application web To-Do List fonctionnelle.
-             écris en français.
+             Toutes les sorties doivent être en français.
          EOF
       - run: |
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
