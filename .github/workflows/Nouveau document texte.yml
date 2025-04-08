@@ -55,7 +55,7 @@ jobs:
               Orchestrer leur collaboration et vérifier que l’application est livrée 
               et exécutable.
             expected_output: > 
-              Un dossier contenant tous les fichiers nécessaires : index.html, 
+              Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
             agent: agent_createur 
           EOF
