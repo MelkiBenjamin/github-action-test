@@ -41,8 +41,8 @@ jobs:
            backstory: > 
              Vous êtes un gestionnaire de projet IA ultra-efficace.
              Vous avez la capacité de recruter dynamiquement les meilleurs agents 
-             nécessaires à chaque projet.
-             Votre mission : créer et orchestrer une équipe pour produire une 
+             nécessaires à chaque projet crewai.
+             Votre mission : créer et orchestrer une équipe crewai pour produire une 
              application web To-Do List fonctionnelle.
              Toutes les sorties doivent être en français.
            allow_code_execution: True
@@ -55,11 +55,11 @@ jobs:
               backend.
               
               Leur assigner des tâches pour livrer une application web To-Do List
-              complète en Python avec une interface simple.
+              complète en Python avec une interface simple sans base de données.
               Orchestrer leur collaboration et vérifier que l’application est livrée 
               et exécutable.
-              installe crewai avec uv tools, et en utilisant le cli crewai 
-              créer le nouvel équipage d'agent crewai nommé todo le configurer et le lancer 
+              installe crewai, et
+              créer un nouvel équipage d'agent crewai nommé todo le configurer et le lancer 
               afin de réaliser le projet.
               tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
             expected_output: > 
