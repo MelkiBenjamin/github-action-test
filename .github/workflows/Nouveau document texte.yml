@@ -54,8 +54,10 @@ jobs:
               Conçois une équipe d’agents CrewAI spécialisée pour développer une application ToDo List simple :
               L'application sera développée en Python avec Flask.
               Elle stocke les tâches en mémoire (liste Python).
-              Elle permet l’ajout, la suppression et l’affichage des tâches.
-              Une fois les rôles définis, crée et configure un équipage optimisé pour cette tâche.
+              Elle permet l’ajout, la suppression et l’affichage des tâches. 
+              Ne crée pas de JSON ni de code Python pour définir les rôles.
+              Utilise directement les fonctions natives de CrewAI pour créer les agents, configurer les tâches et lancer l’équipage.
+              Chaque agent doit avoir un rôle bien défini.
               Puis, exécute concrètement cet équipage dans CrewAI pour lancer le développement de l'application.
               Tu es dans un environnement restreint (pas de curl, pas de sudo), travaille uniquement avec ce que CrewAI permet.
             expected_output: > 
