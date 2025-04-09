@@ -58,7 +58,7 @@ jobs:
               complète en Python avec une interface simple sans base de données.
               Orchestrer leur collaboration et vérifier que l’application est livrée 
               et exécutable.
-              installe crewai, et
+            
               créer un nouvel équipage d'agent crewai nommé todo le configurer et le lancer 
               afin de réaliser le projet.
               tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
