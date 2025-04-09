@@ -53,10 +53,11 @@ jobs:
             description: > 
               Créer une équipe d'agents IA crewai adaptés au projet : développeur frontend, 
               backend, pour creer une apli To do list sans base de donnée.
-              pour faire cela tu va créer un équipage crewai puis me dire 
-              équipage a était créer avec succès.
-              puis le configurer puis le dire en log
-              puis le lancer.
+              Pour faire cela tu va créer un équipage crewai en installant crewai si 
+              pas déjà fais puis le config puis dire 
+              "l'équipage a était créer avec succès" en log.
+              puis le configurer puis dire "equipage creer et config" en log
+              puis lancer cette équipage.
           
         
               tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
