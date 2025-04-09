@@ -51,12 +51,13 @@ jobs:
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
           equipe_task: 
             description: > 
-              Créer et lancer dans crewai un équipage configurer et optimiser pour creer une apli web 
-              To do list sans base de données. réfléchie au rôle au tache et à quel agent créer.
-              puis dire "l'équipage a était créer avec succès".
-              puis le configurer puis dire "equipage creer et config" en log
-              puis lancer cette équipage.
-              tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
+              Conçois une équipe d’agents CrewAI spécialisée pour développer une application ToDo List simple :
+                L'application sera développée en Python avec Flask.
+                Elle stocke les tâches en mémoire (liste Python).
+                Elle permet l’ajout, la suppression et l’affichage des tâches.
+                Une fois les rôles définis, crée et configure un équipage optimisé pour cette tâche.
+             Puis, exécute concrètement cet équipage dans CrewAI pour lancer le développement de l'application.
+             Tu es dans un environnement restreint (pas de curl, pas de sudo), travaille uniquement avec ce que CrewAI permet.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
