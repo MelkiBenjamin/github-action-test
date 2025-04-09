@@ -51,14 +51,11 @@ jobs:
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
           equipe_task: 
             description: > 
-              Créer une équipe d'agents IA crewai adaptés au projet : développeur frontend, 
-              backend, pour creer une apli To do list sans base de donnée.
-              Pour faire cela tu va créer un équipage crewai
-              puis dire "l'équipage a était créer avec succès" en log.
+              Créer et lancer dans crewai un équipage configurer et optimiser pour creer une apli web 
+              To do list sans base de données. réfléchie au rôle au tache et à quel agent créer.
+              puis dire "l'équipage a était créer avec succès".
               puis le configurer puis dire "equipage creer et config" en log
               puis lancer cette équipage.
-          
-        
               tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
