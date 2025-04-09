@@ -52,15 +52,11 @@ jobs:
           equipe_task: 
             description: > 
               Créer une équipe d'agents IA crewai adaptés au projet : développeur frontend, 
-              backend.
+              backend, pour creer une apli To do list sans base de donnée.
               
-              Leur assigner des tâches pour livrer une application web To-Do List
-              complète en Python avec une interface simple sans base de données.
-              Orchestrer leur collaboration et vérifier que l’application est livrée 
-              et exécutable.
-            
-              créer un nouvel équipage d'agent crewai nommé todo le configurer et le lancer 
-              afin de réaliser le projet.
+              puis le lancer.
+          
+        
               tu est dans un conteneur donc curl sudo et autre ne sont pas installer.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
