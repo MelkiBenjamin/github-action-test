@@ -51,21 +51,16 @@ jobs:
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
           equipe_task: 
             description: > 
-              Tu es un agent principal CrewAI. Ton objectif : créer une equipe crewai qui elle seule va creer une application To-Do List simple en Flask.
-              Tu dois créer un équipage composé de 3 agents avec les rôles suivants :
-              1. Dév Frontend (HTML)
-              2. Dév Backend (Flask)
-              3. Rédacteur technique (README en français)
-              - N’utilise pas de JSON en dehors du code Python.
-              - Tu dois créer les agents, leur assigner une tâche, créer le Crew, et le lancer via du code **Python uniquement**, dans le `Code Interpreter`.
-              - L’application n’a pas besoin de base de données (liste Python).
-              - Tu es dans un conteneur, donc pas de `sudo`, `curl`, ni de dépendances système.
-              Étapes :
-              1. Crée les 3 agents avec un nom, un rôle et une tâche.
-              2. Crée un équipage avec ces agents.
-              3. Lance l’équipage.
-              4. Affiche "Équipage lancé avec succès".
-              Code clair, concis et orienté action. ne fais rien d’autre.
+              1. Génère la configuration de l'ensemble d'un equipage multi agent 
+              crewai qui créer une apli web To do list en python avec flask. 
+              Cette équipage est avec des agents front un back et un architecte 
+              ayant des rôles et des tâches précises. 
+              2. Lance cet nouvel équipage créer. Termine en imprimant "Équipage 
+              créé et lancé avec succès." 
+              Précision : 
+              - Tu es dans un conteneur sans accès internet. 
+              - Tu ne peux utiliser aucun outil système (pas de curl, sudo, etc.).
+              - Code clair, concis et orienté action. ne fais rien d’autre.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
