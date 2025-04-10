@@ -61,6 +61,7 @@ jobs:
               - Tu es dans un conteneur sans accès internet. 
               - Tu ne peux utiliser aucun outil système (pas de curl, sudo, etc.).
               - Code clair, concis et orienté action. ne fais rien d’autre.
+              - n'utilises de json. utilise juste python.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
