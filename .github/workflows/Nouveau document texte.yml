@@ -51,15 +51,25 @@ jobs:
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
           equipe_task: 
             description: > 
-              Conçois une équipe d’agents CrewAI spécialisée pour développer une application ToDo List simple :
-              L'application sera développée en Python avec Flask.
-              Elle stocke les tâches en mémoire (liste Python).
-              Elle permet l’ajout, la suppression et l’affichage des tâches. 
-              Ne crée pas de JSON ni de code Python pour définir les rôles.
-              Utilise directement les fonctions natives de CrewAI pour créer les agents, configurer les tâches et lancer l’équipage.
-              Chaque agent doit avoir un rôle bien défini.
-              Puis, exécute concrètement cet équipage dans CrewAI pour lancer le développement de l'application.
-              Tu es dans un environnement restreint (pas de curl, pas de sudo), travaille uniquement avec ce que CrewAI permet.
+              Tu es un agent principal CrewAI. Ton objectif : créer une application To-Do List simple en Flask.
+              Tu dois créer un équipage composé de 3 agents avec les rôles suivants :
+              1. Développeur Frontend (HTML)
+              2. Développeur Backend (Flask)
+              3. Rédacteur technique (README en français)
+              **Instructions importantes** :
+              - Ne crée pas d'action personnalisée comme "Create Crewai Team", ça n'existe pas.
+              - N’utilise pas de JSON ni de dictionnaire de rôles en dehors du code Python.
+              - Tu dois créer les agents, leur assigner une tâche, créer le Crew, et le lancer via du code **Python uniquement**, dans le `Code Interpreter`.
+              - Utilise uniquement le module `flask`, rien d'autre.
+              - L’application n’a pas besoin de base de données (utilise une simple liste Python en mémoire).
+              - Tu es dans un conteneur, donc pas de `sudo`, `curl`, ni de dépendances système.
+              Étapes :
+              1. Crée les 3 agents avec un nom, un rôle et une tâche.
+              2. Crée un équipage avec ces agents.
+              3. Lance l’équipage.
+              4. Affiche "Équipage lancé avec succès".
+              Code clair, concis et orienté action.
+              Ne fais rien d’autre.
             expected_output: > 
               Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
