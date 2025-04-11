@@ -54,7 +54,7 @@ jobs:
               1. Génère la configuration de l'ensemble d'un equipage multi agent 
               crewai qui créer une apli web To do list en python avec flask. 
               Cette équipage est avec des agents front un back et un architecte 
-              ayant des rôles et des tâches précises. 
+              ayant des rôles et des tâches précises. fa8s cela dans un crew.py 
               2. Lance cet nouvel équipage créer. Termine en imprimant "Équipage 
               créé et lancé avec succès." 
               Précision : 
