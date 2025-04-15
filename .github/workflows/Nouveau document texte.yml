@@ -136,7 +136,7 @@ jobs:
       - name: install Shell pilot 
         run: |
           (echo "127.0.0.1" && echo "127.0.0.1") | sudo bash spilot_install.sh
-      - name: config avec localai 
+      - name: config avec localai   
         run: |
           export TERM=dumb
           sudo s-pilot cmp localai
