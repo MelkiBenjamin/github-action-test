@@ -58,7 +58,7 @@ jobs:
               2. Lance cet nouvel équipage créer. Termine en imprimant "Équipage 
               créé et lancé avec succès." 
             expected_output: > 
-              Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
+              affiche le code générer ainsi que creer Un dossier situer dans mon dossier courant contenant tous les fichiers nécessaires : index.html, 
               app.py, README en français, etc. 
             agent: agent_createur 
           EOF
