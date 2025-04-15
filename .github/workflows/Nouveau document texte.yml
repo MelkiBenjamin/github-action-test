@@ -51,7 +51,8 @@ jobs:
           cat > ./test55/src/test55/config/tasks.yaml <<'EOF'
           equipe_task: 
             description: > 
-              1. Génère la configuration complète et fonctionnel d'un equipage multi agent 
+              1. Génère en utilisant uniquement la bibliothèque crewai, la configuration 
+              complète et fonctionnel d'un equipage multi agent 
               crewai qui créer une apli web To do list en python avec flask sans base de donnée. 
               Cette équipage est avec des agents front un back ayant un rôles et une tâches
               précises. fais cela dans un crew.py. Une fois cela fait dis le.
