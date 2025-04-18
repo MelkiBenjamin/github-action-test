@@ -14,7 +14,7 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          API="http://localhost:8080/chat/completions"; M="codellama"; F="script.go"; P="Write a Go program that adds 2+2 and prints the result."
+          API="http://localhost:8080/chat/completions"; M="$MODEL_NAME"; F="script.go"; P="Write a Go program that adds 2+2 and prints the result."
           for i in {1..5}; do
             C=$(jq -n --arg m "$M" --arg p "$P" '{model:$m,messages:[{role:"system",content:"You are a developer who provides code functional without additional explanations or comments"},{role:"user",content:$p}]}' | curl -s -X POST "$API" -H "Content-Type: application/json" -d @- | jq -r '.choices[0].message.content')
             echo "$C" > "$F"; O=$(go run "$F" 2>&1); [ $? -eq 0 ] && echo "$O" && break
