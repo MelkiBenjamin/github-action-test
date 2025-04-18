@@ -14,10 +14,11 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          const fs=require('fs'),{spawnSync}=require('child_process'),http=require('http');
-          async function c(p){return new Promise((res,rej)=>{const d=JSON.stringify({model:'$MODEL_NAME',messages:[{role:'system',content:'You are a developer'},{role:'user',content:p}]});const o={hostname:'localhost',port:8080,path:'/chat/completions',method:'POST',headers:{'Content-Type':'application/json','Content-Length':d.length}};const r=http.request(o,r=>{let b='';r.on('data',c=>b+=c);r.on('end',()=>res(JSON.parse(b).choices[0].message.content.trim()))});r.on('error',rej);r.write(d);r.end()})}
-          (async()=>{let code=await c('Write a Go program that adds 2+2 and prints the result.');for(let i=0;i<5;i++){fs.writeFileSync('script.go',code);let x=spawnSync('go',['run','script.go'],{encoding:'utf-8'});if(x.status===0)return console.log(x.stdout);code=await c(`Code:\n${code}\nError:\n${x.stderr}`);}})();
-
+          API="http://localhost:8080/chat/completions"; M="codellama"; F="script.go"; P="Write a Go program that adds 2+2 and prints the result."
+          for i in {1..5}; do
+            C=$(jq -n --arg m "$M" --arg p "$P" '{model:$m,messages:[{role:"system",content:"You are a developer who provides code functional without additional explanations or comments"},{role:"user",content:$p}]}' | curl -s -X POST "$API" -H "Content-Type: application/json" -d @- | jq -r '.choices[0].message.content')
+            echo "$C" > "$F"; O=$(go run "$F" 2>&1); [ $? -eq 0 ] && echo "$O" && break
+            P="Code:\n$C\nError:\n$O"
       - name: crewai install 
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
