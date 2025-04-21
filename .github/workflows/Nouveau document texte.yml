@@ -34,6 +34,7 @@ jobs:
           response=$(curl -s -X POST $API_URL -H "Content-Type: application/json" -d "$json_payload")
           result="$(echo $response | jq -r '.choices[0].message.content')"
           echo "Result:"
+          echo "$result"
       - name: crewai install 
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
