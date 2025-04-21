@@ -23,7 +23,7 @@ jobs:
           result="$(echo $response | jq -r '.choices[0].message.content')"
           echo "Result:"
           echo "$result"
-          echo "$result" >> script.py
+          echo "$result" >> script_python.py
           python script_python.py
       - name: crewai install 
         run: |
