@@ -29,8 +29,8 @@ jobs:
 
           
             if [ -z "$stderr" ]; then
-             echo "Script exécuté sans erreur."
-             break
+              echo "Script exécuté sans erreur."
+              break
             else
               echo "Erreur détectée :"
               echo "$stderr"
