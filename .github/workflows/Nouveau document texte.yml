@@ -25,7 +25,7 @@ jobs:
           echo "$result"
           echo "$result" >> script_python.py
           while true; do
-            stderr=$(python script.py 2>&1 >/dev/null)
+            stderr=$(python script_python.py 2>&1)
 
           
             if [ -z "$stderr" ]; then
@@ -42,7 +42,7 @@ jobs:
               response=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$json_payload")
               result=$(echo "$response" | jq -r '.choices[0].message.content')
 
-              echo "$result" > script.py
+              echo "$result" > script_python.py
             fi
           done
       - name: crewai install 
