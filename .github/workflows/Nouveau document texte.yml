@@ -43,6 +43,8 @@ jobs:
               result=$(echo "$response" | jq -r '.choices[0].message.content')
 
               echo "$result" > script.py
+            fi
+          done
       - name: crewai install 
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
