@@ -27,9 +27,12 @@ jobs:
           while true; do
             echo 'debut de boucle'
   
-            python script_python.py 2> retour.log
+            python script_python.py 2> retour.log || echo "Le script Python a échoué, mais on continue"
+
+            echo "Suite du script"
+
             echo test
-            cat retour.log
+            
             echo vrai-var
             stderr=$(python3 script_python.py 2>&1 1>/dev/null)
             echo 'var stdr enregistrer'
