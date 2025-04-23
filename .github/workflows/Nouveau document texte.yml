@@ -26,8 +26,7 @@ jobs:
           echo "$result" > script_python.py
           while true; do
             echo 'debut de boucle'
-            echo test1
-            st=$(python3 script_python.py)
+  
             echo $st
             echo test2
             std=$(python3 script_python.py 2>&1)
