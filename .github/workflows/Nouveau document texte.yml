@@ -27,13 +27,13 @@ jobs:
           while true; do
             echo 'debut de boucle'
             echo test1
-            st='python3 script_python.py'
+            st="python3 script_python.py"
             echo $st
             echo test2
-            std='python3 script_python.py 2>&1'
+            std="python3 script_python.py 2>&1"
             echo $ste
             echo test3
-            stde='python3 script_python.py 2>&1 1>/dev/null'
+            stde="python3 script_python.py 2>&1 1>/dev/null"
             echo $stde
             echo vrai-var
             stderr=$(python3 script_python.py 2>&1 1>/dev/null)
