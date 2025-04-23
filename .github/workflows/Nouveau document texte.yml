@@ -26,7 +26,7 @@ jobs:
           echo "$result" > script_python.py
           while true; do
             echo 'debut de boucle'
-            stderr=$(python3 script_python.py)
+            stderr=$(python3 script_python.py 1>/dev/null)
             echo 'var stdr enregistrer'
             if [ -z "$stderr" ]; then
               echo "Script exécuté sans erreur."
