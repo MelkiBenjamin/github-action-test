@@ -36,8 +36,8 @@ jobs:
             else
               echo "Erreur détectée :"
               echo "$stderr"
-              echo "Nouvelle tentative de génération..."
-              input="Corrige le code Python suivant qui contient une erreur : $result. l'erreur est $stderr Répond uniquement avec du code."
+              echo "Nouvelle tentative de génération..."hgfukxhg
+              input="Corrige le code Python suivant qui contient une erreur : $result. l'erreur est $stderr. Le code doit avoir des commentaires, respecter les bonnes pratiques être sans balise markdown. precision : ta réponse sera automatiquement copier dans un fichier puis exécuter. Répond uniquement avec du code."
               json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who corrects broken Python code and replies with only the corrected code"}, {role: "user", content: $input}]}')
               response=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$json_payload")
               result=$(echo "$response" | jq -r '.choices[0].message.content')
