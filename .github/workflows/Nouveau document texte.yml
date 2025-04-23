@@ -14,7 +14,7 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          input="Génére moi un code complet en python qui fait 2+2 et afiche le résultat. Inclus dans le code des commentaires. repond avec seulement du code respectant les bonnes pratiques dev python."
+          input="Génére moi un code complet en python qui fait 2+2 et afiche le résultat. le code doit avoir des commentaires et respecter les bonnes pratiques. repond avec seulement du code."
           API_URL="http://localhost:8080/chat/completions"
 
           json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who provides code functional without additional explanations or comments"}, {role: "user", content: $input}]}')
