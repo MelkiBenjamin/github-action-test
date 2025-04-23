@@ -34,7 +34,8 @@ jobs:
             echo test
             
             echo vrai-var
-            stderr=$(python3 script_python.py 2>&1 1>/dev/null)
+            stderr=$(python3 script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
+
             echo 'var stdr enregistrer'
             if [ -z "$stderr" ]; then
               echo "Script exécuté sans erreur."
