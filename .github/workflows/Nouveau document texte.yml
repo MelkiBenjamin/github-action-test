@@ -26,13 +26,12 @@ jobs:
           echo "$result" > script_python.py
           while true; do
             echo 'debut de boucle'
-            python script_python.py 2> retour.log || echo "Le script Python a échoué, mais on continue"          
-            echo vrai-var
             stderr=$(python3 script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
             echo $stderr
             echo 'var stdr enregistrer'
             if [ -z "$stderr" ]; then
               echo "Script exécuté sans erreur."
+              python script_python.py
               break
             else
               echo "Erreur détectée :"
@@ -43,6 +42,7 @@ jobs:
               response=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$json_payload")
               result=$(echo "$response" | jq -r '.choices[0].message.content')
               echo "$result" > script_python.py
+              echo $result
             fi
           done
       - name: crewai install 
