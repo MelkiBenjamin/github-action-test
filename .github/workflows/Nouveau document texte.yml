@@ -27,13 +27,9 @@ jobs:
           while true; do
             echo 'debut de boucle'
   
-            echo $st
-            echo test2
-            std=$(python3 script_python.py 2>&1)
-            echo $ste
-            echo test3
-            stde=$(python3 script_python.py 2>&1 1>/dev/null)
-            echo $stde
+            python script_python.py 2> retour.log
+            echo test
+            cat retour.log
             echo vrai-var
             stderr=$(python3 script_python.py 2>&1 1>/dev/null)
             echo 'var stdr enregistrer'
