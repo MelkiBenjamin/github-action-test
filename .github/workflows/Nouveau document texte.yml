@@ -26,6 +26,10 @@ jobs:
           echo "$result" > script_python.py
           while true; do
             echo 'debut de boucle'
+            echo test1
+            st='python3 script_python.py'
+            echo test2
+            std='python3 script_python.py 2>&1'
             stderr=$(python3 script_python.py 2>&1 1>/dev/null)
             echo 'var stdr enregistrer'
             if [ -z "$stderr" ]; then
