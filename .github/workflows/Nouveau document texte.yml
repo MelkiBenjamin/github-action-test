@@ -24,7 +24,9 @@ jobs:
           echo "Result:"
           echo "$result"
           echo "$result" > script_python.py
-          tr -d '\`' < script_python.py > mon_fichier_clean.py && cp mon_fichier_clean.py script_python.py
+          tr -d '\`' < script_python.py > mon_fichier_clean.py && cp mon_fichier_clean.py script_python.py | echo 'méthode suivante'
+          perl -pi -e 's/`//g' script_python.py 
+
 
           echo 'scipt sans balise'
           cat script_python.py
