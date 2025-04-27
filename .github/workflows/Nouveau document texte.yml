@@ -28,8 +28,6 @@ jobs:
           perl -pi -e 's/`//g' script_python.py
           echo "Nettoyage terminé"
           echo 'scipt sans balise'
-          cat script_python.py
-
           while true; do
             echo 'debut de boucle'
             stderr=$(python3 script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
