@@ -25,6 +25,8 @@ jobs:
           echo "$result"
           echo "$result" > script_python.py
           sed -i 's/```//g' script_python.py 
+          echo 'scipt sans balise'
+          cat script_python.py
 
           while true; do
             echo 'debut de boucle'
