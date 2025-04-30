@@ -14,10 +14,10 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          input="Génére moi un code complet en python qui fait 2+2 et afiche le résultat. le code doit avoir des commentaires, respecter les bonnes pratiques, être sans balise markdown. precision : ta réponse sera dans un script automatiquement copier dans un fichier puis exécuter. repond avec seulement du code."
+          input="Génére moi un code complet en python qui fait 2+2 et afiche le résultat. le code doit avoir des commentaires, respecter les bonnes pratiques. repond avec seulement du code."
           API_URL="http://localhost:8080/chat/completions"
 
-          json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who provides code functional without additional explanations or comments"}, {role: "user", content: $input}]}')
+          json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who provides code functional without additional explanations or comments or markdown."}, {role: "user", content: $input}]}')
 
           response=$(curl -s -X POST $API_URL -H "Content-Type: application/json" -d "$json_payload")
           result="$(echo $response | jq -r '.choices[0].message.content')"
@@ -45,7 +45,7 @@ jobs:
               echo "Erreur détectée :"
               echo "$stderr"
               echo "Nouvelle tentative de génération..."
-              input="Corrige le code Python suivant qui contient une erreur : $result. l'erreur est $stderr. Le code doit avoir des commentaires, respecter les bonnes pratiques être sans balise markdown. precision : ta réponse sera automatiquement copier dans un fichier puis exécuter. Répond uniquement avec du code."
+              input="Corrige le code Python suivant qui contient une erreur : $result. l'erreur est $stderr. Le code doit avoir des commentaires, respecter les bonnes pratique. Répond uniquement avec du code."
               json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who corrects broken Python code and replies with only the corrected code"}, {role: "user", content: $input}]}')
               response=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$json_payload")
               result=$(echo "$response" | jq -r '.choices[0].message.content')
