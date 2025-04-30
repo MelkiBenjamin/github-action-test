@@ -24,7 +24,7 @@ jobs:
           echo "Result:"
           echo "$result"
           echo "$result" > script_python.py
-          sed 's/^/# /' script_python.py
+          sed '/^```/ s/^/# /' script_python.py
           echo modif
           cat script_python.py 
           
