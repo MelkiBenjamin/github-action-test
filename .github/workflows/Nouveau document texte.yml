@@ -15,7 +15,7 @@ jobs:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
           input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, vérifier et installer les packages pip avant d’essayer de les importer ou les utiliser, et relancer l’import après l’installation. Repond avec seulement du code."
-          API_URL="http://localhost:8080/chat/completions"ggfrx
+          API_URL="http://localhost:8080/chat/completions"
 
           json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who provides code functional without additional explanations or comments or markdown."}, {role: "user", content: $input}]}')
 
