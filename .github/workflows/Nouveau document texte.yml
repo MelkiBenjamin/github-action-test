@@ -14,7 +14,7 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, installer automatiquement les dépendance avec pip aux debut ce code python puis obligatoirement seulement apres les importer avec import même si pas bonne pratique, être totalement autonomes donc pas de commandes ou fichier hors de ce code. Repond avec seulement du code."
+          input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, ajouter des métadonnées de script en ligne dans le style de PEP 723. Repond avec seulement du code."
           API_URL="http://localhost:8080/chat/completions"
 
           json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who provides code functional without additional explanations or comments or markdown."}, {role: "user", content: $input}]}')
@@ -23,12 +23,16 @@ jobs:
           result="$(echo $response | jq -r '.choices[0].message.content')"
           echo "Result:"
           echo "$result"
+  
           echo "$result" > script_python.py   
           
           while true; do
             echo 'debut de boucle'      
             sed -i -e 's/```python//g' -e 's/```//g' script_python.py
             cat script_python.py 
+            echo 'install des dépendance'
+            pip run script_python.py pip
+            echo 'install fait'
             stderr=$(python3 script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
             echo $stderr
             echo 'var stdr enregistrer'
@@ -40,7 +44,7 @@ jobs:
               echo "Erreur détectée :"
               echo "$stderr"
               echo "Nouvelle tentative de génération..."
-              input="Corrige le code Python suivant qui contient une erreur : $result. l'erreur est $stderr. Le code doit avoir des commentaires, respecter les bonnes pratique et installer les dépendances dans ce code. Répond uniquement avec du code."
+              input="Corrige le code Python suivant qui contient une erreur : $result. L'erreur est $stderr. Le code doit avoir des commentaires, respecter les bonnes pratique. Répond uniquement avec du code."
               json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who corrects broken Python code and replies with only the corrected code"}, {role: "user", content: $input}]}')
               response=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$json_payload")
               result=$(echo "$response" | jq -r '.choices[0].message.content')
