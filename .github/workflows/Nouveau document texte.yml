@@ -33,7 +33,7 @@ jobs:
             cat script_python.py 
             echo test
             pip install pipreqs
-            pipreqs --print .
+            pipreqs --print --ignore-errors ./script_python.py 
             echo test2
             pip install requirement.txt
             stderr=$(python script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
