@@ -36,7 +36,7 @@ jobs:
             pip install pipreqs
             mkdir pipreqs
             echo creation
-            pipreqs . --ignore-errors
+            pipreqs . --print
             echo test2
             pip install -r requirements.txt
             stderr=$(python script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
