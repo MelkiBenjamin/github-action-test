@@ -14,7 +14,7 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, ajouter la métadonnées de script en ligne de dépendance seulement dans le style de PEP 723  
+          input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, ajouter la métadonnées de script en ligne de dépendance seulement dans le style de PEP 723 tel :
           # /// script
           # dependencies = ["requests"]
           # ///
@@ -35,7 +35,7 @@ jobs:
             sed -i -e 's/```python//g' -e 's/```//g' script_python.py
             cat script_python.py 
             
-            stderr=$(pipx run script_python.py pip 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
+            stderr=$(pipx run script_python.py pipx 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
             echo $stderr
             echo 'var stdr enregistrer'
             if [ -z "$stderr" ]; then
