@@ -14,7 +14,8 @@ jobs:
         with:
           model: 'hermes-2-theta-llama-3-8b' # Any from models.localai.io, or from huggingface.com with: "huggingface://<repository>/file"
       - run: |
-          input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, ajouter la métadonnées de script en ligne de dépendance seulement dans le style de PEP 723 tel :
+          input="Génére moi un code complet en python qui a scrappe le figaro. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée, ajouter la métadonnées de script en ligne de dépendance seulement dans le style de PEP 723 tel par exemple :
+          # script_python.py
           # /// script
           # dependencies = ["requests"]
           # ///
