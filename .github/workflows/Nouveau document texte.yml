@@ -34,10 +34,8 @@ jobs:
             echo 'debut de boucle'      
             sed -i -e 's/```python//g' -e 's/```//g' script_python.py
             cat script_python.py 
-            echo 'install des dépendance'
-            pipx run script_python.py pip
-            echo 'install fait'
-            stderr=$(python3 script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
+            
+            stderr=$(pipx run script_python.py pip 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
             echo $stderr
             echo 'var stdr enregistrer'
             if [ -z "$stderr" ]; then
