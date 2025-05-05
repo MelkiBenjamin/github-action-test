@@ -34,7 +34,7 @@ jobs:
             echo test
             rm requirements.txt
             pip install pipreqs
-            mkdir pipreqs
+            pipreqs --help
             echo creation
             pipreqs . --print
             echo test2
