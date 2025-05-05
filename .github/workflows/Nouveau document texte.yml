@@ -33,7 +33,7 @@ jobs:
             cat script_python.py 
             echo test
             rm requirements.txt
-            pip install pipreqs
+            pip install git+https://github.com/bndr/pipreqs.git
             pipreqs --help
             echo creation
             pipreqs . --print
