@@ -33,12 +33,8 @@ jobs:
             cat script_python.py 
             echo test
             pip install git+https://github.com/bndr/pipreqs.git
-            pipreqs --help
-            echo creation
             pipreqs . --ignore-errors
-            ls
             cat requirements.txt
-            echo test2
             pip install -r requirements.txt
             stderr=$(python script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
             echo $stderr
@@ -60,11 +56,6 @@ jobs:
             fi
           done
 
-          input="voici un code Python suivant qui marche : $result. Donne moi un prompt ai a donner à une ai pour qu il me créer ce code. Répond uniquement avec ce prompt"
-          json_payload=$(jq -n --arg input "$input" '{model: "'"$MODEL_NAME"'", messages: [{role: "system", content: "You are a developer who corrects broken Python code and replies with only the corrected code"}, {role: "user", content: $input}]}')
-          response=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$json_payload")
-          result=$(echo "$response" | jq -r '.choices[0].message.content')
-          echo "$result"
       - name: crewai install 
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
