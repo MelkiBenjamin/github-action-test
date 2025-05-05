@@ -36,7 +36,7 @@ jobs:
             pip install git+https://github.com/bndr/pipreqs.git
             pipreqs --help
             echo creation
-            pipreqs . --print
+            pipreqs . --print --ignore-errors
             echo test2
             pip install -r requirements.txt
             stderr=$(python script_python.py 2>&1 1>/dev/null || echo "Le script Python a échoué, mais on continue")
