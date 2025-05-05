@@ -33,6 +33,7 @@ jobs:
             cat script_python.py 
             echo test
             pip install git+https://github.com/bndr/pipreqs.git --no-deps pipreqs
+            pip install yarg==0.1.9 docopt==0.6.2
             pipreqs . --ignore-errors
             cat requirements.txt
             pip install -r requirements.txt
