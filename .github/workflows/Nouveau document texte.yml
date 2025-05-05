@@ -32,7 +32,7 @@ jobs:
             sed -i -e 's/```python//g' -e 's/```//g' script_python.py
             cat script_python.py 
             echo test
-            pip install git+https://github.com/bndr/pipreqs.git
+            pip install git+https://github.com/bndr/pipreqs.git --no-deps pipreqs
             pipreqs . --ignore-errors
             cat requirements.txt
             pip install -r requirements.txt
