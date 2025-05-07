@@ -19,8 +19,8 @@ jobs:
 
           while true; do
             result=$(curl -s -X POST "http://localhost:8080/chat/completions" -H "Content-Type: application/json" -d "$(jq -n --arg input "$input" --arg model "$MODEL_NAME" '{model: $model, messages: [{role: "system", content: "$input_system"}, {role: "user", content: $input}]}')" \
-            | jq -r '.choices[0].message.content') > code.py && sed -i -e 's/```python//g' -e 's/```//g' code.py
-            echo "voici le resultat $result" && "echo voici le resultat propre" && cat code.py 
+            | jq -r '.choices[0].message.content') >> code.py && sed -i -e 's/```python//g' -e 's/```//g' code.py
+            echo "voici le resultat : $result" && echo "voici le resultat propre :" && cat code.py 
             stderr=$(python3 code.py 2>&1 1>/dev/null) || echo "Erreur : $stderr mais on continue."
             if [ -z "$stderr" ]; then echo "Aucune erreur détectée. Le code est : $result " && python3 code.py break; fi
             input="Corrige le code Python suivant qui contient une erreur : $result. L'erreur est $stderr. Le code doit avoir des commentaires, respecter les bonnes pratiques. Répond uniquement avec du code."
