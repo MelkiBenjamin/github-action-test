@@ -15,6 +15,7 @@ jobs:
       - run: |
           input="Génére moi un code complet en python qui fait 2+2 et affiche le resultat. Le code doit avoir des commentaires, respecter les bonnes pratiques, être sans dépendance inutilisée, ni import inutilisée. Repond avec seulement du code."
           input_system="You are a developer who provides code functional without additional explanations or comments or markdown."
+          API_URL="http://localhost:8080/chat/completions"
 
           while true; do
             result=$(curl -s -X POST "$API_URL" -H "Content-Type: application/json" -d "$(jq -n --arg input "$input" --arg model "$MODEL_NAME" '{model: $model, messages: [{role: "system", content: "$input_system"}, {role: "user", content: $input}]}')" \
